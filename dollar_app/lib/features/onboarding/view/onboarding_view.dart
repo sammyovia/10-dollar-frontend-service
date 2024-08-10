@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dollar_app/features/auth/register_view.dart';
 import 'package:dollar_app/features/onboarding/model/onboarding.dart';
 import 'package:dollar_app/features/shared/constant/image_constant.dart';
 import 'package:flutter/material.dart';
@@ -115,26 +116,36 @@ class _OnboardingViewState extends State<OnboardingView> {
                           viewportFraction: 1),
                     ),
                   ),
-                  Container(
-                    height: 50.h,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Get Started',
-                          style: GoogleFonts.notoSans(color: Colors.red),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterView(),
                         ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        const Icon(
-                          Icons.play_circle_fill,
-                          color: Colors.red,
-                        )
-                      ],
+                      );
+                    },
+                    child: Container(
+                      height: 50.h,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Get Started',
+                            style: GoogleFonts.notoSans(color: Colors.red),
+                          ),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          const Icon(
+                            Icons.play_circle_fill,
+                            color: Colors.red,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -149,4 +160,3 @@ class _OnboardingViewState extends State<OnboardingView> {
     );
   }
 }
-

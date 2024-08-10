@@ -1,3 +1,4 @@
+import 'package:dollar_app/features/auth/register_view.dart';
 import 'package:dollar_app/features/onboarding/view/onboarding_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
