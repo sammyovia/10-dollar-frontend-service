@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dollar_app/features/auth/register_view.dart';
 import 'package:dollar_app/features/onboarding/model/onboarding.dart';
 import 'package:dollar_app/features/shared/constant/image_constant.dart';
+import 'package:dollar_app/services/network/token_storage.dart';
+import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OnboardingView extends StatefulWidget {
@@ -14,22 +16,35 @@ class OnboardingView extends StatefulWidget {
 }
 
 class _OnboardingViewState extends State<OnboardingView> {
+  Future<void> loadTokensOnStartup(BuildContext context) async {
+    final tokenStorage = TokenStorage();
+    final accessToken = await tokenStorage.getAccessToken();
+    final refreshToken = await tokenStorage.getRefreshToken();
+    if (context.mounted) {
+      if (accessToken != null && refreshToken != null) {
+        // Use the tokens to authenticate the user
+        context.go(AppRoutes.home);
+      } else {
+        // Redirect to login page
+        context.go(AppRoutes.login);
+      }
+    }
+  }
+
   final images = [
     const OnboardingModel(
         id: 1,
         image: AppImages.onboarding1,
         text:
-            'Recieve real-time feedback from  peers, upload videos for voting and win money for being the top voted atrtist'),
+            'Upload videos for voting and win money for being the top voted artist.'),
     const OnboardingModel(
         id: 2,
         image: AppImages.onboarding2,
-        text:
-            'Connect with your other musicians, showcase your talent and earn rewards for your creativity'),
+        text: 'Showcase your talent and earn rewards for your creativity.'),
     const OnboardingModel(
         id: 3,
         image: AppImages.onboarding3,
-        text:
-            'Connect with audience, get free promotions for your and record deals'),
+        text: 'Stake on videos and win big.'),
   ];
 
   @override
@@ -40,12 +55,13 @@ class _OnboardingViewState extends State<OnboardingView> {
           Container(
             width: double.infinity,
             height: 600.h,
-            decoration: BoxDecoration(
-              color: Colors.red.shade300,
-              image: const DecorationImage(
-                  image: AssetImage(AppImages.onboarding2),
-                  fit: BoxFit.fill,
-                  opacity: 0.4),
+            decoration: const BoxDecoration(
+              color: Colors.black87,
+              image: DecorationImage(
+                image: AssetImage(AppImages.onboarding2),
+                fit: BoxFit.cover,
+                //opacity: 0.
+              ),
             ),
           ),
           Container(
@@ -57,8 +73,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Theme.of(context).colorScheme.secondary,
-                  Theme.of(context).colorScheme.secondary.withOpacity(0),
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.primary.withOpacity(0),
                 ],
               ),
             ),
@@ -78,9 +94,9 @@ class _OnboardingViewState extends State<OnboardingView> {
                       Theme.of(context).colorScheme.secondary.withOpacity(0),
                       //Colors.transparent,
                       //Color(0xFFF9FAF8),
-                      Theme.of(context).colorScheme.secondary,
-                      Theme.of(context).colorScheme.secondary,
-                      Theme.of(context).colorScheme.secondary,
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.primary
                     ],
                   ),
                 ),
@@ -110,7 +126,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                         );
                       },
                       options: CarouselOptions(
-                          autoPlayInterval: const Duration(seconds: 3),
+                          autoPlayInterval: const Duration(seconds: 7),
                           height: 70.h,
                           autoPlay: true,
                           viewportFraction: 1),
@@ -118,31 +134,28 @@ class _OnboardingViewState extends State<OnboardingView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterView(),
-                        ),
-                      );
+                      loadTokensOnStartup(context);
                     },
                     child: Container(
                       height: 50.h,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.white),
+                          color: Colors.black),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             'Get Started',
-                            style: GoogleFonts.notoSans(color: Colors.red),
+                            style: GoogleFonts.notoSans(
+                                fontSize: 20.sp, color: Colors.white),
                           ),
                           SizedBox(
                             width: 10.w,
                           ),
-                          const Icon(
+                          Icon(
+                            size: 20.r,
                             Icons.play_circle_fill,
-                            color: Colors.red,
+                            color: Colors.white,
                           )
                         ],
                       ),

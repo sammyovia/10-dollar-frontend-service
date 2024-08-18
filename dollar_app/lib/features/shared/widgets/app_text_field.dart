@@ -39,9 +39,11 @@ class AppTextField extends StatelessWidget {
                   fontSize: 14.sp,
                   color: Colors.black87),
             ),
-            Text(errorText,
-                style: GoogleFonts.redHatDisplay(
-                    fontSize: 14.sp, color: Colors.red.shade200))
+            Text(
+              errorText,
+              style: GoogleFonts.redHatDisplay(
+                  fontSize: 14.sp, color: Colors.red.shade900),
+            )
           ],
         ),
         //SizedBox(height: 5.h),
@@ -58,8 +60,9 @@ class AppTextField extends StatelessWidget {
             onChanged: onchaged,
             controller: controller,
             cursorColor: const Color(0xFFBDBDBD),
-            style: GoogleFonts.redHatDisplay(color: const Color(0xFF757575)),
+            style: GoogleFonts.redHatDisplay(),
             decoration: InputDecoration(
+                filled: false,
                 prefixIcon: Icon(icon, color: Colors.black87),
                 border: InputBorder.none,
                 hintText: hintText,

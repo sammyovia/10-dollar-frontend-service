@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AuthBottomText extends StatelessWidget {
   const AuthBottomText(
-      {super.key, required this.title, required this.actionText,
+      {super.key,
+      required this.title,
+      required this.actionText,
       required this.onClick});
   final String title;
   final String actionText;
@@ -27,7 +29,9 @@ class AuthBottomText extends StatelessWidget {
           onTap: onClick,
           child: Text(
             actionText,
-            style: GoogleFonts.redHatDisplay(color: Colors.red.shade900),
+            style: GoogleFonts.redHatDisplay(
+                fontWeight: FontWeight.w800,
+                color: Theme.of(context).colorScheme.secondary),
           ),
         )
       ],

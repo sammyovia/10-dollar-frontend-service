@@ -1,59 +1,36 @@
 import 'dart:ui';
 
+import 'package:dollar_app/features/auth/providers/login_provider.dart';
+import 'package:dollar_app/features/auth/view/otp_view.dart';
+import 'package:dollar_app/features/auth/view/register_view.dart';
 import 'package:dollar_app/features/auth/widgets/auth_bottom_text.dart';
 import 'package:dollar_app/features/shared/constant/image_constant.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
+import 'package:dollar_app/features/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 
-import '../shared/widgets/app_text_field.dart';
-
-class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+class LoginView extends ConsumerStatefulWidget {
+  const LoginView({super.key});
 
   @override
-  State<RegisterView> createState() => _RegisterViewState();
+  ConsumerState<LoginView> createState() => _LoginViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
-  String userName = '';
-  String usernameErrorText = '';
+class _LoginViewState extends ConsumerState<LoginView> {
+  bool showPassword = true;
   String email = '';
-  String emailErrorText = '';
-  String passwordErrorText = '';
-  bool showPassword = false;
+  String password = '';
   bool validated = false;
 
-  void setUsernameError(String value) {
-    if (value.isEmpty) {
-      usernameErrorText = 'field cannot be empty';
-    } else {
-      usernameErrorText = '';
-    }
-    setState(() {});
-  }
-
-  void setPasswordError(String value) {
-    if (value.length < 8) {
-      passwordErrorText = 'cannot be less than 8 characters';
-    } else {
-      passwordErrorText = '';
-    }
-    setState(() {});
-  }
-
-  void validateEmail(String value) {
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(value)) {
-      emailErrorText = 'invalid email';
-    } else {
-      emailErrorText = '';
-    }
-    setState(() {});
+  void validate() {
+    final valid = email.isNotEmpty && password.isNotEmpty;
+    setState(() {
+      validated = valid;
+    });
   }
 
   @override
@@ -75,7 +52,7 @@ class _RegisterViewState extends State<RegisterView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Sign up",
+                "Login",
                 style: GoogleFonts.notoSans(
                     //color: Colors.white,
                     fontSize: 35.sp,
@@ -89,7 +66,7 @@ class _RegisterViewState extends State<RegisterView> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 15.w),
                     width: 450.w,
-                    height: 500.h,
+                    height: 450.h,
                     decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(0.1),
                       borderRadius: BorderRadius.all(
@@ -106,32 +83,20 @@ class _RegisterViewState extends State<RegisterView> {
                         SizedBox(
                           width: 300.w,
                           child: Text(
-                            "It seems you dont't have an account, lets create one.",
+                            "Login to access great contents.",
                             style: GoogleFonts.redHatDisplay(
                                 fontSize: 14.sp, fontWeight: FontWeight.w400),
                           ),
                         ),
                         SizedBox(height: 35.h),
                         AppTextField(
-                          keybordType: TextInputType.name,
-                          onchaged: (value) {
-                            setUsernameError(value ?? '');
-                          },
-                          labelText: 'Username',
-                          errorText: usernameErrorText,
-                          hintText: 'sammy_boy',
-                          icon: IconlyBold.profile,
-                        ),
-                        SizedBox(
-                          height: 16.h,
-                        ),
-                        AppTextField(
                           keybordType: TextInputType.emailAddress,
                           onchaged: (value) {
-                            validateEmail(value ?? '');
+                            email = value!;
+                            validate();
                           },
                           labelText: 'email',
-                          errorText: emailErrorText,
+                          errorText: '',
                           hintText: 'sammy@gmail.com',
                           icon: IconlyBold.message,
                         ),
@@ -140,11 +105,12 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                         AppTextField(
                           onchaged: (v) {
-                            setPasswordError(v ?? '');
+                            password = v!;
+                            validate();
                           },
                           obscureText: showPassword,
                           labelText: 'Password',
-                          errorText: passwordErrorText,
+                          errorText: '',
                           hintText: '********',
                           icon: IconlyBold.lock,
                           suffix: GestureDetector(
@@ -162,12 +128,44 @@ class _RegisterViewState extends State<RegisterView> {
                         SizedBox(
                           height: 20.h,
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const OTPView(),
+                              ),
+                            );
+                          },
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "Forgot Password?",
+                              style: GoogleFonts.redHatDisplay(
+                                color: Colors.purple.shade900,
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
                         AppPrimaryButton(
-                          color: Theme.of(context).colorScheme.secondary,
-                          title: 'proceed',
+                          enabled: validated,
+                          onPressed: () {
+                            if (validated) {
+                              ref.read(loginProvider.notifier).login(context,
+                                  email: email, password: password);
+                            }
+                          },
+                          isLoading: ref.watch(loginProvider).isLoading,
+                          color: Colors.black,
+                          title: 'login',
                         ),
                         const Divider(),
-                        const AppPrimaryButton(
+                        AppPrimaryButton(
+                          color: Theme.of(context).colorScheme.primary,
                           title: 'Sign in with google',
                           putIcon: false,
                         ),
@@ -175,9 +173,15 @@ class _RegisterViewState extends State<RegisterView> {
                           height: 20.h,
                         ),
                         AuthBottomText(
-                          title: 'Already have an account?',
-                          actionText: 'Login',
-                          onClick: () {},
+                          title: "Are you new on our platform? ",
+                          actionText: 'Register',
+                          onClick: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const RegisterView()),
+                            );
+                          },
                         )
                       ],
                     ),
