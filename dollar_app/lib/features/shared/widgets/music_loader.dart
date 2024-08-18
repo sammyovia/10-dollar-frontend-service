@@ -22,7 +22,7 @@ class MusicLoader extends StatelessWidget {
         ),
         MiniMusicVisualizer(
           height: 15.h,
-         // width: 3.w,
+          width: 3.w,
           animate: true,
           color: Colors.white,
         ),

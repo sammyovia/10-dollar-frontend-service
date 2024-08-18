@@ -1,5 +1,8 @@
 import 'package:dollar_app/features/auth/view/otp_view.dart';
+import 'package:dollar_app/features/main/profile/providers/widgets/log_out_dialog.dart';
+import 'package:dollar_app/features/main/profile/providers/widgets/profile_body_widgets.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
+import 'package:dollar_app/features/shared/widgets/dialog_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -58,6 +61,7 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
                 AppPrimaryButton(
                     color: Theme.of(context).primaryColor,
+                    enabled: true,
                     height: 30.h,
                     width: 200.w,
                     title: 'Edit')
@@ -112,7 +116,10 @@ class _ProfileViewState extends State<ProfileView> {
               suffixIcon: IconlyBold.arrow_right,
             ),
             SizedBox(height: 10.h),
-            const ProfileBodyWidget(
+            ProfileBodyWidget(
+              onClick: () {
+                diolagMethod(context, child: const LogoutDialog());
+              },
               prefixIcon: Icons.logout,
               title: 'Log out',
               suffixIcon: IconlyBold.arrow_right,
@@ -124,44 +131,4 @@ class _ProfileViewState extends State<ProfileView> {
   }
 }
 
-class ProfileBodyWidget extends StatelessWidget {
-  const ProfileBodyWidget(
-      {super.key,
-      required this.prefixIcon,
-      required this.title,
-      this.suffixIcon});
-  final IconData prefixIcon;
-  final String title;
-  final IconData? suffixIcon;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
-      height: 40.h,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(8)),
-      child: Row(children: [
-        Icon(
-          prefixIcon,
-          color: Theme.of(context).primaryColor,
-        ),
-        SizedBox(
-          width: 20.w,
-        ),
-        Text(
-          title,
-          style: GoogleFonts.lato(fontSize: 14.sp),
-        ),
-        const Spacer(),
-        if (suffixIcon != null)
-          Icon(
-            suffixIcon,
-            color: Theme.of(context).primaryColor,
-          )
-      ]),
-    );
-  }
-}

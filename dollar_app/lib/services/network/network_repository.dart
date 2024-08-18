@@ -9,6 +9,12 @@ class NetworkRepository extends NetworkService {
     final response = await post(path, data: body);
     return response.data;
   }
+
+   Future<Map<String, dynamic>> getRequest(
+      {required String path}) async {
+    final response = await get(path);
+    return response.data;
+  }
 }
 
 final networkProvider = Provider((ref) => NetworkRepository(ref: ref));
