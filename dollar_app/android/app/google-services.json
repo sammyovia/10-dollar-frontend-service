@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "312486257891",
+    "project_id": "dolar-app-c6d72",
+    "storage_bucket": "dolar-app-c6d72.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312486257891:android:049a917a56551a1f1a91d6",
+        "android_client_info": {
+          "package_name": "com.example.dollar_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312486257891-q0ieurj9ltk7k0i41jdsr09bfvul27l8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dollar_app",
+            "certificate_hash": "3453f72873c77310c05a5e067146792c06797b9a"
+          }
+        },
+        {
+          "client_id": "312486257891-8ui0t016dniuoui56crgr0f4i4pddujs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD17i-0l9nknSB-JIkmzeHpQA4mughWa7I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312486257891-8ui0t016dniuoui56crgr0f4i4pddujs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

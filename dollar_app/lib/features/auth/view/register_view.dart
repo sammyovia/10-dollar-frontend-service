@@ -5,10 +5,14 @@ import 'package:dollar_app/features/auth/view/login_view.dart';
 import 'package:dollar_app/features/auth/widgets/auth_bottom_text.dart';
 import 'package:dollar_app/features/shared/constant/image_constant.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
+import 'package:dollar_app/services/router/app_router.dart';
+import 'package:dollar_app/services/router/app_routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconly/iconly.dart';
 
 import '../../shared/widgets/app_text_field.dart';
@@ -29,6 +33,34 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
   String passwordErrorText = '';
   bool showPassword = true;
   bool validated = false;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  Future<User?> _signInWithGoogle(context) async {
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) {
+      // The user canceled the sign-in
+      return null;
+    }
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final UserCredential userCredential =
+        await _auth.signInWithCredential(credential);
+    if (userCredential.user?.email != null) {
+      // ref.read(registerProvider.notifier).register(context,
+      //     email: userCredential.user?.email ?? "", password: '123456789');
+      ref.read(router).go(AppRoutes.home);
+    }
+
+    return userCredential.user;
+  }
 
   void validate() {
     final hasEmail = email.isNotEmpty && emailErrorText.isEmpty;
@@ -172,10 +204,10 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         onPressed: () {
                           //context.go(AppRoutes.home);
                           if (validated) {
-                            ref
-                                .read(registerProvider.notifier)
-                                .register(context,
-                                  email: email, password: password);
+                            ref.read(registerProvider.notifier).register(
+                                context,
+                                email: email,
+                                password: password);
                           }
                         },
                         color: Colors.black,
@@ -183,6 +215,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       ),
                       const Divider(),
                       AppPrimaryButton(
+                        onPressed: () => _signInWithGoogle(context),
                         color: Theme.of(context).colorScheme.primary,
                         title: 'Sign in with google',
                         putIcon: false,
