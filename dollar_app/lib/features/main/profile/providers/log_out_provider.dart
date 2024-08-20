@@ -15,7 +15,6 @@ class LogOutProvider extends AsyncNotifier<Map<String, dynamic>> {
       state = const AsyncLoading();
       final res =
           await ref.read(networkProvider).getRequest(path: '/auth/logout');
-      print(res);
       if (res['success'] == true) {
         Navigator.pop(context);
         ref.read(router).go(AppRoutes.login);

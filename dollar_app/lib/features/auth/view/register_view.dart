@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:dollar_app/features/auth/providers/register_provider.dart';
-import 'package:dollar_app/features/auth/view/login_view.dart';
 import 'package:dollar_app/features/auth/widgets/auth_bottom_text.dart';
 import 'package:dollar_app/features/shared/constant/image_constant.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
@@ -14,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconly/iconly.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../shared/widgets/app_text_field.dart';
 
@@ -58,6 +58,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
       //     email: userCredential.user?.email ?? "", password: '123456789');
       ref.read(router).go(AppRoutes.home);
     }
+
 
     return userCredential.user;
   }
@@ -202,7 +203,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         enabled: validated,
                         isLoading: ref.watch(registerProvider).isLoading,
                         onPressed: () {
-                          //context.go(AppRoutes.home);
                           if (validated) {
                             ref.read(registerProvider.notifier).register(
                                 context,
@@ -227,10 +227,12 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         title: 'Already have an account?',
                         actionText: 'Login',
                         onClick: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginView()));
+                          GoRouter.of(context).go('/login');
+                          //context.go(AppRoutes.login);
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => const LoginView()));
                         },
                       )
                     ],

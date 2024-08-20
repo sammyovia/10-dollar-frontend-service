@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:dollar_app/features/auth/providers/login_provider.dart';
 import 'package:dollar_app/features/auth/view/otp_view.dart';
-import 'package:dollar_app/features/auth/view/register_view.dart';
 import 'package:dollar_app/features/auth/widgets/auth_bottom_text.dart';
 import 'package:dollar_app/features/shared/constant/image_constant.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
@@ -10,6 +9,7 @@ import 'package:dollar_app/features/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 
@@ -176,11 +176,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           title: "Are you new on our platform? ",
                           actionText: 'Register',
                           onClick: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const RegisterView()),
-                            );
+                            GoRouter.of(context).go('/register');
                           },
                         )
                       ],

@@ -10,10 +10,12 @@ class RegisterProvider extends AsyncNotifier<Map<String, dynamic>> {
       {required String email, required String password}) async {
     try {
       state = const AsyncLoading();
-      final res = await ref
-          .read(networkProvider)
-          .postRequest(path: '/auth/register',body: {"email":email,"password":password});
-      ref.read(router).go(AppRoutes.login);
+      final res = await ref.read(networkProvider).postRequest(
+          path: '/auth/register', body: {"email": email, "password": password});
+      if (res['status'] == true) {
+        ref.read(router).go(AppRoutes.login);
+      }
+
       state = AsyncData(res);
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);

@@ -20,6 +20,7 @@ class _OnboardingViewState extends State<OnboardingView> {
     final tokenStorage = TokenStorage();
     final accessToken = await tokenStorage.getAccessToken();
     final refreshToken = await tokenStorage.getRefreshToken();
+    
     if (context.mounted) {
       if (accessToken != null && refreshToken != null) {
         // Use the tokens to authenticate the user
