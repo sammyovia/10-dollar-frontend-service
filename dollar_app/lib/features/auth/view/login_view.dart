@@ -46,7 +46,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               image: DecorationImage(
                   image: AssetImage(AppImages.onboarding2),
                   fit: BoxFit.fill,
-                  opacity: 0.8)),
+                  opacity: 0.1)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +142,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             child: Text(
                               "Forgot Password?",
                               style: GoogleFonts.redHatDisplay(
-                                color: Colors.purple.shade900,
                                 fontSize: 12.sp,
                               ),
                             ),

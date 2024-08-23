@@ -5,6 +5,7 @@ import 'package:dollar_app/services/network/network_repository.dart';
 import 'package:dollar_app/services/network/token_storage.dart';
 import 'package:dollar_app/services/router/app_router.dart';
 import 'package:dollar_app/services/router/app_routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,6 +20,8 @@ class LogOutProvider extends AsyncNotifier<Map<String, dynamic>> {
         Navigator.pop(context);
         ref.read(router).go(AppRoutes.login);
       }
+
+      FirebaseAuth.instance.signOut();
 
       state = AsyncData(res);
       token.clearTokens();
