@@ -1,25 +1,37 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dollar_app/features/onboarding/model/onboarding.dart';
+import 'package:dollar_app/features/onboarding/provider/indicator_provider.dart';
+import 'package:dollar_app/features/onboarding/view/widgets/indicator.dart';
 import 'package:dollar_app/features/shared/constant/image_constant.dart';
+import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
 import 'package:dollar_app/services/network/token_storage.dart';
 import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class OnboardingView extends StatefulWidget {
+class OnboardingView extends ConsumerStatefulWidget {
   const OnboardingView({super.key});
 
   @override
-  State<OnboardingView> createState() => _OnboardingViewState();
+  ConsumerState<OnboardingView> createState() => _OnboardingViewState();
 }
 
-class _OnboardingViewState extends State<OnboardingView> {
+class _OnboardingViewState extends ConsumerState<OnboardingView> {
+  late CarouselSliderController _carouselController;
+  @override
+  initState() {
+    super.initState();
+    _carouselController = CarouselSliderController();
+  }
+
   Future<void> loadTokensOnStartup(BuildContext context) async {
     final tokenStorage = TokenStorage();
     final accessToken = await tokenStorage.getAccessToken();
     final refreshToken = await tokenStorage.getRefreshToken();
+
     if (context.mounted) {
       if (accessToken != null && refreshToken != null) {
         // Use the tokens to authenticate the user
@@ -33,15 +45,18 @@ class _OnboardingViewState extends State<OnboardingView> {
 
   final images = [
     const OnboardingModel(
+        title: 'Upload Videos',
         id: 1,
         image: AppImages.onboarding1,
         text:
             'Upload videos for voting and win money for being the top voted artist.'),
     const OnboardingModel(
+        title: 'Showcase Your Talent',
         id: 2,
         image: AppImages.onboarding2,
         text: 'Showcase your talent and earn rewards for your creativity.'),
     const OnboardingModel(
+        title: 'Stake On Videos',
         id: 3,
         image: AppImages.onboarding3,
         text: 'Stake on videos and win big.'),
@@ -49,124 +64,117 @@ class _OnboardingViewState extends State<OnboardingView> {
 
   @override
   Widget build(BuildContext context) {
+    final curent = ref.watch(inidcatorProvider);
     return Scaffold(
-      body: Stack(
+      body: ListView(
         children: [
-          Container(
-            width: double.infinity,
-            height: 600.h,
-            decoration: const BoxDecoration(
-              color: Colors.black87,
-              image: DecorationImage(
-                image: AssetImage(AppImages.onboarding2),
-                fit: BoxFit.cover,
-                //opacity: 0.
-              ),
-            ),
-          ),
-          Container(
-            height: 200.h,
-            //width: 270,
-            decoration: BoxDecoration(
-              //borderRadius: BorderRadius.circular(24.0),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Theme.of(context).colorScheme.primary,
-                  Theme.of(context).colorScheme.primary.withOpacity(0),
-                ],
-              ),
-            ),
-          ),
-          Column(
-            children: [
-              const Expanded(child: SizedBox()),
-              Container(
-                height: 400.h,
-                //width: 270,
-                decoration: BoxDecoration(
-                  //borderRadius: BorderRadius.circular(24.0),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Theme.of(context).colorScheme.secondary.withOpacity(0),
-                      //Colors.transparent,
-                      //Color(0xFFF9FAF8),
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.primary
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
+          CarouselSlider.builder(
+            carouselController: _carouselController,
+            itemCount: 3,
+            itemBuilder: (context, index, realIndex) {
+              return Column(
                 children: [
-                  const Expanded(child: SizedBox()),
                   SizedBox(
-                    height: 200.h,
-                  ),
-                  Expanded(
-                    child: CarouselSlider.builder(
-                      itemCount: 3,
-                      itemBuilder: (context, index, realIndex) {
-                        return Text(
-                          images[index].text,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.redHatDisplay(
-                              color: Colors.white,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.bold),
-                        );
-                      },
-                      options: CarouselOptions(
-                          autoPlayInterval: const Duration(seconds: 7),
-                          height: 70.h,
-                          autoPlay: true,
-                          viewportFraction: 1),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      loadTokensOnStartup(context);
-                    },
-                    child: Container(
-                      height: 50.h,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.black),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Get Started',
-                            style: GoogleFonts.notoSans(
-                                fontSize: 20.sp, color: Colors.white),
+                    height: 390.h,
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: double.infinity,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(images[index].image),
+                                fit: BoxFit.cover,
+                                opacity: 0.5),
+                            color: const Color(0XFFD9D9D9),
+                            borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(50.r),
+                            ),
                           ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Icon(
-                            size: 20.r,
-                            Icons.play_circle_fill,
-                            color: Colors.white,
-                          )
-                        ],
-                      ),
+                        ),
+                        Positioned(
+                          top: 20.h,
+                          right: 30.w,
+                          child: AppPrimaryButton(
+                              onPressed: () {
+                                context.go(AppRoutes.register);
+                              },
+                              putIcon: false,
+                              height: 30.h,
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 100.w,
+                              title: 'Skip'),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(
-                    height: 50.h,
-                  )
+                    height: 30.h,
+                  ),
+                  Text(
+                    images[index].title,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.notoSans(fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Text(
+                    images[index].text,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.lato(fontSize: 12.sp),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  const IndicatorWidget(),
+                  // SizedBox(
+                  //   height: 30.h,
+                  // ),
                 ],
-              ),
-            ),
+              );
+            },
+            options: CarouselOptions(
+                enableInfiniteScroll: false,
+                autoPlayInterval: const Duration(seconds: 7),
+                height: MediaQuery.of(context).size.height * 0.85,
+                autoPlay: false,
+                viewportFraction: 1,
+                onPageChanged: (index, reason) {
+                  ref.watch(inidcatorProvider.notifier).state = index;
+                }),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              AppPrimaryButton(
+                  onPressed: () {
+                    _carouselController.previousPage(curve: Curves.easeIn);
+                  },
+                  radius: 8,
+                  putIcon: false,
+                  height: 30.h,
+                  color: Theme.of(context).colorScheme.primary,
+                  enabled: true,
+                  width: 100.w,
+                  title: 'prev'),
+              AppPrimaryButton(
+                  onPressed: () {
+                    if (curent < 2) {
+                      _carouselController.nextPage(
+                        curve: Curves.linear,
+                      );
+                    } else {
+                      context.go(AppRoutes.register);
+                    }
+                  },
+                  radius: 8,
+                  putIcon: false,
+                  height: 30.h,
+                  color: Theme.of(context).colorScheme.primary,
+                  enabled: true,
+                  width: 100.w,
+                  title: curent == 2 ? 'Procced' : 'next'),
+            ],
           ),
         ],
       ),

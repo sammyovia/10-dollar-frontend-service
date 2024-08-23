@@ -1,19 +1,16 @@
 import 'dart:ui';
 
+import 'package:dollar_app/features/auth/providers/google_sign_in_provider.dart';
 import 'package:dollar_app/features/auth/providers/register_provider.dart';
-import 'package:dollar_app/features/auth/view/login_view.dart';
 import 'package:dollar_app/features/auth/widgets/auth_bottom_text.dart';
 import 'package:dollar_app/features/shared/constant/image_constant.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
-import 'package:dollar_app/services/router/app_router.dart';
-import 'package:dollar_app/services/router/app_routes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconly/iconly.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../shared/widgets/app_text_field.dart';
 
@@ -29,43 +26,19 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
   String usernameErrorText = '';
   String email = '';
   String password = '';
+  String confirmPassword = '';
   String emailErrorText = '';
   String passwordErrorText = '';
+  String confirmPasswordErrorText = '';
   bool showPassword = true;
+  bool showConfirmPassword = true;
   bool validated = false;
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  Future<User?> _signInWithGoogle(context) async {
-    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-    if (googleUser == null) {
-      // The user canceled the sign-in
-      return null;
-    }
-
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    final UserCredential userCredential =
-        await _auth.signInWithCredential(credential);
-    if (userCredential.user?.email != null) {
-      // ref.read(registerProvider.notifier).register(context,
-      //     email: userCredential.user?.email ?? "", password: '123456789');
-      ref.read(router).go(AppRoutes.home);
-    }
-
-    return userCredential.user;
-  }
 
   void validate() {
     final hasEmail = email.isNotEmpty && emailErrorText.isEmpty;
     final hasPassword = password.isNotEmpty && passwordErrorText.isEmpty;
-    final valid = hasEmail && hasPassword;
+    final hasConfimpassword = password == confirmPassword;
+    final valid = hasEmail && hasPassword && hasConfimpassword;
 
     setState(() {
       validated = valid;
@@ -86,6 +59,15 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
       passwordErrorText = 'cannot be less than 8 characters';
     } else {
       passwordErrorText = '';
+    }
+    setState(() {});
+  }
+
+  void setConfirmPasswordError() {
+    if (password != confirmPassword) {
+      confirmPasswordErrorText = 'passwords does not match';
+    } else {
+      confirmPasswordErrorText = '';
     }
     setState(() {});
   }
@@ -114,7 +96,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
             image: DecorationImage(
                 image: AssetImage(AppImages.onboarding2),
                 fit: BoxFit.fill,
-                opacity: 0.8)),
+                opacity: 0.1)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,6 +157,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       AppTextField(
                         onchaged: (v) {
                           setPasswordError(v ?? '');
+                          setConfirmPasswordError();
                           password = v!;
                           validate();
                         },
@@ -196,13 +179,38 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         ),
                       ),
                       SizedBox(
+                        height: 16.h,
+                      ),
+                      AppTextField(
+                        onchaged: (v) {
+                          setConfirmPasswordError();
+                          confirmPassword = v!;
+                          validate();
+                        },
+                        obscureText: showPassword,
+                        labelText: 'Confirm Password',
+                        errorText: confirmPasswordErrorText,
+                        hintText: '********',
+                        icon: IconlyBold.lock,
+                        suffix: GestureDetector(
+                          onTap: () {
+                            showConfirmPassword = !showConfirmPassword;
+                            setState(() {});
+                          },
+                          child: Icon(
+                              showConfirmPassword 
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.black87),
+                        ),
+                      ),
+                      SizedBox(
                         height: 20.h,
                       ),
                       AppPrimaryButton(
                         enabled: validated,
                         isLoading: ref.watch(registerProvider).isLoading,
                         onPressed: () {
-                          //context.go(AppRoutes.home);
                           if (validated) {
                             ref.read(registerProvider.notifier).register(
                                 context,
@@ -215,7 +223,10 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       ),
                       const Divider(),
                       AppPrimaryButton(
-                        onPressed: () => _signInWithGoogle(context),
+                        isLoading: ref.watch(googleSinginProvider).isLoading,
+                        onPressed: () => ref
+                            .read(googleSinginProvider.notifier)
+                            .signInWithGoogle(context),
                         color: Theme.of(context).colorScheme.primary,
                         title: 'Sign in with google',
                         putIcon: false,
@@ -227,10 +238,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         title: 'Already have an account?',
                         actionText: 'Login',
                         onClick: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginView()));
+                          GoRouter.of(context).go('/login');
+                         
                         },
                       )
                     ],

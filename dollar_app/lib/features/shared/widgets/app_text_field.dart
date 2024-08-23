@@ -41,8 +41,8 @@ class AppTextField extends StatelessWidget {
             ),
             Text(
               errorText,
-              style: GoogleFonts.redHatDisplay(
-                  fontSize: 14.sp, color: Colors.red.shade900),
+              style: GoogleFonts.lato(
+                  fontSize: 10.sp, color: Colors.red.shade900),
             )
           ],
         ),

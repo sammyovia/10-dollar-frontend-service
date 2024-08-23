@@ -14,7 +14,8 @@ class AppPrimaryButton extends StatelessWidget {
       this.width,
       this.height,
       this.isLoading = false,
-      this.enabled = false});
+      this.enabled = false,
+      this.radius = 15});
   final String title;
   final bool putIcon;
   final Color color;
@@ -23,6 +24,7 @@ class AppPrimaryButton extends StatelessWidget {
   final double? height;
   final bool isLoading;
   final bool enabled;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +34,8 @@ class AppPrimaryButton extends StatelessWidget {
         width: width ?? double.infinity,
         height: height ?? 50.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: enabled? color:Colors.grey,
+          borderRadius: BorderRadius.circular(radius),
+          color: enabled ? color : color,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
