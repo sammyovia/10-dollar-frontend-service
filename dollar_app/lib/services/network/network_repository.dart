@@ -5,7 +5,7 @@ class NetworkRepository extends NetworkService {
   NetworkRepository({required super.ref});
 
   Future<Map<String, dynamic>> postRequest(
-      {required String path, Map<String,dynamic>? body}) async {
+      {required String path, dynamic body}) async {
     final response = await post(path, data: body);
     return response.data;
   }

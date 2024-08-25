@@ -25,9 +25,10 @@ class NetworkService {
         },
       ),
     );
-    _dio.interceptors.add(
-        _ErrorInterceptor(ref: ref, tokenStorage: _tokenStorage, dio: _dio));
+   
     _dio.interceptors.add(_AuthInterceptor(tokenStorage: _tokenStorage));
+     _dio.interceptors.add(
+        _ErrorInterceptor(ref: ref, tokenStorage: _tokenStorage, dio: _dio));
   }
 
   Future<Response> get(String path,
@@ -90,6 +91,7 @@ class _AuthInterceptor extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
+   
     final accessToken = await tokenStorage.getAccessToken();
     if (accessToken != null) {
       options.headers['Authorization'] = 'Bearer $accessToken';

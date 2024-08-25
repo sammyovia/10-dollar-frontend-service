@@ -18,7 +18,7 @@ class GoogleSignInProvider extends AsyncNotifier<User?> {
   Future<void> signInWithGoogle(context) async {
     try {
       state = const AsyncLoading();
-       final token = TokenStorage();
+      final token = TokenStorage();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
         return;
@@ -46,12 +46,12 @@ class GoogleSignInProvider extends AsyncNotifier<User?> {
         lastName = "";
       }
 
-
       final body = {
         "googleId": userCredential.user?.uid,
         'firstName': firstName,
         'lastName': lastName,
-        'email': userCredential.user?.email
+        'email': userCredential.user?.email,
+        'photoUrl': userCredential.user?.photoURL
       };
 
       final res = await ref

@@ -1,5 +1,5 @@
 import 'package:dollar_app/features/auth/view/otp_view.dart';
-import 'package:dollar_app/features/main/home/home_view.dart';
+import 'package:dollar_app/features/shared/widgets/home_artist_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
