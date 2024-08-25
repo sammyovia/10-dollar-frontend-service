@@ -84,7 +84,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                             image: DecorationImage(
                                 image: AssetImage(images[index].image),
                                 fit: BoxFit.cover,
-                                opacity: 0.5),
+                                ),
                             color: const Color(0XFFD9D9D9),
                             borderRadius: BorderRadius.vertical(
                               bottom: Radius.circular(50.r),

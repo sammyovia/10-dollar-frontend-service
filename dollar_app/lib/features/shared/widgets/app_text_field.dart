@@ -8,7 +8,7 @@ class AppTextField extends StatelessWidget {
     required this.labelText,
     required this.errorText,
     required this.hintText,
-    required this.icon,
+     this.icon,
     this.controller,
     this.onchaged,
     this.keybordType,
@@ -18,7 +18,7 @@ class AppTextField extends StatelessWidget {
   final String labelText;
   final String errorText;
   final String hintText;
-  final IconData icon;
+  final IconData? icon;
   final TextEditingController? controller;
   final Function(String?)? onchaged;
   final TextInputType? keybordType;
