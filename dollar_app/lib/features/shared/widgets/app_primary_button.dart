@@ -41,7 +41,7 @@ class AppPrimaryButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isLoading ? "Loading..." : title,
+              isLoading ? "" : title,
               style: GoogleFonts.lato(color: Colors.white),
             ),
             SizedBox(

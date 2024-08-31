@@ -75,7 +75,7 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
                   GestureDetector(
                     onTap: () {
                       AppBottomSheet.showBottomSheet(
-                          context, const StakeWidget());
+                          context, child:  const StakeWidget());
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
@@ -130,3 +130,6 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
     );
   }
 }
+
+
+

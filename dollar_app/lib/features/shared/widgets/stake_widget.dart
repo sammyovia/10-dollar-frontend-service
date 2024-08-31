@@ -78,8 +78,9 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
   void _onConfirm(context) {
     Navigator.pop(context);
     AppBottomSheet.showBottomSheet(
+      isDismissible: false,
         context,
-        SizedBox(
+      child:   SizedBox(
           width: double.infinity,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

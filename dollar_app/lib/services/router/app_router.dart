@@ -1,4 +1,5 @@
 import 'package:dollar_app/features/main/chat/view/chat_view.dart';
+import 'package:dollar_app/features/main/feeds/view/feeds_details_view.dart';
 import 'package:dollar_app/features/main/feeds/view/feeds_view.dart';
 import 'package:dollar_app/features/main/feeds/view/new_feeds_view.dart';
 import 'package:dollar_app/features/main/home/home_view.dart';
@@ -76,12 +77,11 @@ final router = Provider<GoRouter>((ref) {
                   pageBuilder: (context, state) {
                     return getPage(child: const HomeView(), state: state);
                   }),
-                   GoRoute(
+              GoRoute(
                   path: AppRoutes.profile,
                   pageBuilder: (context, state) {
                     return getPage(child: const ProfileView(), state: state);
                   }),
-
             ]),
             StatefulShellBranch(navigatorKey: _poolsNavigationKey, routes: [
               GoRoute(
@@ -98,7 +98,7 @@ final router = Provider<GoRouter>((ref) {
                   },
                   routes: [
                     GoRoute(
-                      parentNavigatorKey: _feedsNavigationKey,
+                        parentNavigatorKey: _feedsNavigationKey,
                         path: 'new',
                         pageBuilder: (context, state) {
                           return CustomTransitionPage(
@@ -110,6 +110,12 @@ final router = Provider<GoRouter>((ref) {
                                   child: const NewFeedsView(),
                                 );
                               });
+                        }),
+                    GoRoute(
+                        path: 'feedDetails/:postId',
+                        builder: (BuildContext context, GoRouterState state) {
+                          final postId = state.pathParameters['postId']!;
+                          return FeedsDetailsView(postId: postId);
                         })
                   ])
             ]),
