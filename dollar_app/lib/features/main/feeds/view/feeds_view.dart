@@ -1,19 +1,21 @@
 import 'package:dollar_app/features/auth/view/otp_view.dart';
-import 'package:dollar_app/features/shared/widgets/home_artist_widget.dart';
+import 'package:dollar_app/features/main/feeds/providers/get_feeds_provider.dart';
+import 'package:dollar_app/features/main/feeds/widgets/feeds_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 
-class FeedsView extends StatefulWidget {
+class FeedsView extends ConsumerStatefulWidget {
   const FeedsView({super.key});
 
   @override
-  State<FeedsView> createState() => _FeedsViewState();
+  ConsumerState<FeedsView> createState() => _FeedsViewState();
 }
 
-class _FeedsViewState extends State<FeedsView> {
+class _FeedsViewState extends ConsumerState<FeedsView> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -66,91 +68,97 @@ class _FeedsViewState extends State<FeedsView> {
         ],
       ),
       body: SafeArea(
-          child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.w),
-              child: Text(
-                "Feed",
-                style: GoogleFonts.lato(fontSize: 16.sp),
+          child: RefreshIndicator(
+        onRefresh: () async {
+          await ref.refresh(getFeedsProvider.notifier).getFeeds();
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                child: Text(
+                  "Feed",
+                  style: GoogleFonts.lato(fontSize: 16.sp),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            const Divider(
-              thickness: 2,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.w),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.grey.shade300,
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      context.go('/feeds/new');
-                    },
-                    child: SizedBox(
-                        width: 230.w,
-                        child: TextField(
-                          enabled: false,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              fillColor: isDark
-                                  ? const Color(0xFF064D4D)
-                                  : const Color(0xFFE0F7F7),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: isDark
-                                          ? const Color(0xFFB2DFDF)
-                                          : const Color(0xFF5AA3A3)),
-                                  borderRadius: BorderRadius.circular(50)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: isDark
-                                          ? const Color(0xFFB2DFDF)
-                                          : const Color(0xFF5AA3A3)),
-                                  borderRadius: BorderRadius.circular(50)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: isDark
-                                          ? const Color(0xFFB2DFDF)
-                                          : const Color(0xFF5AA3A3)),
-                                  borderRadius: BorderRadius.circular(50)),
-                              hintText: "What's Popping?"),
-                        )),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      IconlyBold.image,
-                      size: 20.r,
-                      color: Theme.of(context).colorScheme.primary,
+              SizedBox(
+                height: 10.h,
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.grey.shade300,
                     ),
-                  )
-                ],
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        context.go('/feeds/new');
+                      },
+                      child: SizedBox(
+                          width: 230.w,
+                          child: TextField(
+                            enabled: false,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                                isDense: true,
+                                fillColor: isDark
+                                    ? const Color(0xFF064D4D)
+                                    : const Color(0xFFE0F7F7),
+                                filled: true,
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: isDark
+                                            ? const Color(0xFFB2DFDF)
+                                            : const Color(0xFF5AA3A3)),
+                                    borderRadius: BorderRadius.circular(50)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: isDark
+                                            ? const Color(0xFFB2DFDF)
+                                            : const Color(0xFF5AA3A3)),
+                                    borderRadius: BorderRadius.circular(50)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: isDark
+                                            ? const Color(0xFFB2DFDF)
+                                            : const Color(0xFF5AA3A3)),
+                                    borderRadius: BorderRadius.circular(50)),
+                                hintText: "What's Popping?"),
+                          )),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        IconlyBold.image,
+                        size: 20.r,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            const PinnedInfoWidget(),
-            SizedBox(
-              height: 15.h,
-            ),
-            const HomeArtistWidget()
-          ],
+              SizedBox(
+                height: 15.h,
+              ),
+              const PinnedInfoWidget(),
+              SizedBox(
+                height: 15.h,
+              ),
+              const FeedsWidget()
+            ],
+          ),
         ),
       )),
     );
@@ -170,18 +178,18 @@ class PinnedInfoWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
           SizedBox(width: 8.w),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Row(
-              children: [
-                CircleAvatar(
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
                     backgroundColor: Colors.grey.shade300,
                   ),
                   SizedBox(width: 8.w),
-                Column(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -195,23 +203,18 @@ class PinnedInfoWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                 const Spacer(),
-                  
-              Icon(
-                Icons.push_pin,
-                color: Colors.red,
-                size: 20.r,
+                  const Spacer(),
+                  Icon(
+                    Icons.push_pin,
+                    color: Colors.red,
+                    size: 20.r,
+                  ),
+                  Icon(
+                    Icons.more_vert,
+                    size: 20.r,
+                  ),
+                ],
               ),
-              Icon(
-                Icons.more_vert,
-                size: 20.r,
-              ),
-                
-              ],
-            ),
-
-              
-             
               SizedBox(
                 height: 10.h,
               ),
@@ -226,7 +229,7 @@ class PinnedInfoWidget extends StatelessWidget {
                 height: 8.h,
               ),
               Container(
-                width:double.infinity,
+                width: double.infinity,
                 height: 150,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),

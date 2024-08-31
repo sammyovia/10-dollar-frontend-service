@@ -13,7 +13,9 @@ class VideoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return
+    
+     Stack(
       children: [
         Container(
           width: double.infinity,

@@ -218,20 +218,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
       required this.title,
       this.centerTitle = true,
       this.actions,
-      this.height = kToolbarHeight});
+      this.height = kToolbarHeight,
+      this.elevation = 0});
   final Widget title;
   final bool centerTitle;
   final List<Widget>? actions;
   final double height;
+  final double elevation;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 0,
+      elevation: elevation,
       backgroundColor: Theme.of(context).colorScheme.surface,
       centerTitle: centerTitle,
       title: title,
       actions: actions,
+      scrolledUnderElevation: 1,
     );
   }
 

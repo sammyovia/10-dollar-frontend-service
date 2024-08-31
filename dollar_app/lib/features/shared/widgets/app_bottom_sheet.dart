@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-
-
 class AppBottomSheet {
-  static showBottomSheet(BuildContext context, Widget child) {
+  static showBottomSheet(
+    BuildContext context, {
+    required Widget child,
+     bool isDismissible = true,
+  }) {
     showModalBottomSheet(
-      isDismissible: false,
+      isDismissible: isDismissible,
       useRootNavigator: true,
       isScrollControlled: true,
       context: context,
