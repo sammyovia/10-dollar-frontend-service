@@ -66,6 +66,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
   Widget build(BuildContext context) {
     final curent = ref.watch(inidcatorProvider);
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: ListView(
         children: [
           CarouselSlider.builder(
@@ -82,9 +83,9 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                           height: double.infinity,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(images[index].image),
-                                fit: BoxFit.cover,
-                                ),
+                              image: AssetImage(images[index].image),
+                              fit: BoxFit.cover,
+                            ),
                             color: const Color(0XFFD9D9D9),
                             borderRadius: BorderRadius.vertical(
                               bottom: Radius.circular(50.r),
@@ -100,7 +101,8 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                               },
                               putIcon: false,
                               height: 30.h,
-                              color: Theme.of(context).colorScheme.primary,
+                              enabled: true,
+                              color: const Color.fromARGB(148, 185, 88, 81),
                               width: 100.w,
                               title: 'Skip'),
                         ),
@@ -153,7 +155,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                   radius: 8,
                   putIcon: false,
                   height: 30.h,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).primaryColor,
                   enabled: true,
                   width: 100.w,
                   title: 'prev'),
@@ -170,7 +172,6 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                   radius: 8,
                   putIcon: false,
                   height: 30.h,
-                  color: Theme.of(context).colorScheme.primary,
                   enabled: true,
                   width: 100.w,
                   title: curent == 2 ? 'Procced' : 'next'),

@@ -3,6 +3,7 @@ import 'package:dollar_app/features/auth/providers/forgot_password_code_provider
 import 'package:dollar_app/features/auth/providers/resend_auth_otp.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
 import 'package:dollar_app/features/shared/widgets/app_text_field.dart';
+import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -212,35 +213,3 @@ class _OTPViewState extends ConsumerState<OTPView> {
   }
 }
 
-class CustomAppBar extends StatelessWidget implements PreferredSize {
-  const CustomAppBar(
-      {super.key,
-      required this.title,
-      this.centerTitle = true,
-      this.actions,
-      this.height = kToolbarHeight,
-      this.elevation = 0});
-  final Widget title;
-  final bool centerTitle;
-  final List<Widget>? actions;
-  final double height;
-  final double elevation;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      elevation: elevation,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      centerTitle: centerTitle,
-      title: title,
-      actions: actions,
-      scrolledUnderElevation: 1,
-    );
-  }
-
-  @override
-  Widget get child => Container();
-
-  @override
-  Size get preferredSize => Size.fromHeight(height);
-}

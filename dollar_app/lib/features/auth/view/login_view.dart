@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dollar_app/features/auth/providers/google_sign_in_provider.dart';
 import 'package:dollar_app/features/auth/providers/login_provider.dart';
 import 'package:dollar_app/features/auth/view/otp_view.dart';
 import 'package:dollar_app/features/auth/widgets/auth_bottom_text.dart';
@@ -36,13 +37,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 23.w),
           decoration: const BoxDecoration(
-              color: Color(0xFFF5F5F5),
+              //  color: Color(0xFFF5F5F5),
               image: DecorationImage(
                   image: AssetImage(AppImages.onboarding2),
                   fit: BoxFit.fill,
@@ -119,10 +121,10 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               setState(() {});
                             },
                             child: Icon(
-                                showPassword
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Colors.black87),
+                              showPassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -151,7 +153,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           height: 20.h,
                         ),
                         AppPrimaryButton(
-                          enabled: validated,
+                          enabled: true,
                           onPressed: () {
                             if (validated) {
                               ref.read(loginProvider.notifier).login(context,
@@ -164,6 +166,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         ),
                         const Divider(),
                         AppPrimaryButton(
+                          enabled: true,
+                          isLoading: ref.watch(googleSinginProvider).isLoading,
+                          onPressed: () => ref
+                              .read(googleSinginProvider.notifier)
+                              .signInWithGoogle(context),
                           color: Theme.of(context).colorScheme.primary,
                           title: 'Sign in with google',
                           putIcon: false,

@@ -33,10 +33,10 @@ class _VideoPreviewState extends State<VideoPreview> {
   @override
   Widget build(BuildContext context) {
     return _controller.value.isInitialized
-        ? SizedBox(
+        ? const SizedBox(
             height: 80,
             width: 80,
-            child: VideoPlayer(_controller),
+            child: Icon(Icons.video_collection),
           )
         : Container(
             height: 80,

@@ -5,6 +5,8 @@ import 'package:dollar_app/features/main/feeds/view/new_feeds_view.dart';
 import 'package:dollar_app/features/main/home/home_view.dart';
 import 'package:dollar_app/features/main/polls/polls_view.dart';
 import 'package:dollar_app/features/main/profile/profile_view.dart';
+import 'package:dollar_app/features/main/videos/view/upload_video_view.dart';
+import 'package:dollar_app/features/main/videos/view/videos_view.dart';
 import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -81,7 +83,24 @@ final router = Provider<GoRouter>((ref) {
                   path: AppRoutes.profile,
                   pageBuilder: (context, state) {
                     return getPage(child: const ProfileView(), state: state);
-                  }),
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'videos',
+                        pageBuilder: (context, state) {
+                          return getPage(
+                              child: const VideosView(), state: state);
+                        },
+                        routes: [
+                          GoRoute(
+                              path: 'upload',
+                              pageBuilder: (context, state) {
+                                return getPage(
+                                    child: const UploadVideoView(),
+                                    state: state);
+                              }),
+                        ]),
+                  ]),
             ]),
             StatefulShellBranch(navigatorKey: _poolsNavigationKey, routes: [
               GoRoute(

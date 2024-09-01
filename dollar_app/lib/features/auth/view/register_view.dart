@@ -64,7 +64,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
   }
 
   void setConfirmPasswordError() {
-    if (password != confirmPassword) {
+    if (confirmPassword != password) {
       confirmPasswordErrorText = 'passwords does not match';
     } else {
       confirmPasswordErrorText = '';
@@ -92,7 +92,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 23.w),
         decoration: const BoxDecoration(
-            color: Color(0xFFF5F5F5),
+            //color: Color(0xFFF5F5F5),
             image: DecorationImage(
                 image: AssetImage(AppImages.onboarding2),
                 fit: BoxFit.fill,
@@ -157,7 +157,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       AppTextField(
                         onchaged: (v) {
                           setPasswordError(v ?? '');
-                          setConfirmPasswordError();
+
                           password = v!;
                           validate();
                         },
@@ -172,10 +172,10 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             setState(() {});
                           },
                           child: Icon(
-                              showPassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.black87),
+                            showPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -198,17 +198,17 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             setState(() {});
                           },
                           child: Icon(
-                              showConfirmPassword 
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.black87),
+                            showConfirmPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
                         ),
                       ),
                       SizedBox(
                         height: 20.h,
                       ),
                       AppPrimaryButton(
-                        enabled: validated,
+                        enabled: true,
                         isLoading: ref.watch(registerProvider).isLoading,
                         onPressed: () {
                           if (validated) {
@@ -223,6 +223,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       ),
                       const Divider(),
                       AppPrimaryButton(
+                        enabled: true,
                         isLoading: ref.watch(googleSinginProvider).isLoading,
                         onPressed: () => ref
                             .read(googleSinginProvider.notifier)
@@ -239,7 +240,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         actionText: 'Login',
                         onClick: () {
                           GoRouter.of(context).go('/login');
-                         
                         },
                       )
                     ],

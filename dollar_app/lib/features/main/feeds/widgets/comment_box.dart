@@ -4,6 +4,7 @@ import 'package:dollar_app/features/main/feeds/providers/comment_provider.dart';
 import 'package:dollar_app/features/main/feeds/providers/get_comments_provider.dart';
 import 'package:dollar_app/features/main/feeds/widgets/file_attachment_widget.dart';
 import 'package:dollar_app/features/shared/widgets/music_loader.dart';
+import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:dollar_app/services/date_manipulation.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -134,34 +135,37 @@ class _CommentBoxState extends ConsumerState<CommentBox> {
               ),
 
             comments.when(
-                data: (data) {
-                  return data.isEmpty
-                      ? const Expanded(
-                          child: Center(
-                            child: Text('No comments to display'),
-                          ),
-                        )
-                      : Expanded(
-                          child: ListView.builder(
-                              physics: widget.showBottomSheet
-                                  ? null
-                                  : const NeverScrollableScrollPhysics(),
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                final comment = data[index];
-                                return CommentItem(
-                                  comment: comment.content,
-                                  image: comment.user.avatar,
-                                  contentImage: comment.attachment,
-                                  date: comment.createdAt,
-                                );
-                              }),
-                        );
-                },
-                error: (e, s) {
-                  return Text(e.toString());
-                },
-                loading: () => const AppLoader()),
+              data: (data) {
+                return data.isEmpty
+                    ? const Expanded(
+                        child: Center(
+                          child: Text('No comments to display'),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                            physics: widget.showBottomSheet
+                                ? null
+                                : const NeverScrollableScrollPhysics(),
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              final comment = data[index];
+                              return CommentItem(
+                                comment: comment.content,
+                                image: comment.user.avatar,
+                                contentImage: comment.attachment,
+                                date: comment.createdAt,
+                              );
+                            }),
+                      );
+              },
+              error: (e, s) {
+                return Text(e.toString());
+              },
+              loading: () => const ShimmerWidget(
+                layoutType: LayoutType.howVideo,
+              ),
+            ),
             // const Spacer(),
             // Input area
             if (widget.showBottomSheet)
@@ -281,13 +285,19 @@ class CommentItem extends StatelessWidget {
 
       dense: true,
       leading: CircleAvatar(
+        backgroundColor: Colors.grey.shade300,
         backgroundImage: image != null ? NetworkImage(image!) : null,
       ),
       title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(comment),
+          SizedBox(
+            height: 5.h,
+          ),
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey.shade200,
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.all(10),
@@ -295,7 +305,6 @@ class CommentItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(comment),
                 if (contentImage != null)
                   Image.network(
                     contentImage!,

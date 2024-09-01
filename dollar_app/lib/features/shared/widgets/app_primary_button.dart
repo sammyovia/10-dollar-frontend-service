@@ -9,7 +9,7 @@ class AppPrimaryButton extends StatelessWidget {
       {super.key,
       required this.title,
       this.putIcon = true,
-      this.color = Colors.red,
+      this.color,
       this.onPressed,
       this.width,
       this.height,
@@ -18,7 +18,7 @@ class AppPrimaryButton extends StatelessWidget {
       this.radius = 15});
   final String title;
   final bool putIcon;
-  final Color color;
+  final Color? color;
   final VoidCallback? onPressed;
   final double? width;
   final double? height;
@@ -35,7 +35,8 @@ class AppPrimaryButton extends StatelessWidget {
         height: height ?? 50.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius),
-          color: enabled ? color : color,
+          color:
+              enabled ? color ?? Theme.of(context).primaryColor : Colors.grey,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

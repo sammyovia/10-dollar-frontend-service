@@ -1,10 +1,11 @@
-import 'package:dollar_app/features/auth/view/otp_view.dart';
 import 'package:dollar_app/features/main/profile/providers/widgets/log_out_dialog.dart';
 import 'package:dollar_app/features/main/profile/providers/widgets/profile_body_widgets.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
+import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
 import 'package:dollar_app/features/shared/widgets/dialog_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 
@@ -33,7 +34,7 @@ class _ProfileViewState extends State<ProfileView> {
               height: 170.h,
               width: double.infinity,
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
+                  border: Border.all(color: Theme.of(context).dividerColor),
                   borderRadius: BorderRadius.circular(15)),
               child: Column(children: [
                 SizedBox(
@@ -60,7 +61,8 @@ class _ProfileViewState extends State<ProfileView> {
                   height: 20.h,
                 ),
                 AppPrimaryButton(
-                    color: Theme.of(context).primaryColor,
+                    putIcon: false,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
                     enabled: true,
                     height: 30.h,
                     width: 200.w,
@@ -86,9 +88,12 @@ class _ProfileViewState extends State<ProfileView> {
               suffixIcon: IconlyBold.arrow_right,
             ),
             SizedBox(height: 10.h),
-            const ProfileBodyWidget(
+            ProfileBodyWidget(
+              onClick: () {
+                context.go('/profile/videos');
+              },
               prefixIcon: Icons.video_camera_front,
-              title: 'Saved Videos',
+              title: 'Videos',
               suffixIcon: IconlyBold.arrow_right,
             ),
             SizedBox(height: 10.h),
@@ -130,5 +135,3 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 }
-
-
