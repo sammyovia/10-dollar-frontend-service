@@ -1,4 +1,4 @@
-import 'package:dollar_app/features/auth/view/otp_view.dart';
+import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,55 +45,31 @@ class _ChatViewState extends ConsumerState<ChatView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: CustomAppBar(
-          height: 70.h,
-          title: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "10",
-                style: GoogleFonts.bebasNeue(
-                  fontWeight: FontWeight.w900,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-              Text(
-                "Dollar",
-                style: GoogleFonts.bebasNeue(
-                  fontWeight: FontWeight.w900,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ],
+        centerTitle: false,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              IconlyLight.search,
+              color: Colors.black,
+              size: 20.r,
+            ),
           ),
-          centerTitle: false,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                IconlyLight.search,
-                color: Colors.black,
-                size: 20.r,
-              ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              IconlyBold.notification,
+              color: Colors.black,
+              size: 20.r,
             ),
-            IconButton(
+          ),
+          IconButton(
               onPressed: () {},
-              icon: Icon(
-                IconlyBold.notification,
-                color: Colors.black,
-                size: 20.r,
-              ),
-            ),
-            IconButton(
-                onPressed: () {},
-                icon: CircleAvatar(
-                  radius: 15.r,
-                  backgroundColor: Colors.grey.shade300,
-                )),
-          ],
-        ),
+              icon: CircleAvatar(
+                radius: 15.r,
+                backgroundColor: Colors.grey.shade300,
+              )),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

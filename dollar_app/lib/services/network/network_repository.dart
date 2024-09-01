@@ -10,9 +10,18 @@ class NetworkRepository extends NetworkService {
     return response.data;
   }
 
-   Future<Map<String, dynamic>> getRequest(
-      {required String path}) async {
+  Future<Map<String, dynamic>> getRequest({required String path}) async {
     final response = await get(path);
+    return response.data;
+  }
+
+   Future<Map<String, dynamic>> deleteRequest({required String path}) async {
+    final response = await delete(path);
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> putRequest({required String path, dynamic body}) async {
+    final response = await put(path,data: body);
     return response.data;
   }
 }

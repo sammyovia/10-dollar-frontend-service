@@ -42,7 +42,10 @@ class _VideoPreviewState extends State<FeedsVideoPreview> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: Colors.grey.shade100,
+        ),
         width: double.infinity,
         height: 150.h,
         child: CustomVideoPlayer(

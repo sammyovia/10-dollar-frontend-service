@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:dollar_app/features/main/feeds/providers/post_feeds_provider.dart';
 import 'package:dollar_app/features/main/feeds/widgets/file_attachment_widget.dart';
-import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
 import 'package:dollar_app/services/file_picker_service.dart' as fps;
 import 'package:file_picker/file_picker.dart';
@@ -11,21 +9,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class NewFeedsView extends ConsumerStatefulWidget {
-  const NewFeedsView({super.key});
+class UploadVideoView extends ConsumerStatefulWidget {
+  const UploadVideoView({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _NewFeedsViewState();
 }
 
-class _NewFeedsViewState extends ConsumerState<NewFeedsView> {
+class _NewFeedsViewState extends ConsumerState<UploadVideoView> {
   List<File> attachments = [];
   final _feedController = TextEditingController();
   String? errorMessage;
 
   Future<void> _pickAttachments() async {
     try {
-      FilePickerResult? result = await fps.FilePickerService.pickAttachments();
+      FilePickerResult? result = await fps.FilePickerService.pickAttachments(
+          extensions: ['mp4', 'mov']);
 
       if (result != null) {
         List<File> validFiles = fps.FilePickerService.getValidFiles(result);
@@ -73,43 +72,23 @@ class _NewFeedsViewState extends ConsumerState<NewFeedsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: CircleAvatar(
-          backgroundColor: Colors.grey.shade300,
-        ),
-        centerTitle: false,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AppPrimaryButton(
-                isLoading: ref.watch(postFeedsProvider).isLoading,
-                onPressed: () {
-                  ref.read(postFeedsProvider.notifier).postFeeds(context,
-                      content: _feedController.text, attachments: attachments);
-                },
-                putIcon: false,
-                height: 30.h,
-                color: Theme.of(context).colorScheme.primary,
-                width: 100.w,
-                title: "Post"),
-          )
-        ],
+      appBar: const CustomAppBar(
+        title: Text('Upload Video'),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 23.w),
         child: Column(
           children: [
-            Expanded(
-                child: TextFormField(
+            TextFormField(
               controller: _feedController,
-              keyboardType: TextInputType.multiline,
-              maxLines: 99999999,
+              keyboardType: TextInputType.text,
+              maxLines: 1,
               decoration: InputDecoration.collapsed(
-                  hintText: "Whats' popping?",
+                  hintText: "title",
                   hintStyle: GoogleFonts.redHatDisplay(fontSize: 12.sp)),
               scrollPadding: const EdgeInsets.all(20.0),
               autofocus: true,
-            )),
+            ),
             if (errorMessage != null)
               Padding(
                 padding: const EdgeInsets.all(8.0),

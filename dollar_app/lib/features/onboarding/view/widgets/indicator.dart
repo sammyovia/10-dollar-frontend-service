@@ -31,7 +31,7 @@ class _IndicatorWidgetState extends ConsumerState<IndicatorWidget> {
             height: 8.h,
             decoration: BoxDecoration(
               color: selectedIndex == index
-                  ? Theme.of(context).colorScheme.primary
+                  ? Theme.of(context).primaryColor
                   : const Color(0XFFD9D9D9),
               borderRadius: BorderRadius.circular(16),
             ),

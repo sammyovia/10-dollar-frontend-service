@@ -1,6 +1,6 @@
-import 'package:dollar_app/features/auth/view/otp_view.dart';
 import 'package:dollar_app/features/main/feeds/providers/get_feeds_provider.dart';
 import 'package:dollar_app/features/main/feeds/widgets/feeds_widget.dart';
+import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,51 +21,11 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: CustomAppBar(
+        showProfile: true,
+        showSearch: true,
+        showLeading: true,
         height: 70.h,
-        title: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "10",
-              style: GoogleFonts.bebasNeue(
-                fontWeight: FontWeight.w900,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            Text(
-              "Dollar",
-              style: GoogleFonts.bebasNeue(
-                fontWeight: FontWeight.w900,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-          ],
-        ),
         centerTitle: false,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              IconlyLight.search,
-              size: 20.r,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              IconlyBold.notification,
-              size: 20.r,
-            ),
-          ),
-          IconButton(
-              onPressed: () {},
-              icon: CircleAvatar(
-                radius: 15.r,
-                backgroundColor: Colors.grey.shade300,
-              )),
-        ],
       ),
       body: SafeArea(
           child: RefreshIndicator(

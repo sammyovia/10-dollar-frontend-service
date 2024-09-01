@@ -3,7 +3,7 @@ import 'package:dollar_app/features/main/feeds/providers/like_count_provider.dar
 import 'package:dollar_app/features/main/feeds/widgets/comment_box.dart';
 import 'package:dollar_app/features/main/feeds/widgets/feeds_attachment_widget.dart';
 import 'package:dollar_app/features/shared/widgets/app_bottom_sheet.dart';
-import 'package:dollar_app/features/shared/widgets/music_loader.dart';
+import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -102,7 +102,7 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                           ),
                           GestureDetector(
                             onTap: () {
-                             context.go('/feeds/feedDetails/${feed.id}');
+                              context.go('/feeds/feedDetails/${feed.id}');
                             },
                             child: SizedBox(
                               width: double.infinity,
@@ -197,6 +197,8 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
         error: (e, s) {
           return Text(e.toString());
         },
-        loading: () => const AppLoader());
+        loading: () => const ShimmerWidget(
+              layoutType: LayoutType.howVideo,
+            ));
   }
 }

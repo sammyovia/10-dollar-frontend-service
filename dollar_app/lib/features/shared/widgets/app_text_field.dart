@@ -8,7 +8,7 @@ class AppTextField extends StatelessWidget {
     required this.labelText,
     required this.errorText,
     required this.hintText,
-     this.icon,
+    this.icon,
     this.controller,
     this.onchaged,
     this.keybordType,
@@ -35,14 +35,14 @@ class AppTextField extends StatelessWidget {
             Text(
               labelText,
               style: GoogleFonts.notoSans(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14.sp,
-                  color: Colors.black87),
+                fontWeight: FontWeight.w500,
+                fontSize: 14.sp,
+              ),
             ),
             Text(
               errorText,
-              style: GoogleFonts.lato(
-                  fontSize: 10.sp, color: Colors.red.shade900),
+              style:
+                  GoogleFonts.lato(fontSize: 10.sp, color: Colors.red.shade900),
             )
           ],
         ),
@@ -63,7 +63,7 @@ class AppTextField extends StatelessWidget {
             style: GoogleFonts.redHatDisplay(),
             decoration: InputDecoration(
                 filled: false,
-                prefixIcon: Icon(icon, color: Colors.black87),
+                prefixIcon: Icon(icon),
                 border: InputBorder.none,
                 hintText: hintText,
                 hintStyle: GoogleFonts.redHatDisplay(fontSize: 12.sp),

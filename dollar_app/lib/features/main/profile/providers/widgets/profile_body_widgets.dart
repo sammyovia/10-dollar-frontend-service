@@ -23,7 +23,7 @@ class ProfileBodyWidget extends StatelessWidget {
         height: 40.h,
         width: double.infinity,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: Theme.of(context).dividerColor),
             borderRadius: BorderRadius.circular(8)),
         child: Row(children: [
           Icon(
