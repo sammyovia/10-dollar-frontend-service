@@ -1,4 +1,5 @@
 import 'package:dollar_app/features/main/feeds/widgets/feeds_attachment_widget.dart';
+import 'package:dollar_app/features/main/polls/provider/get_polls_provider.dart';
 import 'package:dollar_app/features/main/videos/provider/get_videos_provider.dart';
 import 'package:dollar_app/features/main/videos/provider/like_delete_video_provider.dart';
 import 'package:dollar_app/features/shared/widgets/app_bottom_sheet.dart';
@@ -14,8 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeArtistWidget extends ConsumerStatefulWidget {
-  const HomeArtistWidget(
+class PollsViewWidgets extends ConsumerStatefulWidget {
+  const PollsViewWidgets(
       {super.key,
       this.showDelete = false,
       this.showShare = true,
@@ -35,10 +36,10 @@ class HomeArtistWidget extends ConsumerStatefulWidget {
   final bool pollsPage;
 
   @override
-  ConsumerState<HomeArtistWidget> createState() => _HomeArtistWidgetState();
+  ConsumerState<PollsViewWidgets> createState() => _HomeArtistWidgetState();
 }
 
-class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
+class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
   @override
   void initState() {
     super.initState();
@@ -51,7 +52,7 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final model = ref.watch(getVideosProvider);
+    final model = ref.watch(getPollsProvider);
     return model.when(
         data: (data) {
           return data.isEmpty
@@ -67,7 +68,7 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
                   itemCount: data.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final artist = data[index];
+                    final artist = data[index].video;
                     final isLiked =
                         DataManipulation.likedFeeds[artist.id] ?? false;
                     return Padding(
@@ -102,14 +103,14 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          if (artist.title != null)
-                            Text(
-                              artist.title ?? "",
-                              style: GoogleFonts.lato(fontSize: 10.sp),
-                            ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
+                          // if (artist. != null)
+                          //   Text(
+                          //     artist.title ?? "",
+                          //     style: GoogleFonts.lato(fontSize: 10.sp),
+                          //   ),
+                          // SizedBox(
+                          //   height: 8.h,
+                          // ),
                           FeedsAttachmentWidget(file: artist.videoUrl),
                           SizedBox(
                             height: 5.h,
@@ -270,7 +271,11 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
                 );
         },
         error: (e, s) {
-          return Text(e.toString());
+          return Center(
+              child: Text(
+            e.toString(),
+            style: GoogleFonts.lato(),
+          ));
         },
         loading: () => const ShimmerWidget(
               layoutType: LayoutType.howVideo,

@@ -1,7 +1,7 @@
 import 'package:dollar_app/features/main/home/provider/top_artist_provider.dart';
 import 'package:dollar_app/features/main/videos/provider/get_videos_provider.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
-import 'package:dollar_app/features/shared/widgets/home_artist_widget.dart';
+import 'package:dollar_app/features/shared/widgets/home_video_provider_widget.dart';
 import 'package:dollar_app/features/shared/widgets/top_artist_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,7 +66,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 thickness: 2,
                 color: Theme.of(context).dividerColor,
               ),
-              const HomeArtistWidget()
+              const HomeVideoProviderWidget(
+                canStake: true,
+              )
             ],
           ),
         ),

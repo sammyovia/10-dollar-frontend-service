@@ -56,6 +56,24 @@ class LikeDeleteVideoProvider extends AsyncNotifier<Map<String, dynamic>> {
     }
   }
 
+  Future<void> publishVideo(context, {required String postId}) async {
+    try {
+      state = const AsyncLoading();
+      final res = await ref
+          .read(networkProvider)
+          .postRequest(path: '/videos/publish', body: {"videoId": postId});
+      if (res['status'] == true) {
+        ref.invalidate(getVideosProvider);
+        Navigator.pop(context);
+      }
+      state = AsyncData(res);
+      await future;
+    } catch (e) {
+      state = AsyncError(e, StackTrace.current);
+      Toast.showErrorToast(context, e.toString());
+    }
+  }
+
   @override
   FutureOr<Map<String, dynamic>> build() {
     return {};
