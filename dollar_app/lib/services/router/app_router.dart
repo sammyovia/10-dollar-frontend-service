@@ -1,3 +1,4 @@
+import 'package:dollar_app/features/main/admin/view/admin_view.dart';
 import 'package:dollar_app/features/main/chat/view/chat_view.dart';
 import 'package:dollar_app/features/main/feeds/view/feeds_details_view.dart';
 import 'package:dollar_app/features/main/feeds/view/feeds_view.dart';
@@ -99,7 +100,14 @@ final router = Provider<GoRouter>((ref) {
                                     child: const UploadVideoView(),
                                     state: state);
                               }),
+                              
                         ]),
+                        GoRoute(
+                        path: 'admin',
+                        pageBuilder: (context, state) {
+                          return getPage(
+                              child: const AdminView(), state: state);
+                        }),
                   ]),
             ]),
             StatefulShellBranch(navigatorKey: _poolsNavigationKey, routes: [

@@ -1,5 +1,5 @@
 import 'package:dollar_app/features/main/feeds/widgets/feeds_attachment_widget.dart';
-import 'package:dollar_app/features/main/videos/provider/get_videos_provider.dart';
+import 'package:dollar_app/features/main/home/provider/home_video_provider.dart';
 import 'package:dollar_app/features/main/videos/provider/like_delete_video_provider.dart';
 import 'package:dollar_app/features/shared/widgets/app_bottom_sheet.dart';
 import 'package:dollar_app/features/shared/widgets/delete_pop_up_widget.dart';
@@ -14,8 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeArtistWidget extends ConsumerStatefulWidget {
-  const HomeArtistWidget(
+class HomeVideoProviderWidget extends ConsumerStatefulWidget {
+  const HomeVideoProviderWidget(
       {super.key,
       this.showDelete = false,
       this.showShare = true,
@@ -35,23 +35,14 @@ class HomeArtistWidget extends ConsumerStatefulWidget {
   final bool pollsPage;
 
   @override
-  ConsumerState<HomeArtistWidget> createState() => _HomeArtistWidgetState();
+  ConsumerState<HomeVideoProviderWidget> createState() =>
+      _HomeArtistWidgetState();
 }
 
-class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(getVideosProvider.notifier)
-          .displayFeeds(context, pollsPage: widget.pollsPage);
-    });
-  }
-
+class _HomeArtistWidgetState extends ConsumerState<HomeVideoProviderWidget> {
   @override
   Widget build(BuildContext context) {
-    final model = ref.watch(getVideosProvider);
+    final model = ref.watch(getHomeVideosProvider);
     return model.when(
         data: (data) {
           return data.isEmpty
@@ -102,11 +93,10 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          if (artist.title != null)
-                            Text(
-                              artist.title ?? "",
-                              style: GoogleFonts.lato(fontSize: 10.sp),
-                            ),
+                          Text(
+                            artist.title,
+                            style: GoogleFonts.lato(fontSize: 10.sp),
+                          ),
                           SizedBox(
                             height: 8.h,
                           ),

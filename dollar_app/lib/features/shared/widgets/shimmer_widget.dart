@@ -38,22 +38,27 @@ class ShimmerWidget extends StatelessWidget {
             shrinkWrap: true,
             itemCount: 3,
             itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 100.w,
-                    height: 20.h,
-                    color: Colors.grey.shade300,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 150.h,
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(8)),
-                  )
-                ],
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 3),
+                      width: 100.w,
+                      height: 10.h,
+                      color: Colors.grey.shade300,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 3),
+                      width: 200.w,
+                      height: 50.h,
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(8)),
+                    )
+                  ],
+                ),
               );
             });
       case LayoutType.homeArtist:

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dollar_app/features/main/feeds/providers/comment_provider.dart';
 import 'package:dollar_app/features/main/feeds/providers/get_comments_provider.dart';
 import 'package:dollar_app/features/main/feeds/widgets/file_attachment_widget.dart';
-import 'package:dollar_app/features/shared/widgets/music_loader.dart';
 import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:dollar_app/services/date_manipulation.dart';
 import 'package:file_picker/file_picker.dart';

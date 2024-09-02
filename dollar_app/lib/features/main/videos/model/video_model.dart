@@ -10,11 +10,10 @@ class VideoModel {
 
   VideoModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    data = List.from(json['data']).map((e) => VideoModelData.fromJson(e)).toList();
+    data =
+        List.from(json['data']).map((e) => VideoModelData.fromJson(e)).toList();
     message = json['message'];
   }
-
- 
 }
 
 class VideoModelData {
@@ -30,7 +29,7 @@ class VideoModelData {
     required this.updatedAt,
   });
   late final String id;
-  late final String title;
+  late final String? title;
   late final String videoUrl;
   late final int voteCount;
   late final int likeCount;
@@ -41,7 +40,7 @@ class VideoModelData {
 
   VideoModelData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    title = json['title'];
+    title = json['title'] ?? '';
     videoUrl = json['videoUrl'];
     voteCount = json['voteCount'];
     likeCount = json['likeCount'];
@@ -50,6 +49,4 @@ class VideoModelData {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
-
- 
 }

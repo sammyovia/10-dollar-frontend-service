@@ -13,10 +13,13 @@ class GetVideosProvider extends AsyncNotifier<List<VideoModelData>> {
     return videos;
   }
 
-  Future<void> displayFeeds(context) async {
+  Future<void> displayFeeds(context, {bool pollsPage = false}) async {
     try {
       state = const AsyncLoading();
       final res = await getFeeds();
+      if (pollsPage) {
+       
+      }
       state = AsyncData(res);
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);

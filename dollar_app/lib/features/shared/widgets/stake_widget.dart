@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dollar_app/features/main/home/model/stake_model.dart';
+import 'package:dollar_app/features/main/feeds/widgets/feeds_attachment_widget.dart';
 import 'package:dollar_app/features/main/home/provider/stake_provider.dart';
+import 'package:dollar_app/features/main/polls/model/polls_video_model.dart';
+import 'package:dollar_app/features/main/polls/provider/get_polls_provider.dart';
 import 'package:dollar_app/features/onboarding/provider/indicator_provider.dart';
 import 'package:dollar_app/features/shared/widgets/app_bottom_sheet.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
 import 'package:dollar_app/features/shared/widgets/app_text_field.dart';
-import 'package:dollar_app/features/shared/widgets/video_widgets.dart';
+import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +21,7 @@ class StakeWidget extends ConsumerStatefulWidget {
 }
 
 class _StakeWidgetState extends ConsumerState<StakeWidget> {
-  List<StakeModel> stakes = <StakeModel>[];
+  List<PollsVideoModelData> stakes = <PollsVideoModelData>[];
   final Map<int, StakePosition?> _selectedPositions = {};
   final Map<StakePosition, int?> _globalSelectedPositions = {};
   final Map<int, double> _stakeAmounts = {};
@@ -78,9 +80,9 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
   void _onConfirm(context) {
     Navigator.pop(context);
     AppBottomSheet.showBottomSheet(
-      isDismissible: false,
+        isDismissible: false,
         context,
-      child:   SizedBox(
+        child: SizedBox(
           width: double.infinity,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -93,11 +95,14 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
                 SizedBox(
                   height: 20.h,
                 ),
-                 Icon(Icons.thumb_up, size: 40.r,),
+                Icon(
+                  Icons.thumb_up,
+                  size: 40.r,
+                ),
                 SizedBox(
                   height: 20.h,
                 ),
-                 Text('Stake Successful',
+                Text('Stake Successful',
                     style: GoogleFonts.lato(fontSize: 32.sp)),
                 SizedBox(
                   height: 20.h,
@@ -115,7 +120,7 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    stakes = ref.watch(stakeProvider);
+    final model = ref.watch(getPollsProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -150,64 +155,79 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
                 fontSize: 16.sp, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 10.h),
-          CarouselSlider.builder(
-            itemCount: stakes.length,
-            itemBuilder: (context, index, innerIndex) {
-              final stake = stakes[index];
-              return Column(
-                children: [
-                  Text(
-                    "${stake.name} Video",
-                    style: GoogleFonts.notoSans(fontSize: 14.sp),
-                  ),
-                  SizedBox(height: 10.h),
-                  VideoWidget(
-                    video: stake.video,
-                    height: 200.h,
-                    topPosition: 70.h,
-                    bottomPosition: 150.w,
-                  ),
-                  SizedBox(height: 10.h),
-                  _buildPositionTile(index, StakePosition.first, "First Place"),
-                  _buildPositionTile(
-                      index, StakePosition.second, "Second Place"),
-                  _buildPositionTile(index, StakePosition.third, "Third Place"),
-                  const StakeIndicatorWidget(),
-                  SizedBox(height: 8.h),
-                  const Text('Enter Stake Amount'),
-                  AppTextField(
-                    controller: _stakeAmountController,
-                    onchaged: (value) => _updateStakeAmount(index, value!),
-                    labelText: '',
-                    errorText: '',
-                    hintText: '',
-                  ),
-                ],
+          model.when(
+            data: (data) {
+              return CarouselSlider.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index, innerIndex) {
+                  final stake = data[index];
+                  return Column(
+                    children: [
+                      Text(
+                        "${stake.video.title} Video",
+                        style: GoogleFonts.notoSans(fontSize: 14.sp),
+                      ),
+                      SizedBox(height: 10.h),
+                      FeedsAttachmentWidget(file: stake.video.videoUrl),
+                      SizedBox(height: 10.h),
+                      _buildPositionTile(
+                          index, StakePosition.first, "First Place"),
+                      _buildPositionTile(
+                          index, StakePosition.second, "Second Place"),
+                      _buildPositionTile(
+                          index, StakePosition.third, "Third Place"),
+                      SizedBox(height: 8.h),
+                      const StakeIndicatorWidget(),
+                    ],
+                  );
+                },
+                options: CarouselOptions(
+                  enableInfiniteScroll: false,
+                  height: 320.h,
+                  viewportFraction: 1,
+                  onPageChanged: (index, reason) {
+                    ref.watch(inidcatorProvider.notifier).state = index;
+                    _updateTextFieldValue(index);
+                  },
+                ),
               );
             },
-            options: CarouselOptions(
-              enableInfiniteScroll: false,
-              height: 450.h,
-              viewportFraction: 1,
-              onPageChanged: (index, reason) {
-                ref.watch(inidcatorProvider.notifier).state = index;
-                _updateTextFieldValue(index);
-              },
+            error: (error, stackTrace) {
+              return Text(
+                error.toString(),
+                style: GoogleFonts.lato(),
+              );
+            },
+            loading: () => const ShimmerWidget(
+              layoutType: LayoutType.howVideo,
             ),
+          ),
+          SizedBox(height: 8.h),
+          const Text('Enter Stake Amount'),
+          AppTextField(
+            controller: _stakeAmountController,
+            // onchaged: (value) => _updateStakeAmount(index, value!),
+            labelText: '',
+            errorText: '',
+            hintText: '',
           ),
           SizedBox(height: 8.h),
           const Text('Balance: 2000'),
           SizedBox(height: 8.h),
           AppPrimaryButton(
-           
             onPressed: _isAllVideoSelectedAndStaked()
                 ? () {
                     _onConfirm(context);
                   }
                 : null,
             title: 'Confirm',
-            color: _isAllVideoSelectedAndStaked()?  Theme.of(context).colorScheme.primary:Colors.grey ,
+            color: _isAllVideoSelectedAndStaked()
+                ? Theme.of(context).colorScheme.primary
+                : Colors.grey,
             putIcon: false,
+          ),
+          SizedBox(
+            height: 16.h,
           ),
           Padding(
             padding: EdgeInsets.only(

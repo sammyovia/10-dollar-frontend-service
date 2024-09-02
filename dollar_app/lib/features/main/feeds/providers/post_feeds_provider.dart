@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:dollar_app/features/main/feeds/providers/get_feeds_provider.dart';
 import 'package:dollar_app/features/shared/widgets/toast.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mime/mime.dart';
 
@@ -41,11 +42,12 @@ class PostFeedsProvider extends AsyncNotifier<Map<String, dynamic>> {
           .read(networkProvider)
           .postRequest(path: '/posts', body: formData);
       if (response['status'] == true) {
-        state = AsyncData(response);
         ref.invalidateSelf();
         ref.invalidate(getFeedsProvider);
         Toast.showSuccessToast(context, 'Post Successful');
+        Navigator.pop(context);
       }
+      state = AsyncData(response);
       await future;
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);

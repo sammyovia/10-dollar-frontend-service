@@ -82,7 +82,10 @@ class _ProfileViewState extends State<ProfileView> {
               suffixIcon: IconlyBold.arrow_right,
             ),
             SizedBox(height: 10.h),
-            const ProfileBodyWidget(
+            ProfileBodyWidget(
+              onClick: () {
+                context.push('/profile/admin');
+              },
               prefixIcon: Icons.admin_panel_settings,
               title: 'Admin',
               suffixIcon: IconlyBold.arrow_right,
