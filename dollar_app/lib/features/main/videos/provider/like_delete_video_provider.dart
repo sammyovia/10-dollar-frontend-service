@@ -41,6 +41,26 @@ class LikeDeleteVideoProvider extends AsyncNotifier<Map<String, dynamic>> {
     }
   }
 
+  Future<void> stakeVideo(context,
+      {required int amount, required List<Map<String, dynamic>> videos}) async {
+    try {
+      state = const AsyncLoading();
+      final res = await ref.read(networkProvider).postRequest(
+          path: '/polls/stake', body: {"amount": amount, "videos": videos});
+      print(res);
+
+      if (res['status'] == true) {
+        ref.read(getVideosProvider.notifier).getFeeds();
+        Toast.showSuccessToast(context, 'Voting Successful');
+        Navigator.pop(context);
+      }
+      state = AsyncData(res);
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+      Toast.showErrorToast(context, e.toString());
+    }
+  }
+
   Future<void> deleteVidoe(context, {required String postId}) async {
     try {
       state = const AsyncLoading();

@@ -6,7 +6,7 @@ import 'package:dollar_app/features/shared/widgets/delete_pop_up_widget.dart';
 import 'package:dollar_app/features/shared/widgets/dialog_method.dart';
 import 'package:dollar_app/features/shared/widgets/publish_pop_up_widget.dart';
 import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
-import 'package:dollar_app/features/shared/widgets/stake_widget.dart';
+import 'package:dollar_app/features/shared/widgets/stake_widget/view/stake_widget.dart';
 import 'package:dollar_app/features/shared/widgets/vote_pop_up_widget.dart';
 import 'package:dollar_app/services/date_manipulation.dart';
 import 'package:flutter/material.dart';

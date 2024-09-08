@@ -2,10 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dollar_app/features/main/feeds/widgets/feeds_attachment_widget.dart';
 import 'package:dollar_app/features/main/polls/model/polls_video_model.dart';
 import 'package:dollar_app/features/main/polls/provider/get_polls_provider.dart';
+import 'package:dollar_app/features/main/videos/provider/like_delete_video_provider.dart';
 import 'package:dollar_app/features/onboarding/provider/indicator_provider.dart';
-import 'package:dollar_app/features/shared/widgets/app_bottom_sheet.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
 import 'package:dollar_app/features/shared/widgets/app_text_field.dart';
+import 'package:dollar_app/features/shared/widgets/stake_widget/helper/stake_helper.dart';
+import 'package:dollar_app/features/shared/widgets/stake_widget/widgets/build_position_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,8 +22,7 @@ class StakeWidget extends ConsumerStatefulWidget {
 
 class _StakeWidgetState extends ConsumerState<StakeWidget> {
   List<Data> stakes = <Data>[];
-  final Map<int, StakePosition?> _selectedPositions = {};
-  final Map<StakePosition, int?> _globalSelectedPositions = {};
+
   final Map<int, double> _stakeAmounts = {};
   final TextEditingController _stakeAmountController =
       TextEditingController(text: '200');
@@ -33,78 +34,14 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
     super.dispose();
   }
 
-  void _handlePositionSelection(int videoIndex, StakePosition position) {
-    setState(() {
-      if (_selectedPositions[videoIndex] == position) {
-        // Deselect if already selected
-        _selectedPositions.remove(videoIndex);
-        _globalSelectedPositions.remove(position);
-      } else {
-        // Deselect previous position for this video if any
-        if (_selectedPositions.containsKey(videoIndex)) {
-          _globalSelectedPositions.remove(_selectedPositions[videoIndex]);
-        }
-
-        // Select new position
-        _selectedPositions[videoIndex] = position;
-        _globalSelectedPositions[position] = videoIndex;
-      }
-    });
-  }
-
-  bool _isPositionGloballySelected(StakePosition position) {
-    return _globalSelectedPositions.containsKey(position);
-  }
-
-
   void _updateTextFieldValue(int index) {
     _stakeAmountController.text = _stakeAmounts[index]?.toString() ?? '';
-  }
-
-
-
-  void _onConfirm(context) {
-    Navigator.pop(context);
-    AppBottomSheet.showBottomSheet(
-        isDismissible: false,
-        context,
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.thumb_up,
-                  size: 40.r,
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Text('Stake Successful',
-                    style: GoogleFonts.lato(fontSize: 32.sp)),
-                SizedBox(
-                  height: 20.h,
-                ),
-                AppPrimaryButton(
-                  putIcon: false,
-                  enabled: true,
-                  color: Theme.of(context).colorScheme.primary,
-                  title: "Back To Home",
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-              ]),
-        ));
   }
 
   @override
   Widget build(BuildContext context) {
     final model = ref.watch(getPollsProvider);
+    final stakeHelper = ref.watch(stakeHelperProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -142,7 +79,7 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
           model.when(
               data: (data) {
                 return CarouselSlider.builder(
-                  itemCount: data.length,
+                  itemCount: 3,
                   itemBuilder: (context, index, innerIndex) {
                     final stake = data[index];
                     return Column(
@@ -154,12 +91,21 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
                         SizedBox(height: 10.h),
                         FeedsAttachmentWidget(file: stake.video!.videoUrl!),
                         SizedBox(height: 10.h),
-                        _buildPositionTile(
-                            index, StakePosition.first, "First Place"),
-                        _buildPositionTile(
-                            index, StakePosition.second, "Second Place"),
-                        _buildPositionTile(
-                            index, StakePosition.third, "Third Place"),
+                        buildPositionTile(ref, context,
+                            videoIndex: index,
+                            position: StakePosition.first,
+                            title: "FIRST",
+                            id: stake.video!.id!),
+                        buildPositionTile(ref, context,
+                            videoIndex: index,
+                            position: StakePosition.second,
+                            title: "SECOND",
+                            id: stake.video!.id!),
+                        buildPositionTile(ref, context,
+                            videoIndex: index,
+                            position: StakePosition.third,
+                            title: "THIRD",
+                            id: stake.video!.id!),
                         SizedBox(height: 8.h),
                         const StakeIndicatorWidget(),
                       ],
@@ -173,7 +119,7 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
                       ref.watch(inidcatorProvider.notifier).state = index;
                       _updateTextFieldValue(index);
                       setState(() {
-                        _isLastItem = index == data.length - 1;
+                        _isLastItem = index == 2;
                       });
                     },
                   ),
@@ -205,13 +151,18 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
                 const Text('Balance: 2000'),
                 SizedBox(height: 8.h),
                 AppPrimaryButton(
+                  isLoading: ref.watch(likeDeleteVideoProvider).isLoading,
                   onPressed: () {
-                    _onConfirm(context);
+                    final videosList =
+                        stakeHelper.convertSelectedVideosToList();
+                    ref
+                        .read(likeDeleteVideoProvider.notifier)
+                        .stakeVideo(context, amount: 200, videos: videosList);
                   },
                   title: 'Confirm',
                   color: Theme.of(context).colorScheme.primary,
                   putIcon: false,
-                  enabled: true,
+                  enabled: stakeHelper.selectedVideos.isNotEmpty,
                 ),
                 SizedBox(
                   height: 16.h,
@@ -226,67 +177,7 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
       ),
     );
   }
-
-  Widget _buildPositionTile(
-      int videoIndex, StakePosition position, String title) {
-    bool isSelected = _selectedPositions[videoIndex] == position;
-    bool isDisabled = _isPositionGloballySelected(position) && !isSelected;
-    return GestureDetector(
-      onTap: isDisabled
-          ? null
-          : () => _handlePositionSelection(videoIndex, position),
-      child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        tileColor: isSelected ? Colors.grey : null,
-        minVerticalPadding: 8.h,
-        minTileHeight: 8.h,
-        title: Text(title),
-        trailing: CustomRadioButton(
-          activeColor:
-              isSelected ? Theme.of(context).colorScheme.primary : null,
-        ),
-        enabled: !isDisabled,
-      ),
-    );
-  }
 }
-
-class CustomRadioButton extends StatefulWidget {
-  const CustomRadioButton({super.key, this.activeColor});
-  final Color? activeColor;
-
-  @override
-  State<CustomRadioButton> createState() => _CustomRadioButtonState();
-}
-
-class _CustomRadioButtonState extends State<CustomRadioButton> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 20.w,
-      height: 20.h,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: Colors.black,
-          width: 2,
-        ),
-      ),
-      child: Center(
-        child: Container(
-          width: 13.w,
-          height: 13.h,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: widget.activeColor,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-enum StakePosition { first, second, third }
 
 class StakeIndicatorWidget extends ConsumerStatefulWidget {
   const StakeIndicatorWidget({super.key});
