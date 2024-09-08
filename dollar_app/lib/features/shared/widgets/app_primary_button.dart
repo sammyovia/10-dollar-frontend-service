@@ -38,25 +38,27 @@ class AppPrimaryButton extends StatelessWidget {
           color:
               enabled ? color ?? Theme.of(context).primaryColor : Colors.grey,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              isLoading ? "" : title,
-              style: GoogleFonts.lato(color: Colors.white),
-            ),
-            SizedBox(
-              width: 8.w,
-            ),
-            isLoading
-                ? const MusicLoader()
-                : putIcon
-                    ? const Icon(
-                        IconlyBold.play,
-                        color: Colors.white,
-                      )
-                    : const SizedBox.shrink()
-          ],
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                isLoading ? "" : title,
+                style: GoogleFonts.lato(color: Colors.white),
+              ),
+              SizedBox(
+                width: 8.w,
+              ),
+              isLoading
+                  ? const MusicLoader()
+                  : putIcon
+                      ? const Icon(
+                          IconlyBold.play,
+                          color: Colors.white,
+                        )
+                      : const SizedBox.shrink()
+            ],
+          ),
         ),
       ),
     );

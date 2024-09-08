@@ -27,6 +27,7 @@ class LikeDeleteVideoProvider extends AsyncNotifier<Map<String, dynamic>> {
       final res = await ref
           .read(networkProvider)
           .putRequest(path: '/videos/vote', body: {"videoId": postId});
+      print(res);
 
       if (res['status'] == true) {
         ref.read(getVideosProvider.notifier).getFeeds();
@@ -36,6 +37,7 @@ class LikeDeleteVideoProvider extends AsyncNotifier<Map<String, dynamic>> {
       state = AsyncData(res);
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
+      Toast.showErrorToast(context, e.toString());
     }
   }
 

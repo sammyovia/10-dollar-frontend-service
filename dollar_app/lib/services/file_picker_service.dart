@@ -3,7 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 
 class FilePickerService {
-  static const int maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+  static const int maxFileSize = 30 * 1024 * 1024; // 5MB in bytes
 
   static Future<FilePickerResult?> pickAttachments(
       {List<String>? extensions}) async {

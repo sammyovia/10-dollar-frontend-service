@@ -272,7 +272,7 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
         error: (e, s) {
           return Text(e.toString());
         },
-        loading: () => const ShimmerWidget(
+        loading: () => const ShimmerWidget( 
               layoutType: LayoutType.howVideo,
             ));
   }

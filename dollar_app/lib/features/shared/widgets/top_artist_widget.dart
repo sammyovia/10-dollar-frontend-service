@@ -34,8 +34,8 @@ class _TopArtistWidgetState extends ConsumerState<TopArtistWidget> {
                           CircleAvatar(
                             radius: 40,
                             backgroundColor: Colors.grey.shade300,
-                            backgroundImage: artist.artist.avatar != null
-                                ? NetworkImage(artist.artist.avatar!)
+                            backgroundImage: artist.artist?.avatar != null
+                                ? NetworkImage(artist.artist?.avatar!)
                                 : null,
                           ),
                           SizedBox(
@@ -47,7 +47,7 @@ class _TopArtistWidgetState extends ConsumerState<TopArtistWidget> {
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
-                              '${artist.artist.firstName} ${artist.artist.lastName}',
+                              '${artist.artist?.firstName ?? ''} ${artist.artist?.lastName}',
                               style: GoogleFonts.lato(),
                             ),
                           )

@@ -14,6 +14,7 @@ class AppTextField extends StatelessWidget {
     this.keybordType,
     this.suffix,
     this.obscureText = false,
+    this.readOnly = false
   });
   final String labelText;
   final String errorText;
@@ -24,6 +25,7 @@ class AppTextField extends StatelessWidget {
   final TextInputType? keybordType;
   final Widget? suffix;
   final bool obscureText;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,7 @@ class AppTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(15)),
           width: double.infinity,
           child: TextField(
+            readOnly:readOnly ,
             obscureText: obscureText,
             keyboardType: keybordType,
             onChanged: onchaged,

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dollar_app/features/main/feeds/widgets/file_attachment_widget.dart';
+import 'package:dollar_app/features/main/videos/provider/upload_video_provider.dart';
+import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
 import 'package:dollar_app/services/file_picker_service.dart' as fps;
 import 'package:file_picker/file_picker.dart';
@@ -72,8 +74,26 @@ class _NewFeedsViewState extends ConsumerState<UploadVideoView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: Text('Upload Video'),
+      appBar: CustomAppBar(
+        title: const Text('Upload Video'),
+        action: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AppPrimaryButton(
+              onPressed: () {
+                ref.read(uploadVideoProvider.notifier).uploadVideo(context,
+                    title: _feedController.text, attachments: attachments);
+              },
+              isLoading: ref.watch(uploadVideoProvider).isLoading,
+              enabled: true,
+              putIcon: false,
+              height: 30.h,
+              width: 100.w,
+              color: Colors.red,
+              title: 'Upload',
+            ),
+          )
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 23.w),

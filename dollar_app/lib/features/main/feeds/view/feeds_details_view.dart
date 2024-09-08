@@ -49,130 +49,138 @@ class _FeedsDetailsViewState extends ConsumerState<FeedsDetailsView> {
             ref.refresh(getCommentProvider.notifier).getComments(widget.postId);
           },
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 23.w),
             child: feedDetails.when(
-              data: (data) {
-                final details = data.data!;
-                final isLiked =
-                    DataManipulation.likedFeeds[details.id] ?? false;
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 16.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: details.user?.avatar != null
-                              ? NetworkImage(data.data?.user?.avatar)
-                              : null,
-                        ),
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        Column(
+                data: (data) {
+                  final details = data.data!;
+                  final isLiked =
+                      DataManipulation.likedFeeds[details.id] ?? false;
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 23.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                                '${details.user?.firstName} ${details.user?.lastName}'),
-                            Text(details.user?.role ?? ''),
+                            CircleAvatar(
+                              backgroundImage: details.user?.avatar != null
+                                  ? NetworkImage(data.data?.user?.avatar)
+                                  : null,
+                            ),
+                            SizedBox(
+                              width: 8.w,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    '${details.user?.firstName} ${details.user?.lastName}'),
+                                Text(details.user?.role ?? ''),
+                              ],
+                            )
                           ],
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16.h,
-                    ),
-                    Text(details.content ?? ''),
-                    SizedBox(
-                      height: 8.h,
-                    ),
-                    if (details.attachment != null &&
-                        details.attachment!.isNotEmpty)
-                      FeedsAttachmentWidget(
-                        file: details.attachment!,
-                        height: 200.h,
+                        ),
                       ),
-                    SizedBox(
-                      height: 16.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            AppBottomSheet.showBottomSheet(
-                                isDismissible: true,
-                                context,
-                                child: CommentBox(
-                                  postId: details.id!,
-                                ));
-                          },
-                          child: Icon(
-                            IconlyBold.chat,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 23.w),
+                        child: Text(details.content ?? ''),
+                      ),
+                      SizedBox(
+                        height: 8.h,
+                      ),
+                      if (details.attachment != null &&
+                          details.attachment!.isNotEmpty)
+                        FeedsAttachmentWidget(
+                          file: details.attachment!,
+                          height: 200.h,
                         ),
-                        SizedBox(
-                          width: 3.w,
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 23.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                AppBottomSheet.showBottomSheet(
+                                    isDismissible: true,
+                                    context,
+                                    child: CommentBox(
+                                      postId: details.id!,
+                                    ));
+                              },
+                              child: Icon(
+                                IconlyBold.chat,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 3.w,
+                            ),
+                            Text(
+                              details.commentCount.toString(),
+                              style: GoogleFonts.lato(
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                DataManipulation.toggleLike(
+                                    details.id!, details.likeCount!);
+                                ref
+                                    .read(likeCountProvider.notifier)
+                                    .likeComment(details.id!);
+                                setState(() {});
+                              },
+                              child: Icon(
+                                Icons.favorite,
+                                color:
+                                    isLiked ? Colors.red : Colors.grey.shade200,
+                                size: 20.r,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 3.w,
+                            ),
+                            Text(
+                              isLiked
+                                  ? '${details.likeCount! + 1}'
+                                  : details.likeCount.toString(),
+                              style: GoogleFonts.lato(
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          details.commentCount.toString(),
-                          style: GoogleFonts.lato(
-                            fontSize: 12.sp,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            DataManipulation.toggleLike(
-                                details.id!, details.likeCount!);
-                            ref
-                                .read(likeCountProvider.notifier)
-                                .likeComment(details.id!);
-                            setState(() {});
-                          },
-                          child: Icon(
-                            Icons.favorite,
-                            color: isLiked ? Colors.red : Colors.grey.shade200,
-                            size: 20.r,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 3.w,
-                        ),
-                        Text(
-                          isLiked
-                              ? '${details.likeCount! + 1}'
-                              : details.likeCount.toString(),
-                          style: GoogleFonts.lato(
-                            fontSize: 12.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    const Text('Comments'),
-                    CommentBox(
-                      postId: details.id!,
-                      showBottomSheet: false,
-                    )
-                  ],
-                );
-              },
-              error: (e, s) {
-                return Text(e.toString());
-              },
-              loading: () => const ShimmerWidget(
-                layoutType: LayoutType.howVideo,
-              ),
-            ),
+                      ),
+                      const Divider(),
+                      const Text('Comments'),
+                      CommentBox(
+                        postId: details.id!,
+                        showBottomSheet: false,
+                      )
+                    ],
+                  );
+                },
+                error: (e, s) {
+                  return Text(e.toString());
+                },
+                loading: () => const ShimmerWidget(
+                      layoutType: LayoutType.howVideo,
+                    )),
           ),
         )));
   }

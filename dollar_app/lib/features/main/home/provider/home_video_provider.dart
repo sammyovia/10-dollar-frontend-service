@@ -4,11 +4,11 @@ import 'package:dollar_app/features/main/home/model/home_video_model.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeVideosProvider extends AsyncNotifier<List<HomeVideoModelData>> {
-  Future<List<HomeVideoModelData>> getFeeds() async {
+class HomeVideosProvider extends AsyncNotifier<List<Data>> {
+  Future<List<Data>> getFeeds() async {
     final response =
         await ref.read(networkProvider).getRequest(path: '/home/videos');
-    final videos = HomwVideosModel.fromJson(response).data;
+    final videos =  HomeVideo.fromJson(response).data ?? [];
 
     return videos;
   }
@@ -25,12 +25,12 @@ class HomeVideosProvider extends AsyncNotifier<List<HomeVideoModelData>> {
   }
 
   @override
-  FutureOr<List<HomeVideoModelData>> build() {
+  FutureOr<List<Data>> build() {
     state = const AsyncLoading();
     return getFeeds();
   }
 }
 
 final getHomeVideosProvider =
-    AsyncNotifierProvider<HomeVideosProvider, List<HomeVideoModelData>>(
+    AsyncNotifierProvider<HomeVideosProvider, List<Data>>(
         HomeVideosProvider.new);

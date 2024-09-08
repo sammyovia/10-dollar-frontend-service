@@ -1,5 +1,7 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:dollar_app/services/router/app_router.dart';
 import 'package:dollar_app/theme/app_theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,8 +14,13 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+     ProviderScope(
+      child: DevicePreview(
+        enabled: !kReleaseMode,
+        builder: (context) {
+          return const MyApp();
+        }
+      ),
     ),
   );
 }
@@ -30,9 +37,12 @@ class MyApp extends ConsumerWidget {
         splitScreenMode: true,
         builder: (_, child) {
           return MaterialApp.router(
+            useInheritedMediaQuery: true,
+            locale: DevicePreview.locale(context),
+            builder: DevicePreview.appBuilder,
             routerConfig: ref.watch(router),
             debugShowCheckedModeBanner: false,
-            title: 'Dollar App',
+            title: '10dollar',
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: ThemeMode.system,

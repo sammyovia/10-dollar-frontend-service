@@ -1,5 +1,5 @@
+import 'package:dollar_app/features/main/home/provider/home_video_provider.dart';
 import 'package:dollar_app/features/main/home/provider/top_artist_provider.dart';
-import 'package:dollar_app/features/main/videos/provider/get_videos_provider.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
 import 'package:dollar_app/features/shared/widgets/home_video_provider_widget.dart';
 import 'package:dollar_app/features/shared/widgets/top_artist_widget.dart';
@@ -20,19 +20,18 @@ class _HomeViewState extends ConsumerState<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         showProfile: true,
         showSearch: true,
         showLeading: true,
-        height: 70.h,
-        title: const Text('Home'),
+        //  height: 70.h,
         centerTitle: false,
       ),
       body: SafeArea(
           child: RefreshIndicator(
         onRefresh: () async {
           ref.refresh(topArtistProvider.notifier).displayFeeds();
-          ref.refresh(getVideosProvider.notifier).displayFeeds(context);
+          ref.refresh(getHomeVideosProvider.notifier).displayFeeds(context);
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -68,6 +67,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
               ),
               const HomeVideoProviderWidget(
                 canStake: true,
+                showShare: false,
               )
             ],
           ),

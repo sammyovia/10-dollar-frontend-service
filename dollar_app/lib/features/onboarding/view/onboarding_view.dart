@@ -120,10 +120,13 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                   SizedBox(
                     height: 30.h,
                   ),
-                  Text(
-                    images[index].text,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.lato(fontSize: 12.sp),
+                  SizedBox(
+                    width: 300.w,
+                    child: Text(
+                      images[index].text,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.lato(fontSize: 12.sp),
+                    ),
                   ),
                   SizedBox(
                     height: 30.h,
@@ -148,17 +151,18 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              AppPrimaryButton(
-                  onPressed: () {
-                    _carouselController.previousPage(curve: Curves.easeIn);
-                  },
-                  radius: 8,
-                  putIcon: false,
-                  height: 30.h,
-                  color: Theme.of(context).primaryColor,
-                  enabled: true,
-                  width: 100.w,
-                  title: 'prev'),
+              if (ref.watch(inidcatorProvider) > 0)
+                AppPrimaryButton(
+                    onPressed: () {
+                      _carouselController.previousPage(curve: Curves.easeIn);
+                    },
+                    radius: 8,
+                    putIcon: false,
+                    height: 30.h,
+                    color: Theme.of(context).primaryColor,
+                    enabled: true,
+                    width: 100.w,
+                    title: 'prev'),
               AppPrimaryButton(
                   onPressed: () {
                     if (curent < 2) {
@@ -174,7 +178,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                   height: 30.h,
                   enabled: true,
                   width: 100.w,
-                  title: curent == 2 ? 'Procced' : 'next'),
+                  title: curent == 2 ? 'Proceed' : 'next'),
             ],
           ),
         ],

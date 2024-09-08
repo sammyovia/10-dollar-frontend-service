@@ -16,6 +16,7 @@ class FeedsView extends ConsumerStatefulWidget {
 }
 
 class _FeedsViewState extends ConsumerState<FeedsView> {
+  bool isBannerVissible = true;
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -112,7 +113,14 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
               SizedBox(
                 height: 15.h,
               ),
-              const PinnedInfoWidget(),
+              if (isBannerVissible)
+                PinnedInfoWidget(
+                  onClose: () {
+                    setState(() {
+                      isBannerVissible = false;
+                    });
+                  },
+                ),
               SizedBox(
                 height: 15.h,
               ),
@@ -126,127 +134,45 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
 }
 
 class PinnedInfoWidget extends StatelessWidget {
-  const PinnedInfoWidget({
-    super.key,
-  });
+  const PinnedInfoWidget({super.key, this.onClose});
+  final VoidCallback? onClose;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(width: 8.w),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.grey.shade300,
-                  ),
-                  SizedBox(width: 8.w),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'sammy rado',
-                        style: GoogleFonts.lato(fontSize: 12.sp),
-                      ),
-                      Text(
-                        'admin',
-                        style: GoogleFonts.lato(fontSize: 10.sp),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Icon(
-                    Icons.push_pin,
-                    color: Colors.red,
-                    size: 20.r,
-                  ),
-                  Icon(
-                    Icons.more_vert,
-                    size: 20.r,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              SizedBox(
-                width: 270.w,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(10),
+        height: 100.h,
+        decoration: BoxDecoration(
+          color: Colors.red.shade100,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              IconlyBold.volume_up,
+              color: Theme.of(context).primaryColor,
+            ),
+            SizedBox(
+                width: 200.w,
                 child: Text(
-                  'Hello everyone, welcome and we are hope you have gotten your winings',
-                  style: GoogleFonts.lato(fontSize: 10.sp),
-                ),
+                  "Hello All your winnings have been paid to your account",
+                  style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold, color: Colors.black),
+                )),
+            GestureDetector(
+              onTap: onClose,
+              child: Icon(
+                IconlyBold.close_square,
+                color: Theme.of(context).primaryColor,
               ),
-              SizedBox(
-                height: 8.h,
-              ),
-              Container(
-                width: double.infinity,
-                height: 150,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey.shade300),
-              ),
-              SizedBox(
-                height: 5.h,
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.thumb_up,
-                    color: Colors.green,
-                    size: 20.r,
-                  ),
-                  SizedBox(
-                    width: 3.w,
-                  ),
-                  Text(
-                    '445',
-                    style: GoogleFonts.redHatDisplay(fontSize: 12.sp),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Icon(
-                    Icons.chat_rounded,
-                    color: Colors.green.shade900,
-                    size: 20.r,
-                  ),
-                  SizedBox(
-                    width: 3.w,
-                  ),
-                  Text(
-                    '445',
-                    style: GoogleFonts.redHatDisplay(fontSize: 12.sp),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Icon(
-                    Icons.send,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 20.r,
-                  ),
-                  SizedBox(
-                    width: 3.w,
-                  ),
-                  Text(
-                    '445',
-                    style: GoogleFonts.redHatDisplay(fontSize: 12.sp),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

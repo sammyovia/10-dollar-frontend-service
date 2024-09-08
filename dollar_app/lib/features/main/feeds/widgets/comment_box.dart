@@ -134,37 +134,36 @@ class _CommentBoxState extends ConsumerState<CommentBox> {
               ),
 
             comments.when(
-              data: (data) {
-                return data.isEmpty
-                    ? const Expanded(
-                        child: Center(
-                          child: Text('No comments to display'),
-                        ),
-                      )
-                    : Expanded(
-                        child: ListView.builder(
-                            physics: widget.showBottomSheet
-                                ? null
-                                : const NeverScrollableScrollPhysics(),
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              final comment = data[index];
-                              return CommentItem(
-                                comment: comment.content,
-                                image: comment.user.avatar,
-                                contentImage: comment.attachment,
-                                date: comment.createdAt,
-                              );
-                            }),
-                      );
-              },
-              error: (e, s) {
-                return Text(e.toString());
-              },
-              loading: () => const ShimmerWidget(
-                layoutType: LayoutType.howVideo,
-              ),
-            ),
+                data: (data) {
+                  return data.isEmpty
+                      ? const Expanded(
+                          child: Center(
+                            child: Text('No comments to display'),
+                          ),
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                              physics: widget.showBottomSheet
+                                  ? null
+                                  : const NeverScrollableScrollPhysics(),
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                final comment = data[index];
+                                return CommentItem(
+                                  comment: comment.content,
+                                  image: comment.user.avatar,
+                                  contentImage: comment.attachment,
+                                  date: comment.createdAt,
+                                );
+                              }),
+                        );
+                },
+                error: (e, s) {
+                  return Text(e.toString());
+                },
+                loading: () => const ShimmerWidget(
+                      layoutType: LayoutType.howVideo,
+                    )),
             // const Spacer(),
             // Input area
             if (widget.showBottomSheet)

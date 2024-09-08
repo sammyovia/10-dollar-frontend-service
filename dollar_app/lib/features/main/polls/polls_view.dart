@@ -49,9 +49,10 @@ class _PollsViewState extends ConsumerState<PollsView> {
               const PollsViewWidgets(
                 showLike: false,
                 showShare: false,
-                showStake: false,
+                showStake: true,
                 showVote: true,
                 pollsPage: true,
+                canStake: true,
               )
             ],
           ),

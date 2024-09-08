@@ -94,7 +94,7 @@ class _AuthInterceptor extends Interceptor {
     final accessToken = await tokenStorage.getAccessToken();
 
     if (accessToken != null) {
-      options.headers['Authorization'] = 'Bearer $accessToken';
+      options.headers['Authorization'] = "Bearer $accessToken";
     }
     return handler.next(options); // Continue with the request
   }
@@ -110,8 +110,6 @@ class _ErrorInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    log('API Error: ${err.message}');
-
     if (err.response?.statusCode == 401) {
       final isRefreshed = await _attemptTokenRefresh();
       if (isRefreshed) {
@@ -133,6 +131,7 @@ class _ErrorInterceptor extends Interceptor {
     while (retryCount < 3) {
       try {
         final refreshToken = await tokenStorage.getRefreshToken();
+        log("refresh token from error $refreshToken");
         if (refreshToken == null) return false;
 
         final response = await Dio().get(
@@ -143,10 +142,11 @@ class _ErrorInterceptor extends Interceptor {
               },
             ));
 
-        final newAccessToken = response.data['accessToken'];
-        final newRefreshToken = response.data['refreshToken'];
+        final newAccessToken = response.data['data']['accessToken'];
+        final newRefreshToken = response.data['data']['refreshToken'];
 
-        await tokenStorage.saveTokens(newAccessToken, newRefreshToken);
+        await tokenStorage.saveTokens(
+            accessToken: newAccessToken, refreshToken: newRefreshToken);
 
         return true;
       } catch (e) {
@@ -171,12 +171,14 @@ class _ErrorInterceptor extends Interceptor {
       },
     );
 
-    return dio.request(
+    final response = dio.request(
       requestOptions.path,
       data: requestOptions.data,
       queryParameters: requestOptions.queryParameters,
       options: options,
     );
+
+    return response;
   }
 }
 

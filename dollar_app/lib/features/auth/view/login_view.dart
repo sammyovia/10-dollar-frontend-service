@@ -49,10 +49,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   image: AssetImage(AppImages.onboarding2),
                   fit: BoxFit.fill,
                   opacity: 0.1)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
             children: [
+              SizedBox(
+                height: 30.h,
+              ),
               Text(
                 "Login",
                 style: GoogleFonts.notoSans(
