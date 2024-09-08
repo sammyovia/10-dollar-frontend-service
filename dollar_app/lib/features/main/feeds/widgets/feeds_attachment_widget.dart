@@ -4,8 +4,8 @@ import 'package:dollar_app/services/file_picker_service.dart' as fps;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FeedsAttachmentWidget extends StatefulWidget {
-  const FeedsAttachmentWidget({super.key, required this.file, this.height,
-  this.width});
+  const FeedsAttachmentWidget(
+      {super.key, required this.file, this.height, this.width});
   final String file;
   final double? height;
   final double? width;
@@ -24,8 +24,8 @@ class _FileAttachmentWidgetState extends State<FeedsAttachmentWidget> {
         return Container(
           width: widget.width ?? double.infinity,
           height: widget.height ?? 150.h,
+          padding: const EdgeInsets.symmetric(horizontal: 23.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
             color: Colors.grey.shade300,
             image: DecorationImage(
                 image: NetworkImage(widget.file), fit: BoxFit.cover),

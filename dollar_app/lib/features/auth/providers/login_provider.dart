@@ -15,14 +15,19 @@ class LoginProvider extends AsyncNotifier<Map<String, dynamic>> {
       state = const AsyncLoading();
       final res = await ref.read(networkProvider).postRequest(
           path: '/auth/login', body: {"email": email, "password": password});
-      token.saveTokens(res['data']['accessToken'], res['data']['refreshToken']);
+      token.saveTokens(
+          accessToken: res['data']['accessToken'],
+          refreshToken: res['data']['refreshToken']);
       ref.read(router).go(AppRoutes.home);
+
       state = AsyncData(res);
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
       Toast.showErrorToast(context, e.toString());
     }
   }
+
+ 
 
   @override
   FutureOr<Map<String, dynamic>> build() {

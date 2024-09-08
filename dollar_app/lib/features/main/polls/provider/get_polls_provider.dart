@@ -4,10 +4,10 @@ import 'package:dollar_app/features/main/polls/model/polls_video_model.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GetPollsProvider extends AsyncNotifier<List<PollsVideoModelData>> {
-  Future<List<PollsVideoModelData>> getFeeds() async {
+class GetPollsProvider extends AsyncNotifier<List<Data>> {
+  Future<List<Data>> getFeeds() async {
     final response = await ref.read(networkProvider).getRequest(path: '/polls');
-    final videos = PollsVideoModel.fromJson(response).data;
+    final videos = PollsVideoModel.fromJson(response).data ?? [];
 
     return videos;
   }
@@ -24,12 +24,12 @@ class GetPollsProvider extends AsyncNotifier<List<PollsVideoModelData>> {
   }
 
   @override
-  FutureOr<List<PollsVideoModelData>> build() {
+  FutureOr<List<Data>> build() {
     state = const AsyncLoading();
     return getFeeds();
   }
 }
 
 final getPollsProvider =
-    AsyncNotifierProvider<GetPollsProvider, List<PollsVideoModelData>>(
+    AsyncNotifierProvider<GetPollsProvider, List<Data>>(
         GetPollsProvider.new);

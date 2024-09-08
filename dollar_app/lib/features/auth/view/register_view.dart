@@ -63,9 +63,10 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
     setState(() {});
   }
 
-  void setConfirmPasswordError() {
-    if (confirmPassword != password) {
-      confirmPasswordErrorText = 'passwords does not match';
+  void setConfirmPasswordError(String value) {
+    confirmPassword = value; // Update confirmPassword first
+    if (password != confirmPassword) {
+      confirmPasswordErrorText = 'passwords do not match';
     } else {
       confirmPasswordErrorText = '';
     }
@@ -97,10 +98,13 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                 image: AssetImage(AppImages.onboarding2),
                 fit: BoxFit.fill,
                 opacity: 0.1)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 30.h,
+            ),
             Text(
               "Sign up",
               style: GoogleFonts.notoSans(
@@ -156,9 +160,9 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       ),
                       AppTextField(
                         onchaged: (v) {
-                          setPasswordError(v ?? '');
-
                           password = v!;
+                          setPasswordError(v);
+                          setConfirmPasswordError(v);
                           validate();
                         },
                         obscureText: showPassword,
@@ -183,8 +187,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       ),
                       AppTextField(
                         onchaged: (v) {
-                          setConfirmPasswordError();
                           confirmPassword = v!;
+                          setConfirmPasswordError(v);
                           validate();
                         },
                         obscureText: showPassword,
@@ -208,7 +212,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         height: 20.h,
                       ),
                       AppPrimaryButton(
-                        enabled: true,
+                        enabled: validated,
                         isLoading: ref.watch(registerProvider).isLoading,
                         onPressed: () {
                           if (validated) {
@@ -221,7 +225,9 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         color: Colors.black,
                         title: 'Register',
                       ),
-                      const Divider(),
+                      Divider(
+                        color: Theme.of(context).dividerColor,
+                      ),
                       AppPrimaryButton(
                         enabled: true,
                         isLoading: ref.watch(googleSinginProvider).isLoading,

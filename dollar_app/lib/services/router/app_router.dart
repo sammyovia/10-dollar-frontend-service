@@ -8,6 +8,7 @@ import 'package:dollar_app/features/main/polls/polls_view.dart';
 import 'package:dollar_app/features/main/profile/profile_view.dart';
 import 'package:dollar_app/features/main/videos/view/upload_video_view.dart';
 import 'package:dollar_app/features/main/videos/view/videos_view.dart';
+import 'package:dollar_app/features/startup/startup_view.dart';
 import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,9 +39,15 @@ final router = Provider<GoRouter>((ref) {
   }
 
   return GoRouter(
-      initialLocation: AppRoutes.onboarding,
+      initialLocation: AppRoutes.startupView,
       navigatorKey: _rootNavigationKey,
       routes: [
+        GoRoute(
+          parentNavigatorKey: _rootNavigationKey,
+          path: AppRoutes.startupView,
+          pageBuilder: (context, state) =>
+              const NoTransitionPage(child: StartupView()),
+        ),
         GoRoute(
           parentNavigatorKey: _rootNavigationKey,
           path: AppRoutes.onboarding,
@@ -100,9 +107,8 @@ final router = Provider<GoRouter>((ref) {
                                     child: const UploadVideoView(),
                                     state: state);
                               }),
-                              
                         ]),
-                        GoRoute(
+                    GoRoute(
                         path: 'admin',
                         pageBuilder: (context, state) {
                           return getPage(

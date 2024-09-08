@@ -19,6 +19,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        
         title: Text(
           'Change Password',
           style: GoogleFonts.lato(color: Colors.white),

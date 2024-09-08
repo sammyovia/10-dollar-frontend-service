@@ -5,12 +5,12 @@ import 'dart:async';
 
 import 'package:dollar_app/services/network/network_repository.dart';
 
-class TopArtistProvider extends AsyncNotifier<List<TopArtistModelData>> {
-  Future<List<TopArtistModelData>> getFeeds() async {
+class TopArtistProvider extends AsyncNotifier<List<Data>> {
+  Future<List<Data>> getFeeds() async {
     state = const AsyncLoading();
     final response =
         await ref.read(networkProvider).getRequest(path: '/home/artists');
-    final feeds = TopArtistModel.fromJson(response).data;
+    final feeds = TopArtistModel.fromJson(response).data ?? [];
 
     return feeds;
   }
@@ -26,11 +26,11 @@ class TopArtistProvider extends AsyncNotifier<List<TopArtistModelData>> {
   }
 
   @override
-  FutureOr<List<TopArtistModelData>> build() {
+  FutureOr<List<Data>> build() {
     return getFeeds();
   }
 }
 
 final topArtistProvider =
-    AsyncNotifierProvider<TopArtistProvider, List<TopArtistModelData>>(
+    AsyncNotifierProvider<TopArtistProvider, List<Data>>(
         TopArtistProvider.new);

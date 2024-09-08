@@ -8,21 +8,27 @@ class FeedsVideoPreview extends StatefulWidget {
   const FeedsVideoPreview({super.key, required this.file});
 
   @override
-  State<FeedsVideoPreview> createState() => _VideoPreviewState();
+  State<FeedsVideoPreview> createState() => _FeedsVideoPreviewState();
 }
 
-class _VideoPreviewState extends State<FeedsVideoPreview> {
+class _FeedsVideoPreviewState extends State<FeedsVideoPreview> {
   late CustomVideoPlayerController _customVideoPlayerController;
+  bool _isVideoInitialized = false;
 
   void _initializeVideoPlayer() {
     VideoPlayerController videoplayerController =
         VideoPlayerController.contentUri(Uri.parse(widget.file))
-          ..initialize().then((value) {
-            setState(() {});
+          ..initialize().then((_) {
+            setState(() {
+              _isVideoInitialized = true;
+            });
           });
 
     _customVideoPlayerController = CustomVideoPlayerController(
-        context: context, videoPlayerController: videoplayerController);
+      customVideoPlayerSettings: const CustomVideoPlayerSettings(),
+      context: context,
+      videoPlayerController: videoplayerController,
+    );
   }
 
   @override
@@ -33,66 +39,68 @@ class _VideoPreviewState extends State<FeedsVideoPreview> {
 
   @override
   void dispose() {
-    super.dispose();
     _customVideoPlayerController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: Colors.grey.shade100,
-        ),
-        width: double.infinity,
-        height: 150.h,
-        child: CustomVideoPlayer(
-            customVideoPlayerController: _customVideoPlayerController),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: Colors.grey.shade100,
+      ),
+      width: double.infinity,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Video Player
+          if (_isVideoInitialized)
+            CustomVideoPlayer(
+              customVideoPlayerController: _customVideoPlayerController,
+            ),
+          // Loading Indicator
+          if (!_isVideoInitialized)
+            Container(
+              color: Colors.grey.shade200,
+              width: double.infinity,
+              height: 150.h,
+              child: Center(
+                child: SizedBox(
+                  height: 30.h,
+                  width: 30.h,
+                  child: const CircularProgressIndicator(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          // Play Button (optional)
+          if (_isVideoInitialized)
+            Positioned(
+              child: IconButton(
+                icon: Icon(
+                  _customVideoPlayerController
+                          .videoPlayerController.value.isPlaying
+                      ? Icons.pause
+                      : Icons.play_arrow,
+                  color: Colors.white,
+                  size: 50,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _customVideoPlayerController
+                            .videoPlayerController.value.isPlaying
+                        ? _customVideoPlayerController.videoPlayerController
+                            .pause()
+                        : _customVideoPlayerController.videoPlayerController
+                            .play();
+                  });
+                },
+              ),
+            ),
+        ],
       ),
     );
-    // return Stack(
-    //   children: [
-    //     ClipRRect(
-    //         borderRadius: const BorderRadius.all(Radius.circular(10)),
-    //         child: CustomVideoPlayer(
-    //             customVideoPlayerController: _customVideoPlayerController)),
-    //     // Align(
-    //     //   alignment: Alignment.bottomCenter,
-    //     //   child:
-    //     //       VideoProgressIndicator(_controller, allowScrubbing: true),
-    //     // ),
-    //     // Positioned(
-    //     //   top: 40.h,
-    //     //   left: 130.w,
-    //     //   child: Container(
-    //     //       padding: const EdgeInsets.all(8),
-    //     //       decoration: BoxDecoration(
-    //     //         color: Colors.black.withOpacity(0.5),
-    //     //         shape: BoxShape.circle,
-    //     //       ),
-    //     //       child: IconButton(
-    //     //         onPressed: () {
-    //     //           setState(() {
-    //     //             _controller.value.isPlaying
-    //     //                 ? _controller.pause()
-    //     //                 : _controller.play();
-    //     //           });
-    //     //         },
-    //     //       //   icon: Icon(
-    //     //       //     _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-    //     //       //     color: Colors.white,
-    //     //       //   ),
-    //     //       // )),
-    //     // ),
-    //   ],
-    // );
-    // : Container(
-    //     height: 80,
-    //     width: 80,
-    //     color: Colors.black,
-    //     child: const Center(child: CircularProgressIndicator()),
-    //   );
   }
 }

@@ -71,6 +71,7 @@ class _OTPViewState extends ConsumerState<OTPView> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
+        action: const [],
         title: Text(
           "OTP",
           style: GoogleFonts.lato(fontWeight: FontWeight.bold),
@@ -212,4 +213,3 @@ class _OTPViewState extends ConsumerState<OTPView> {
     );
   }
 }
-

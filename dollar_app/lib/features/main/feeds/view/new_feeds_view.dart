@@ -22,6 +22,17 @@ class _NewFeedsViewState extends ConsumerState<NewFeedsView> {
   List<File> attachments = [];
   final _feedController = TextEditingController();
   String? errorMessage;
+  bool validated = false;
+
+  void validate() {
+    if (_feedController.text.isNotEmpty) {
+      validated = true;
+    } else {
+      validated = false;
+    }
+
+    setState(() {});
+  }
 
   Future<void> _pickAttachments() async {
     try {
@@ -74,6 +85,25 @@ class _NewFeedsViewState extends ConsumerState<NewFeedsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
+        action: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AppPrimaryButton(
+              isLoading: ref.watch(postFeedsProvider).isLoading,
+              enabled: validated,
+              onPressed: () {
+                if (_feedController.text.isNotEmpty) {
+                  ref.read(postFeedsProvider.notifier).postFeeds(context,
+                      content: _feedController.text, attachments: attachments);
+                }
+              },
+              title: 'Post',
+              width: 150.w,
+              height: 30.h,
+              putIcon: false,
+            ),
+          )
+        ],
         title: CircleAvatar(
           backgroundColor: Colors.grey.shade300,
         ),
@@ -101,6 +131,9 @@ class _NewFeedsViewState extends ConsumerState<NewFeedsView> {
           children: [
             Expanded(
                 child: TextFormField(
+              onChanged: (v) {
+                validate();
+              },
               controller: _feedController,
               keyboardType: TextInputType.multiline,
               maxLines: 99999999,

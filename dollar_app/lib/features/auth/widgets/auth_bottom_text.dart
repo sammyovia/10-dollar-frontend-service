@@ -30,8 +30,8 @@ class AuthBottomText extends StatelessWidget {
           child: Text(
             actionText,
             style: GoogleFonts.redHatDisplay(
-              fontWeight: FontWeight.w800,
-            ),
+                fontWeight: FontWeight.w800,
+                color: Theme.of(context).primaryColor),
           ),
         )
       ],

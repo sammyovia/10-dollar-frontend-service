@@ -8,12 +8,14 @@ import 'package:dollar_app/features/shared/widgets/dialog_method.dart';
 import 'package:dollar_app/features/shared/widgets/publish_pop_up_widget.dart';
 import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:dollar_app/features/shared/widgets/stake_widget.dart';
+import 'package:dollar_app/features/shared/widgets/toast.dart';
 import 'package:dollar_app/features/shared/widgets/vote_pop_up_widget.dart';
 import 'package:dollar_app/services/date_manipulation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PollsViewWidgets extends ConsumerStatefulWidget {
   const PollsViewWidgets(
@@ -40,6 +42,30 @@ class PollsViewWidgets extends ConsumerStatefulWidget {
 }
 
 class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
+  Set<String> votedVideos = {};
+
+  Future<void> _saveVotedVideos() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('votedVideos', votedVideos.toList());
+  }
+
+  Future<void> _toggleVote(context, String videoId) async {
+    setState(() {
+      if (votedVideos.contains(videoId)) {
+        votedVideos.remove(videoId);
+      } else {
+        votedVideos.add(videoId);
+      }
+    });
+    await _saveVotedVideos();
+    // Call the vote/unvote API here
+    // await ref.read(voteProvider.notifier).toggleVote(videoId);
+    diolagMethod(
+      context,
+      child: VotePopupWidget(postId: videoId),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +73,14 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
       ref
           .read(getVideosProvider.notifier)
           .displayFeeds(context, pollsPage: widget.pollsPage);
+      _loadVotedVideos();
+    });
+  }
+
+  Future<void> _loadVotedVideos() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      votedVideos = prefs.getStringList('votedVideos')?.toSet() ?? {};
     });
   }
 
@@ -54,76 +88,87 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
   Widget build(BuildContext context) {
     final model = ref.watch(getPollsProvider);
     return model.when(
-        data: (data) {
-          return data.isEmpty
-              ? Center(
-                  child: Text(
-                    "No data to display",
-                    style: GoogleFonts.lato(fontSize: 14.sp),
-                  ),
-                )
-              : ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 15.w),
-                  itemCount: data.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final artist = data[index].video;
-                    final isLiked =
-                        DataManipulation.likedFeeds[artist.id] ?? false;
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+      data: (data) {
+        return data.isEmpty
+            ? Center(
+                child: Text(
+                  "No data to display",
+                  style: GoogleFonts.lato(fontSize: 14.sp),
+                ),
+              )
+            : ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                itemCount: data.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final artist = data[index].video;
+                  final isLiked =
+                      DataManipulation.likedFeeds[artist?.id] ?? false;
+                  final isVoted = votedVideos.contains(artist?.id);
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 20.h),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 23.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // CircleAvatar(
-                              //   backgroundColor: Colors.grey.shade300,
-                              //   backgroundImage: NetworkImage(artist.profilePic),
-                              // ),
-                              SizedBox(width: 8.w),
-                              const Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              Row(
                                 children: [
-                                  // Text(
-                                  //   artist.fullName,
-                                  //   style: GoogleFonts.lato(fontSize: 12.sp),
-                                  // ),
-                                  // Text(
-                                  //   artist.position,
-                                  //   style: GoogleFonts.lato(fontSize: 10.sp),
-                                  // )
+                                  CircleAvatar(
+                                    backgroundColor: Colors.grey.shade300,
+                                    backgroundImage: artist?.artist?.avatar !=
+                                            null
+                                        ? NetworkImage(artist?.artist?.avatar)
+                                        : null,
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${artist?.artist?.firstName} ${artist?.artist?.lastName}",
+                                        style:
+                                            GoogleFonts.lato(fontSize: 12.sp),
+                                      ),
+                                    ],
+                                  )
                                 ],
-                              )
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Text(
+                                artist?.title ?? '',
+                                style: GoogleFonts.lato(fontSize: 10.sp),
+                              ),
+                              SizedBox(
+                                height: 8.h,
+                              ),
                             ],
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          // if (artist. != null)
-                          //   Text(
-                          //     artist.title ?? "",
-                          //     style: GoogleFonts.lato(fontSize: 10.sp),
-                          //   ),
-                          // SizedBox(
-                          //   height: 8.h,
-                          // ),
-                          FeedsAttachmentWidget(file: artist.videoUrl),
-                          SizedBox(
-                            height: 5.h,
-                          ),
-                          Row(
+                        ),
+                        FeedsAttachmentWidget(file: artist!.videoUrl!),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 23.w),
+                          child: Row(
                             children: [
                               if (widget.showPublished)
                                 GestureDetector(
                                   onTap: () {
                                     diolagMethod(
                                       context,
-                                      child:
-                                          PublishPopupWidget(postId: artist.id),
+                                      child: PublishPopupWidget(
+                                          postId: artist.id!),
                                     );
                                   },
                                   child: Container(
@@ -144,31 +189,26 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
                               if (widget.showVote)
                                 GestureDetector(
                                   onTap: () {
-                                    diolagMethod(
-                                      context,
-                                      child: VotePopupWidget(postId: artist.id),
-                                    );
+                                    if (isVoted) {
+                                      Toast.showErrorToast(context,
+                                          "You have already voted for this video");
+                                    } else {
+                                      _toggleVote(context, artist.id!);
+                                    }
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 8),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
-                                        color: Colors.green),
+                                        color: isVoted
+                                            ? Colors.green
+                                            : Colors.grey),
                                     child: Text(
                                       'vote',
                                       style: GoogleFonts.lato(
                                           fontSize: 10.sp, color: Colors.white),
                                     ),
-                                  ),
-                                ),
-                              SizedBox(
-                                width: 3.w,
-                              ),
-                              if (widget.showVote)
-                                Text(
-                                  artist.voteCount.toString(),
-                                  style: GoogleFonts.lato(
-                                    fontSize: 12.sp,
                                   ),
                                 ),
                               SizedBox(
@@ -212,10 +252,10 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
                                 GestureDetector(
                                   onTap: () {
                                     DataManipulation.toggleLike(
-                                        artist.id, artist.likeCount);
+                                        artist.id!, artist.likeCount!);
                                     ref
                                         .read(likeDeleteVideoProvider.notifier)
-                                        .likeVideo(artist.id);
+                                        .likeVideo(artist.id!);
                                     setState(() {});
                                   },
                                   child: Icon(
@@ -232,7 +272,7 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
                               if (widget.showLike)
                                 Text(
                                   isLiked
-                                      ? '${artist.likeCount + 1}'
+                                      ? '${artist.likeCount! + 1}'
                                       : artist.likeCount.toString(),
                                   style: GoogleFonts.lato(
                                     fontSize: 12.sp,
@@ -255,7 +295,7 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
                                   onTap: () {
                                     diolagMethod(context,
                                         child: DeletePopupWidget(
-                                          postId: artist.id,
+                                          postId: artist.id!,
                                           onPress: () {},
                                         ));
                                   },
@@ -263,22 +303,24 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
                                       size: 17.r, color: Colors.grey),
                                 ),
                             ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                );
-        },
-        error: (e, s) {
-          return Center(
-              child: Text(
-            e.toString(),
-            style: GoogleFonts.lato(),
-          ));
-        },
-        loading: () => const ShimmerWidget(
-              layoutType: LayoutType.howVideo,
-            ));
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              );
+      },
+      error: (e, s) {
+        return Center(
+            child: Text(
+          e.toString(),
+          style: GoogleFonts.lato(),
+        ));
+      },
+      loading: () => const ShimmerWidget(
+        layoutType: LayoutType.howVideo,
+      ),
+    );
   }
 }

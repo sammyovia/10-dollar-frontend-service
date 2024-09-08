@@ -52,27 +52,29 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
   Widget build(BuildContext context) {
     final model = ref.watch(getFeedsProvider);
     return model.when(
-        data: (data) {
-          return data.isEmpty
-              ? const Center(
-                  child: Text('No Feeds to display'),
-                )
-              : ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 15.w),
-                  itemCount: data.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final feed = data[index];
-                    final isLiked = likedFeeds[feed.id] ?? false;
+      data: (data) {
+        return data.isEmpty
+            ? const Center(
+                child: Text('No Feeds to display'),
+              )
+            : ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                itemCount: data.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final feed = data[index];
+                  final isLiked = likedFeeds[feed.id] ?? false;
 
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 20.0.h),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 23.0),
+                          child: Row(
                             children: [
                               CircleAvatar(
                                 backgroundColor: Colors.grey.shade300,
@@ -97,36 +99,43 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                               )
                             ],
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              context.go('/feeds/feedDetails/${feed.id}');
-                            },
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: Column(
-                                children: [
-                                  Text(
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            context.go('/feeds/feedDetails/${feed.id}');
+                          },
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 23.0),
+                                  child: Text(
                                     feed.content,
                                     style: GoogleFonts.lato(fontSize: 10.sp),
                                   ),
-                                  SizedBox(
-                                    height: 8.h,
-                                  ),
-                                  if (feed.attachment != null &&
-                                      feed.attachment!.isNotEmpty)
-                                    FeedsAttachmentWidget(
-                                        file: feed.attachment!),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                ],
-                              ),
+                                ),
+                                SizedBox(
+                                  height: 8.h,
+                                ),
+                                if (feed.attachment != null &&
+                                    feed.attachment!.isNotEmpty)
+                                  FeedsAttachmentWidget(file: feed.attachment!),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                              ],
                             ),
                           ),
-                          Row(
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 23.0),
+                          child: Row(
                             children: [
                               GestureDetector(
                                 onTap: () {
@@ -187,18 +196,20 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                 color: Theme.of(context).primaryColor,
                               )
                             ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                );
-        },
-        error: (e, s) {
-          return Text(e.toString());
-        },
-        loading: () => const ShimmerWidget(
-              layoutType: LayoutType.howVideo,
-            ));
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              );
+      },
+      error: (e, s) {
+        return Text(e.toString());
+      },
+      loading: () => const ShimmerWidget(
+        layoutType: LayoutType.howVideo,
+      ),
+    );
   }
 }

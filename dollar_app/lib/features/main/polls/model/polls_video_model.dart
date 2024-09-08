@@ -1,106 +1,179 @@
+
+// ignore_for_file: no_leading_underscores_for_local_identifiers, duplicate_ignore
+
 class PollsVideoModel {
-  PollsVideoModel({
-    required this.status,
-    required this.data,
-    required this.message,
-  });
-  late final bool status;
-  late final List<PollsVideoModelData> data;
-  late final String message;
+  bool? status;
+  List<Data>? data;
+  String? message;
+
+  PollsVideoModel({this.status, this.data, this.message});
 
   PollsVideoModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    data = List.from(json['data']).map((e) => PollsVideoModelData.fromJson(e)).toList();
-    message = json['message'];
+    if(json["status"] is bool) {
+      status = json["status"];
+    }
+    if(json["data"] is List) {
+      data = json["data"] == null ? null : (json["data"] as List).map((e) => Data.fromJson(e)).toList();
+    }
+    if(json["message"] is String) {
+      message = json["message"];
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final datam = <String, dynamic>{};
-    datam['status'] = status;
-    datam['data'] = data.map((e) => e.toJson()).toList();
-    datam['message'] = message;
-    return datam;
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["status"] = status;
+    if(data != null) {
+      _data["data"] = data?.map((e) => e.toJson()).toList();
+    }
+    _data["message"] = message;
+    return _data;
   }
 }
 
-class PollsVideoModelData {
-  PollsVideoModelData({
-    required this.id,
-    required this.videoId,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.video,
-  });
-  late final String id;
-  late final String videoId;
-  late final String createdAt;
-  late final String updatedAt;
-  late final Video video;
+class Data {
+  String? id;
+  String? videoId;
+  String? createdAt;
+  String? updatedAt;
+  Video? video;
 
-  PollsVideoModelData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    videoId = json['videoId'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    video = Video.fromJson(json['video']);
+  Data({this.id, this.videoId, this.createdAt, this.updatedAt, this.video});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    if(json["id"] is String) {
+      id = json["id"];
+    }
+    if(json["videoId"] is String) {
+      videoId = json["videoId"];
+    }
+    if(json["createdAt"] is String) {
+      createdAt = json["createdAt"];
+    }
+    if(json["updatedAt"] is String) {
+      updatedAt = json["updatedAt"];
+    }
+    if(json["video"] is Map) {
+      video = json["video"] == null ? null : Video.fromJson(json["video"]);
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final datam = <String, dynamic>{};
-    datam['id'] = id;
-    datam['videoId'] = videoId;
-    datam['createdAt'] = createdAt;
-    datam['updatedAt'] = updatedAt;
-    datam['video'] = video.toJson();
-    return datam;
+    // ignore: no_leading_underscores_for_local_identifiers
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["videoId"] = videoId;
+    _data["createdAt"] = createdAt;
+    _data["updatedAt"] = updatedAt;
+    if(video != null) {
+      _data["video"] = video?.toJson();
+    }
+    return _data;
   }
 }
 
 class Video {
-  Video({
-    required this.id,
-    required this.title,
-    required this.videoUrl,
-    required this.voteCount,
-    required this.likeCount,
-    required this.status,
-    required this.artistId,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-  late final String id;
-  late final String title;
-  late final String videoUrl;
-  late final int voteCount;
-  late final int likeCount;
-  late final String status;
-  late final String artistId;
-  late final String createdAt;
-  late final String updatedAt;
+  String? id;
+  String? title;
+  String? videoUrl;
+  int? voteCount;
+  int? likeCount;
+  int? stakeCount;
+  String? status;
+  String? artistId;
+  String? createdAt;
+  String? updatedAt;
+  Artist? artist;
+
+  Video({this.id, this.title, this.videoUrl, this.voteCount, this.likeCount, this.stakeCount, this.status, this.artistId, this.createdAt, this.updatedAt, this.artist});
 
   Video.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    videoUrl = json['videoUrl'];
-    voteCount = json['voteCount'];
-    likeCount = json['likeCount'];
-    status = json['status'];
-    artistId = json['artistId'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
+    if(json["id"] is String) {
+      id = json["id"];
+    }
+    if(json["title"] is String) {
+      title = json["title"];
+    }
+    if(json["videoUrl"] is String) {
+      videoUrl = json["videoUrl"];
+    }
+    if(json["voteCount"] is int) {
+      voteCount = json["voteCount"];
+    }
+    if(json["likeCount"] is int) {
+      likeCount = json["likeCount"];
+    }
+    if(json["stakeCount"] is int) {
+      stakeCount = json["stakeCount"];
+    }
+    if(json["status"] is String) {
+      status = json["status"];
+    }
+    if(json["artistId"] is String) {
+      artistId = json["artistId"];
+    }
+    if(json["createdAt"] is String) {
+      createdAt = json["createdAt"];
+    }
+    if(json["updatedAt"] is String) {
+      updatedAt = json["updatedAt"];
+    }
+    if(json["artist"] is Map) {
+      artist = json["artist"] == null ? null : Artist.fromJson(json["artist"]);
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final datam = <String, dynamic>{};
-    datam['id'] = id;
-    datam['title'] = title;
-    datam['videoUrl'] = videoUrl;
-    datam['voteCount'] = voteCount;
-    datam['likeCount'] = likeCount;
-    datam['status'] = status;
-    datam['artistId'] = artistId;
-    datam['createdAt'] = createdAt;
-    datam['updatedAt'] = updatedAt;
-    return datam;
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["title"] = title;
+    _data["videoUrl"] = videoUrl;
+    _data["voteCount"] = voteCount;
+    _data["likeCount"] = likeCount;
+    _data["stakeCount"] = stakeCount;
+    _data["status"] = status;
+    _data["artistId"] = artistId;
+    _data["createdAt"] = createdAt;
+    _data["updatedAt"] = updatedAt;
+    if(artist != null) {
+      _data["artist"] = artist?.toJson();
+    }
+    return _data;
+  }
+}
+
+class Artist {
+  String? id;
+  String? firstName;
+  String? lastName;
+  String? email;
+  dynamic avatar;
+
+  Artist({this.id, this.firstName, this.lastName, this.email, this.avatar});
+
+  Artist.fromJson(Map<String, dynamic> json) {
+    if(json["id"] is String) {
+      id = json["id"];
+    }
+    if(json["firstName"] is String) {
+      firstName = json["firstName"];
+    }
+    if(json["lastName"] is String) {
+      lastName = json["lastName"];
+    }
+    if(json["email"] is String) {
+      email = json["email"];
+    }
+    avatar = json["avatar"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["firstName"] = firstName;
+    _data["lastName"] = lastName;
+    _data["email"] = email;
+    _data["avatar"] = avatar;
+    return _data;
   }
 }

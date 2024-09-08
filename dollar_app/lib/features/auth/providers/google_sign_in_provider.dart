@@ -58,8 +58,10 @@ class GoogleSignInProvider extends AsyncNotifier<User?> {
           .read(networkProvider)
           .postRequest(path: '/auth/google', body: body);
       if (res['status'] == true) {
-        token.saveTokens(
-            res['data']['accessToken'], res['data']['refreshToken']);
+        token.saveTokens( accessToken: 
+            res['data']['accessToken'], 
+            refreshToken: 
+            res['data']['refreshToken']);
         ref.read(router).go(AppRoutes.home);
       }
       state = const AsyncData(null);

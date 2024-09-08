@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dollar_app/features/main/videos/provider/get_videos_provider.dart';
 import 'package:dollar_app/features/shared/widgets/toast.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
 import 'package:dollar_app/services/router/app_router.dart';
@@ -40,10 +41,12 @@ class UploadVideoProvider extends AsyncNotifier<Map<String, dynamic>> {
           .read(networkProvider)
           .postRequest(path: '/videos', body: formData);
       if (response['status'] == true) {
-        state = AsyncData(response);
         ref.invalidateSelf();
         ref.read(router).pop();
+        ref.read(getVideosProvider.notifier).displayFeeds(context);
+        Toast.showSuccessToast(context, 'upload successful');
       }
+      state = AsyncData(response);
       await future;
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
