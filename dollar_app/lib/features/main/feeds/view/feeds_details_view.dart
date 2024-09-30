@@ -166,8 +166,13 @@ class _FeedsDetailsViewState extends ConsumerState<FeedsDetailsView> {
                           ],
                         ),
                       ),
-                      const Divider(),
-                      const Text('Comments'),
+                      Divider(
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Comments'),
+                      ),
                       CommentBox(
                         postId: details.id!,
                         showBottomSheet: false,

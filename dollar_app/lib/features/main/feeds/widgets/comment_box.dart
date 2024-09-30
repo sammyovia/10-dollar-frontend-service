@@ -127,8 +127,8 @@ class _CommentBoxState extends ConsumerState<CommentBox> {
                     style: GoogleFonts.notoSans(
                         fontWeight: FontWeight.bold, fontSize: 16.sp),
                   ),
-                  const Divider(
-                    color: Colors.grey,
+                  Divider(
+                    color: Theme.of(context).primaryColor,
                   ),
                 ],
               ),

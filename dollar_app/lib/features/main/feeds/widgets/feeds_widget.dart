@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconly/iconly.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedsWidget extends ConsumerStatefulWidget {
@@ -72,33 +71,30 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 23.0),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.grey.shade300,
-                                backgroundImage: feed.user.avatar != null
-                                    ? NetworkImage(feed.user.avatar!)
-                                    : null,
-                              ),
-                              SizedBox(width: 8.w),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${feed.user.firstName ?? 'new'} ${feed.user.lastName ?? 'user'}',
-                                    style: GoogleFonts.lato(fontSize: 12.sp),
-                                  ),
-                                  Text(
-                                    feed.user.role,
-                                    style: GoogleFonts.lato(fontSize: 10.sp),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.grey.shade300,
+                              backgroundImage: feed.user.avatar != null
+                                  ? NetworkImage(feed.user.avatar!)
+                                  : null,
+                            ),
+                            SizedBox(width: 8.w),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${feed.user.firstName ?? 'new'} ${feed.user.lastName ?? 'user'}',
+                                  style: GoogleFonts.lato(fontSize: 12.sp),
+                                ),
+                                Text(
+                                  feed.user.role,
+                                  style: GoogleFonts.lato(fontSize: 10.sp),
+                                )
+                              ],
+                            )
+                          ],
                         ),
                         SizedBox(
                           height: 10.h,
@@ -147,8 +143,9 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                       ));
                                 },
                                 child: Icon(
-                                  IconlyBold.chat,
+                                  Icons.comment_rounded,
                                   color: Theme.of(context).colorScheme.primary,
+                                  size: 17.r,
                                 ),
                               ),
                               SizedBox(
@@ -175,7 +172,7 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                   color: isLiked
                                       ? Colors.red
                                       : Colors.grey.shade200,
-                                  size: 20.r,
+                                  size: 17.r,
                                 ),
                               ),
                               SizedBox(
@@ -190,11 +187,6 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                 ),
                               ),
                               const Spacer(),
-                              Icon(
-                                Icons.share,
-                                size: 20.r,
-                                color: Theme.of(context).primaryColor,
-                              )
                             ],
                           ),
                         )

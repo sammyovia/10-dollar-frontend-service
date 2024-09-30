@@ -6,6 +6,7 @@ import 'package:dollar_app/features/main/feeds/view/new_feeds_view.dart';
 import 'package:dollar_app/features/main/home/home_view.dart';
 import 'package:dollar_app/features/main/polls/polls_view.dart';
 import 'package:dollar_app/features/main/profile/profile_view.dart';
+import 'package:dollar_app/features/main/profile/views/theme_view.dart';
 import 'package:dollar_app/features/main/videos/view/upload_video_view.dart';
 import 'package:dollar_app/features/main/videos/view/videos_view.dart';
 import 'package:dollar_app/features/startup/startup_view.dart';
@@ -113,6 +114,12 @@ final router = Provider<GoRouter>((ref) {
                         pageBuilder: (context, state) {
                           return getPage(
                               child: const AdminView(), state: state);
+                        }),
+                    GoRoute(
+                        path: 'theme',
+                        pageBuilder: (context, state) {
+                          return getPage(
+                              child: const ThemeView(), state: state);
                         }),
                   ]),
             ]),

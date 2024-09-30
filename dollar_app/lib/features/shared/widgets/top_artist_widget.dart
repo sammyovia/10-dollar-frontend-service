@@ -21,8 +21,9 @@ class _TopArtistWidgetState extends ConsumerState<TopArtistWidget> {
     return model.when(
         data: (data) {
           return SizedBox(
-              height: 120.h,
+              height: 90.h,
               child: ListView.builder(
+                  padding: EdgeInsets.zero,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     final artist = data[index];
@@ -39,16 +40,13 @@ class _TopArtistWidgetState extends ConsumerState<TopArtistWidget> {
                                 : null,
                           ),
                           SizedBox(
-                            height: 8.h,
-                          ),
-                          SizedBox(
-                            width: 100.w,
+                            // width: 10.w,
                             child: Text(
                               textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
+                              overflow: TextOverflow.clip,
                               maxLines: 2,
                               '${artist.artist?.firstName ?? ''} ${artist.artist?.lastName}',
-                              style: GoogleFonts.lato(),
+                              style: GoogleFonts.lato(fontSize: 12.sp),
                             ),
                           )
                         ],

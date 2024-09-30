@@ -34,6 +34,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
           ref.refresh(getHomeVideosProvider.notifier).displayFeeds(context);
         },
         child: SingleChildScrollView(
+          
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
@@ -48,26 +49,29 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       style: GoogleFonts.lato(fontSize: 16.sp),
                     ),
                   ),
-                  Divider(
-                    thickness: 2,
-                    color: Theme.of(context).dividerColor,
-                  ),
                   SizedBox(
                     height: 10.h,
+                  ),
+                  Divider(
+                    thickness: 1,
+                    color: Theme.of(context).dividerColor,
                   ),
                   const TopArtistWidget()
                 ],
               ),
+              Divider(
+                thickness: 1,
+                color: Theme.of(context).dividerColor,
+              ),
               SizedBox(
                 height: 10.h,
               ),
-              Divider(
-                thickness: 2,
-                color: Theme.of(context).dividerColor,
-              ),
-              const HomeVideoProviderWidget(
-                canStake: true,
-                showShare: false,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: const HomeVideoProviderWidget(
+                  canStake: true,
+                  showShare: false,
+                ),
               )
             ],
           ),

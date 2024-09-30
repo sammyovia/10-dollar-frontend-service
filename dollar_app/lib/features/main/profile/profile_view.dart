@@ -1,5 +1,5 @@
-import 'package:dollar_app/features/main/profile/providers/widgets/log_out_dialog.dart';
-import 'package:dollar_app/features/main/profile/providers/widgets/profile_body_widgets.dart';
+import 'package:dollar_app/features/main/profile/widgets/log_out_dialog.dart';
+import 'package:dollar_app/features/main/profile/widgets/profile_body_widgets.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
 import 'package:dollar_app/features/shared/widgets/dialog_method.dart';
@@ -31,10 +31,10 @@ class _ProfileViewState extends State<ProfileView> {
         child: Column(
           children: [
             Container(
-              height: 170.h,
+              height: 180.h,
               width: double.infinity,
               decoration: BoxDecoration(
-                  border: Border.all(color: Theme.of(context).dividerColor),
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(15)),
               child: Column(children: [
                 SizedBox(
@@ -62,7 +62,7 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
                 AppPrimaryButton(
                     putIcon: false,
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    color: Theme.of(context).primaryColor,
                     enabled: true,
                     height: 30.h,
                     width: 200.w,
@@ -100,7 +100,10 @@ class _ProfileViewState extends State<ProfileView> {
               suffixIcon: IconlyBold.arrow_right,
             ),
             SizedBox(height: 10.h),
-            const ProfileBodyWidget(
+            ProfileBodyWidget(
+              onClick: () {
+                context.go('/profile/theme');
+              },
               prefixIcon: Icons.light_mode,
               title: 'Theme',
               suffixIcon: IconlyBold.arrow_right,

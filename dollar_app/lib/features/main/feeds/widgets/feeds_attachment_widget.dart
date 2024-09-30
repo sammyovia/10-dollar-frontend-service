@@ -26,6 +26,7 @@ class _FileAttachmentWidgetState extends State<FeedsAttachmentWidget> {
           height: widget.height ?? 150.h,
           padding: const EdgeInsets.symmetric(horizontal: 23.0),
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
             color: Colors.grey.shade300,
             image: DecorationImage(
                 image: NetworkImage(widget.file), fit: BoxFit.cover),
@@ -35,6 +36,7 @@ class _FileAttachmentWidgetState extends State<FeedsAttachmentWidget> {
       case fps.AttachmentType.video:
         return FeedsVideoPreview(file: widget.file);
       case fps.AttachmentType.other:
+      case fps.AttachmentType.audio:
         return Container();
     }
   }

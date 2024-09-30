@@ -28,7 +28,7 @@ class _StartupViewState extends State<StartupView> {
         context.go(AppRoutes.home);
       } else {
         // Redirect to login page
-        context.go(AppRoutes.login);
+        context.go(AppRoutes.onboarding);
       }
     }
   }

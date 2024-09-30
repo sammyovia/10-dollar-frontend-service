@@ -29,6 +29,7 @@ class _FileAttachmentWidgetState extends State<FileAttachmentWidget> {
       case fps.AttachmentType.video:
         return VideoPreview(file: widget.file);
       case fps.AttachmentType.other:
+      case fps.AttachmentType.audio:
         return Container();
     }
   }

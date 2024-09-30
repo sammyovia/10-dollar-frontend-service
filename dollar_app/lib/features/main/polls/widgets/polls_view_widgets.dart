@@ -1,6 +1,5 @@
 import 'package:dollar_app/features/main/feeds/widgets/feeds_attachment_widget.dart';
 import 'package:dollar_app/features/main/polls/provider/get_polls_provider.dart';
-import 'package:dollar_app/features/main/polls/provider/pay_stack_provider.dart';
 import 'package:dollar_app/features/main/polls/provider/stake_videos_notifier.dart';
 import 'package:dollar_app/features/main/polls/provider/voted_videos_notifier.dart';
 import 'package:dollar_app/features/main/polls/widgets/stake_bootom_sheet.dart';
@@ -132,8 +131,8 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  //showStakeBottomSheet(context, artist.id!);
-                                  PayStackProvider.initilaizePayStake(context);
+                                 
+                                  showStakeBottomSheet(context, artist.id!);
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(

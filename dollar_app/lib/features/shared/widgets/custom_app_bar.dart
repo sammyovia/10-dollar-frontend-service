@@ -1,7 +1,6 @@
 import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconly/iconly.dart';
 
@@ -36,7 +35,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
       centerTitle: centerTitle,
       leadingWidth: showLeading ? 100.w : null,
       leading:
-          showLeading ? SvgPicture.asset('assets/images/applogo.svg') : null,
+          showLeading ? Image.asset('assets/images/applogobg.png') : null,
       title: title,
       actions: action ??
           [

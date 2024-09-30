@@ -4,7 +4,7 @@ import 'package:dollar_app/features/shared/widgets/delete_pop_up_widget.dart';
 import 'package:dollar_app/features/shared/widgets/dialog_method.dart';
 import 'package:dollar_app/features/shared/widgets/publish_pop_up_widget.dart';
 import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
-import 'package:dollar_app/features/shared/widgets/vote_pop_up_widget.dart';
+import 'package:dollar_app/features/main/polls/widgets/vote_pop_up_widget.dart';
 import 'package:dollar_app/services/date_manipulation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,47 +64,44 @@ class _HomeArtistWidgetState extends ConsumerState<HomeVideoProviderWidget> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 23.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.grey.shade300,
-                                    backgroundImage: artist.artist?.avatar !=
-                                            null
-                                        ? NetworkImage(artist.artist?.avatar)
-                                        : null,
-                                  ),
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${artist.artist?.firstName}  ${artist.artist?.lastName}",
-                                        style:
-                                            GoogleFonts.lato(fontSize: 12.sp),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              Text(
-                                artist.title ?? '',
-                                style: GoogleFonts.lato(fontSize: 10.sp),
-                              ),
-                            ],
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.grey.shade300,
+                                  backgroundImage: artist.artist?.avatar !=
+                                          null
+                                      ? NetworkImage(artist.artist?.avatar)
+                                      : null,
+                                ),
+                                SizedBox(
+                                  width: 8.w,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${artist.artist?.firstName}  ${artist.artist?.lastName}",
+                                      style:
+                                          GoogleFonts.lato(fontSize: 12.sp),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Text(
+                              artist.title ?? '',
+                              style: GoogleFonts.lato(fontSize: 10.sp),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           height: 8.h,
@@ -177,10 +174,11 @@ class _HomeArtistWidgetState extends ConsumerState<HomeVideoProviderWidget> {
                               GestureDetector(
                                 onTap: () {},
                                 child: Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20.w, vertical: 5.h),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                   child: Text(
                                     'stake',
@@ -210,7 +208,7 @@ class _HomeArtistWidgetState extends ConsumerState<HomeVideoProviderWidget> {
                                 },
                                 child: Icon(
                                   Icons.favorite,
-                                  color: Colors.grey.shade200,
+                                  color: Theme.of(context).primaryColor,
                                   size: 17.r,
                                 ),
                               ),

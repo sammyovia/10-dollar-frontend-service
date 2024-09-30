@@ -47,8 +47,8 @@ class _FeedsVideoPreviewState extends State<FeedsVideoPreview> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(25),
+        // color: Colors.grey.shade100,
       ),
       width: double.infinity,
       child: Stack(
@@ -56,15 +56,22 @@ class _FeedsVideoPreviewState extends State<FeedsVideoPreview> {
         children: [
           // Video Player
           if (_isVideoInitialized)
-            CustomVideoPlayer(
-              customVideoPlayerController: _customVideoPlayerController,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: CustomVideoPlayer(
+                customVideoPlayerController: _customVideoPlayerController,
+              ),
             ),
           // Loading Indicator
           if (!_isVideoInitialized)
             Container(
-              color: Colors.grey.shade200,
+
               width: double.infinity,
               height: 150.h,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(15),
+              ),
               child: Center(
                 child: SizedBox(
                   height: 30.h,

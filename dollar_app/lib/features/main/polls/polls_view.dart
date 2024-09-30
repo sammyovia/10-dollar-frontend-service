@@ -1,6 +1,6 @@
 import 'package:dollar_app/features/main/polls/provider/get_polls_provider.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
-import 'package:dollar_app/features/shared/widgets/polls_view_widgets.dart';
+import 'package:dollar_app/features/main/polls/widgets/polls_view_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,7 +26,7 @@ class _PollsViewState extends ConsumerState<PollsView> {
       body: SafeArea(
           child: RefreshIndicator(
         onRefresh: () async {
-          ref.refresh(getPollsProvider.notifier).displayFeeds(context);
+          ref.refresh(getPollsProvider.notifier).displayPolls(context);
         },
         child: SingleChildScrollView(
           child: Column(
@@ -46,13 +46,9 @@ class _PollsViewState extends ConsumerState<PollsView> {
               Divider(
                 color: Theme.of(context).dividerColor,
               ),
-              const PollsViewWidgets(
-                showLike: false,
-                showShare: false,
-                showStake: true,
-                showVote: true,
-                pollsPage: true,
-                canStake: true,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: const PollsViewWidgets(),
               )
             ],
           ),
