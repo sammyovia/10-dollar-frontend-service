@@ -38,6 +38,7 @@ class MyApp extends ConsumerWidget {
       splitScreenMode: true,
       builder: (_, child) {
         return MaterialApp.router(
+          // ignore: deprecated_member_use
           useInheritedMediaQuery: true,
           locale: DevicePreview.locale(context),
           builder: DevicePreview.appBuilder,

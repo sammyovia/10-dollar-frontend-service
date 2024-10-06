@@ -181,6 +181,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                   title: curent == 2 ? 'Proceed' : 'next'),
             ],
           ),
+          SizedBox(height: 10.h,),
         ],
       ),
     );

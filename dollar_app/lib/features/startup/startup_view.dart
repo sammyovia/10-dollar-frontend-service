@@ -25,7 +25,7 @@ class _StartupViewState extends State<StartupView> {
     if (context.mounted) {
       if (accessToken != null && refreshToken != null) {
         // Use the tokens to authenticate the user
-        context.go(AppRoutes.home);
+        context.go(AppRoutes.onboarding);
       } else {
         // Redirect to login page
         context.go(AppRoutes.onboarding);

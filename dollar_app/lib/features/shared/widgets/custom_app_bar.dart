@@ -1,6 +1,9 @@
+import 'package:dollar_app/features/main/profile/providers/get_profile_provider.dart';
 import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconly/iconly.dart';
 
@@ -15,7 +18,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
       this.showLeading = false,
       this.showSearch = false,
       this.showProfile = false,
-      this.action});
+      this.action,
+      this.showNofication = true});
   final Widget? title;
   final bool centerTitle;
   final List<Widget>? actions;
@@ -25,46 +29,59 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
   final bool showSearch;
   final bool showProfile;
   final List<Widget>? action;
+  final bool showNofication;
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      automaticallyImplyLeading: true,
-      elevation: elevation,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      centerTitle: centerTitle,
-      leadingWidth: showLeading ? 100.w : null,
-      leading:
-          showLeading ? Image.asset('assets/images/applogobg.png') : null,
-      title: title,
-      actions: action ??
-          [
-            if (showSearch)
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  IconlyLight.search,
-                  size: 20.r,
-                ),
-              ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                IconlyBold.notification,
-                size: 20.r,
-              ),
-            ),
-            if (showProfile)
-              IconButton(
-                  onPressed: () {
-                    context.push(AppRoutes.profile);
-                  },
-                  icon: CircleAvatar(
-                    radius: 15.r,
-                    backgroundColor: Colors.grey.shade300,
-                  )),
-          ],
-      scrolledUnderElevation: 1,
+    return Consumer(
+      builder: (context, ref, child) {
+        final image = ref.watch(getProfileProvider).value?.avatar;
+
+        return AppBar(
+          automaticallyImplyLeading: true,
+          elevation: elevation,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          centerTitle: centerTitle,
+          leadingWidth: showLeading ? 100.w : null,
+          leading: showLeading
+              ? SvgPicture.asset(
+                  'assets/images/10.svg',
+                )
+              : null,
+          title: title,
+          actions: action ??
+              [
+                if (showSearch)
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      IconlyLight.search,
+                      size: 20.r,
+                    ),
+                  ),
+                if (showNofication)
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      IconlyBold.notification,
+                      size: 20.r,
+                    ),
+                  ),
+                if (showProfile)
+                  IconButton(
+                    onPressed: () {
+                      context.push(AppRoutes.profile);
+                    },
+                    icon: CircleAvatar(
+                        radius: 15.r,
+                        backgroundColor: Colors.grey.shade300,
+                        backgroundImage:
+                            image != null ? NetworkImage(image) : null),
+                  ),
+              ],
+          scrolledUnderElevation: 1,
+        );
+      },
     );
   }
 

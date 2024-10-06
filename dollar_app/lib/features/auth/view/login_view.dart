@@ -56,7 +56,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               ),
               Text(
                 "Login",
-                style: GoogleFonts.notoSans(
+                style: GoogleFonts.aBeeZee(
                     //color: Colors.white,
                     fontSize: 35.sp,
                     fontWeight: FontWeight.w700),
@@ -69,7 +69,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 15.w),
                     width: 450.w,
-                    height: 450.h,
+                    //height: 450.h,
                     decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(0.1),
                       borderRadius: BorderRadius.all(
@@ -91,7 +91,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                 fontSize: 14.sp, fontWeight: FontWeight.w400),
                           ),
                         ),
-                        SizedBox(height: 35.h),
+                        SizedBox(height: 16.h),
                         AppTextField(
                           keybordType: TextInputType.emailAddress,
                           onchaged: (value) {
@@ -104,7 +104,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           icon: IconlyBold.message,
                         ),
                         SizedBox(
-                          height: 16.h,
+                          height: 8.h,
                         ),
                         AppTextField(
                           onchaged: (v) {
@@ -125,11 +125,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               showPassword
                                   ? Icons.visibility
                                   : Icons.visibility_off,
+                              color: Theme.of(context).dividerColor,
+                              size: 17.r,
                             ),
                           ),
                         ),
                         SizedBox(
-                          height: 20.h,
+                          height: 8.h,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -144,9 +146,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             alignment: Alignment.centerRight,
                             child: Text(
                               "Forgot Password?",
-                              style: GoogleFonts.redHatDisplay(
-                                fontSize: 12.sp,
-                              ),
+                              style: GoogleFonts.lato(
+                                  fontSize: 12.sp,
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
                         ),
@@ -154,6 +156,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           height: 20.h,
                         ),
                         AppPrimaryButton(
+                          putIcon: false,
+                          height: 35.h,
                           enabled: true,
                           onPressed: () {
                             if (validated) {
@@ -165,8 +169,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           color: Colors.black,
                           title: 'login',
                         ),
-                        const Divider(),
+                        Divider(
+                          color: Theme.of(context).dividerColor,
+                        ),
                         AppPrimaryButton(
+                          height: 35.h,
                           enabled: true,
                           isLoading: ref.watch(googleSinginProvider).isLoading,
                           onPressed: () => ref
@@ -185,6 +192,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           onClick: () {
                             GoRouter.of(context).go('/register');
                           },
+                        ),
+                        SizedBox(
+                          height: 20.h,
                         )
                       ],
                     ),

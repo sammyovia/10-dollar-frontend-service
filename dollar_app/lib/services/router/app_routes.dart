@@ -1,7 +1,6 @@
-
 class AppRoutes {
   static const onboarding = '/onboarding';
-   static const startupView = '/startup';
+  static const startupView = '/startup';
   static const login = '/login';
   static const register = '/register';
   static const otp = '/otp';
@@ -12,4 +11,7 @@ class AppRoutes {
   static const profile = '/profile';
   static const chat = '/chat';
   static const newFeeds = 'feeds/new';
+  static const verifyEmail = '/verifyEmail';
+  static const setUp = '/setUp';
+  static const completeSetUp = '/completeSetUp';
 }

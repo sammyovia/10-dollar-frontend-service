@@ -1,3 +1,4 @@
+import 'package:dollar_app/features/auth/view/verify_email_view.dart';
 import 'package:dollar_app/features/main/admin/view/admin_view.dart';
 import 'package:dollar_app/features/main/chat/view/chat_view.dart';
 import 'package:dollar_app/features/main/feeds/view/feeds_details_view.dart';
@@ -5,10 +6,17 @@ import 'package:dollar_app/features/main/feeds/view/feeds_view.dart';
 import 'package:dollar_app/features/main/feeds/view/new_feeds_view.dart';
 import 'package:dollar_app/features/main/home/home_view.dart';
 import 'package:dollar_app/features/main/polls/polls_view.dart';
+import 'package:dollar_app/features/main/profile/model/profile_model.dart';
 import 'package:dollar_app/features/main/profile/profile_view.dart';
+import 'package:dollar_app/features/main/profile/views/edit_profile_view.dart';
+import 'package:dollar_app/features/main/profile/views/stake_tickets.dart';
 import 'package:dollar_app/features/main/profile/views/theme_view.dart';
+import 'package:dollar_app/features/main/profile/views/ticket_details_view.dart';
+import 'package:dollar_app/features/main/profile/views/view_profile.dart';
 import 'package:dollar_app/features/main/videos/view/upload_video_view.dart';
 import 'package:dollar_app/features/main/videos/view/videos_view.dart';
+import 'package:dollar_app/features/set_up/view/set_up_succesful_page.dart';
+import 'package:dollar_app/features/set_up/view/set_up_view.dart';
 import 'package:dollar_app/features/startup/startup_view.dart';
 import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -79,6 +87,35 @@ final router = Provider<GoRouter>((ref) {
           pageBuilder: (context, state) =>
               const NoTransitionPage(child: ChangePasswordPage()),
         ),
+        GoRoute(
+            parentNavigatorKey: _rootNavigationKey,
+            path: "${AppRoutes.verifyEmail}/:email",
+            pageBuilder: (context, state) {
+              final email = state.pathParameters['email']!;
+              return NoTransitionPage(
+                child: VerifyEmailView(
+                  email: email,
+                ),
+              );
+            }),
+        GoRoute(
+            parentNavigatorKey: _rootNavigationKey,
+            path: "${AppRoutes.setUp}/:email",
+            pageBuilder: (context, state) {
+              final email = state.pathParameters['email']!;
+
+              return NoTransitionPage(
+                child: SetUpView(
+                  email: email,
+                ),
+              );
+            }),
+        GoRoute(
+          parentNavigatorKey: _rootNavigationKey,
+          path: AppRoutes.completeSetUp,
+          pageBuilder: (context, state) =>
+              const NoTransitionPage(child: SetUPSuccessfulView()),
+        ),
         StatefulShellRoute.indexedStack(
           parentNavigatorKey: _rootNavigationKey,
           branches: [
@@ -94,6 +131,26 @@ final router = Provider<GoRouter>((ref) {
                     return getPage(child: const ProfileView(), state: state);
                   },
                   routes: [
+                    GoRoute(
+                        path: 'viewProfile',
+                        pageBuilder: (context, state) {
+                          final userData = state.extra as ProfileData;
+                          return getPage(
+                              child: ViewProfile(
+                                userData: userData,
+                              ),
+                              state: state);
+                        }),
+                    GoRoute(
+                        path: 'editProfile',
+                        pageBuilder: (context, state) {
+                          final userData = state.extra as ProfileData;
+                          return getPage(
+                              child: EditProfileView(
+                                userData: userData,
+                              ),
+                              state: state);
+                        }),
                     GoRoute(
                         path: 'videos',
                         pageBuilder: (context, state) {
@@ -121,6 +178,22 @@ final router = Provider<GoRouter>((ref) {
                           return getPage(
                               child: const ThemeView(), state: state);
                         }),
+                    GoRoute(
+                        path: 'tickets',
+                        pageBuilder: (context, state) {
+                          return getPage(
+                              child: const StakeTicketsView(), state: state);
+                        },
+                        routes: [
+                          GoRoute(
+                              path: 'ticketDetails/:id',
+                              pageBuilder: (context, state) {
+                                final id = state.pathParameters['id']!;
+                                return getPage(
+                                    child: TicketDetailsView(id: id),
+                                    state: state);
+                              }),
+                        ]),
                   ]),
             ]),
             StatefulShellBranch(navigatorKey: _poolsNavigationKey, routes: [

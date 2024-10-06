@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FeedsVideoPreview extends StatefulWidget {
   final String file;
+  final double? width;
+  final double? height;
 
-  const FeedsVideoPreview({super.key, required this.file});
+  const FeedsVideoPreview({super.key, required this.file, this.width, this.height});
 
   @override
   State<FeedsVideoPreview> createState() => _FeedsVideoPreviewState();
@@ -50,7 +52,8 @@ class _FeedsVideoPreviewState extends State<FeedsVideoPreview> {
         borderRadius: BorderRadius.circular(25),
         // color: Colors.grey.shade100,
       ),
-      width: double.infinity,
+      width: widget.width ?? double.infinity,
+      height: widget.height,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -66,7 +69,7 @@ class _FeedsVideoPreviewState extends State<FeedsVideoPreview> {
           if (!_isVideoInitialized)
             Container(
 
-              width: double.infinity,
+              width:  double.infinity,
               height: 150.h,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
