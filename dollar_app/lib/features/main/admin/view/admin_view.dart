@@ -1,9 +1,12 @@
-import 'package:dollar_app/features/main/videos/provider/get_videos_provider.dart';
+import 'package:dollar_app/features/main/admin/posts/view/admin_post_view.dart';
+import 'package:dollar_app/features/main/admin/users/view/users_view.dart';
+import 'package:dollar_app/features/main/admin/videos/view/admin_video_view.dart';
+import 'package:dollar_app/features/main/profile/views/stake_tickets.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
-import 'package:dollar_app/features/shared/widgets/home_artist_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 
 class AdminView extends ConsumerStatefulWidget {
@@ -13,55 +16,98 @@ class AdminView extends ConsumerStatefulWidget {
   ConsumerState<AdminView> createState() => _AdminViewState();
 }
 
-class _AdminViewState extends ConsumerState<AdminView> {
+class _AdminViewState extends ConsumerState<AdminView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
+        height: 90.h,
         elevation: 5,
-        title: Text('Admin'),
+        title: Text(
+          'Admin',
+          style:
+              GoogleFonts.aBeeZee(fontSize: 14.sp, fontWeight: FontWeight.bold),
+        ),
         centerTitle: false,
-      ),
-      body: SafeArea(
-          child: RefreshIndicator(
-        onRefresh: () async {
-          await ref.refresh(getVideosProvider.notifier).displayFeeds(context);
-        },
-        child: RefreshIndicator(
-          onRefresh: () async {
-            ref.refresh(getVideosProvider.notifier).displayFeeds(context);
-          },
-          child: const SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    HomeArtistWidget(
-                      showDelete: true,
-                      showShare: false,
-                      showVote: false,
-                      showPublished: true,
-                      showStake: false,
-                      showLike: false,
-                    ),
-                  ],
-                ),
-              ],
+        bottom: TabBar(controller: _tabController, tabs: [
+          Tab(
+            icon: Icon(
+              Icons.people,
+              color: _tabController.index == 0
+                  ? Theme.of(context).primaryColor
+                  : null,
+            ),
+            child: Text(
+              'Users',
+              style: GoogleFonts.lato(
+                fontSize: 12.sp,
+              ),
             ),
           ),
-        ),
-      )),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(IconlyBold.upload),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        onPressed: () {
-          context.go('/profile/videos/upload');
-        },
-        label: const Text('Upload Video'),
+          Tab(
+            icon: Icon(
+              Icons.video_camera_front,
+              color: _tabController.index == 1
+                  ? Theme.of(context).primaryColor
+                  : null,
+            ),
+            child: Text(
+              'Videos',
+              style: GoogleFonts.lato(
+                fontSize: 12.sp,
+              ),
+            ),
+          ),
+          Tab(
+            icon: Icon(
+              IconlyBold.ticket,
+              color: _tabController.index == 2
+                  ? Theme.of(context).primaryColor
+                  : null,
+            ),
+            child: Text(
+              'Stakes',
+              style: GoogleFonts.lato(
+                fontSize: 12.sp,
+              ),
+            ),
+          ),
+          Tab(
+            icon: Icon(
+              Icons.featured_play_list,
+              color: _tabController.index == 3
+                  ? Theme.of(context).primaryColor
+                  : null,
+            ),
+            child: Text(
+              'Posts',
+              style: GoogleFonts.lato(
+                fontSize: 12.sp,
+              ),
+            ),
+          ),
+        ]),
       ),
+      body: TabBarView(controller: _tabController, children: const [
+        UsersView(),
+        AdminVideoView(),
+        StakeTicketsView(
+          admin: 'yes',
+        ),
+        AdminPostView()
+      ]),
     );
   }
 }

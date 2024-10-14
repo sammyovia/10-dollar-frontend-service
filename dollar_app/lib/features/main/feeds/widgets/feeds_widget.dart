@@ -1,7 +1,9 @@
 import 'package:dollar_app/features/main/feeds/providers/get_feeds_provider.dart';
 import 'package:dollar_app/features/main/feeds/providers/like_count_provider.dart';
+import 'package:dollar_app/features/main/feeds/view/delete_post.dart';
 import 'package:dollar_app/features/main/feeds/widgets/comment_box.dart';
 import 'package:dollar_app/features/main/feeds/widgets/feeds_attachment_widget.dart';
+import 'package:dollar_app/features/main/profile/providers/get_profile_provider.dart';
 import 'package:dollar_app/features/shared/widgets/app_bottom_sheet.dart';
 import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +14,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedsWidget extends ConsumerStatefulWidget {
-  const FeedsWidget({
-    super.key,
-  });
+  const FeedsWidget({super.key, this.physics});
+  final ScrollPhysics? physics;
 
   @override
   ConsumerState<FeedsWidget> createState() => _FeedsWidgetState();
@@ -50,6 +51,8 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
   @override
   Widget build(BuildContext context) {
     final model = ref.watch(getFeedsProvider);
+    final userRole = ref.watch(getProfileProvider).value?.role ?? "";
+    final userId = ref.watch(getProfileProvider).value?.id ?? "";
     return model.when(
       data: (data) {
         return data.isEmpty
@@ -57,7 +60,7 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                 child: Text('No Feeds to display'),
               )
             : ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
+                physics: widget.physics ?? const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 itemCount: data.length,
                 shrinkWrap: true,
@@ -66,7 +69,13 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                   final isLiked = likedFeeds[feed.id] ?? false;
 
                   return Container(
-                    margin: EdgeInsets.only(bottom: 20.0.h),
+                    margin: EdgeInsets.only(bottom: 5.0.h),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +174,7 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                   _toggleLike(feed.id, feed.likeCount);
                                   ref
                                       .read(likeCountProvider.notifier)
-                                      .likeComment(feed.id);
+                                      .likePost(feed.id);
                                 },
                                 child: Icon(
                                   Icons.favorite,
@@ -187,6 +196,17 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                 ),
                               ),
                               const Spacer(),
+                              if (userRole == "ADMIN" || userId == feed.user.id)
+                                IconButton(
+                                    onPressed: () {
+                                      AppBottomSheet.showBottomSheet(context,
+                                          child: DeletePostWidget(post: feed));
+                                    },
+                                    icon: Icon(
+                                      Icons.delete,
+                                      size: 17.r,
+                                      color: Theme.of(context).primaryColor,
+                                    ))
                             ],
                           ),
                         )

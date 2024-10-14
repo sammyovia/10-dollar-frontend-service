@@ -19,15 +19,32 @@ class _StartupViewState extends State<StartupView> {
 
   Future<void> loadTokensOnStartup(BuildContext context) async {
     final tokenStorage = TokenStorage();
-    final accessToken = await tokenStorage.getAccessToken();
-    final refreshToken = await tokenStorage.getRefreshToken();
+    final userOnboarded = await tokenStorage.getUserOnboarded();
+    final userRegistered = await tokenStorage.getUserRegistered();
+    final userEmail = await tokenStorage.getUserEmail();
+    final userEmailVerified = await tokenStorage.getEmailVerified();
+    final userProfileVerified = await tokenStorage.getUserProfileVerified();
 
     if (context.mounted) {
-      if (accessToken != null && refreshToken != null) {
-        // Use the tokens to authenticate the user
-        context.go(AppRoutes.onboarding);
+      if (userOnboarded != null && userOnboarded == true) {
+        if (userRegistered != null && userRegistered == true) {
+          if (userEmail != null && userEmail.isNotEmpty) {
+            if (userEmailVerified != null && userEmailVerified == true) {
+              if (userProfileVerified != null && userProfileVerified == true) {
+                context.go(AppRoutes.home);
+              } else {
+                context.go("${AppRoutes.setUp}/$userEmail");
+              }
+            } else {
+              context.go("${AppRoutes.verifyEmail}/$userEmail");
+            }
+          } else {
+            context.go(AppRoutes.register);
+          }
+        } else {
+          context.go(AppRoutes.register);
+        }
       } else {
-        // Redirect to login page
         context.go(AppRoutes.onboarding);
       }
     }

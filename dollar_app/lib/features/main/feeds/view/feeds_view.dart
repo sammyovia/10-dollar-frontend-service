@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconly/iconly.dart';
+
+import '../../admin/posts/view/pinne_post.dart';
 
 class FeedsView extends ConsumerStatefulWidget {
   const FeedsView({super.key});
@@ -122,47 +123,4 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
   }
 }
 
-class PinnedInfoWidget extends StatelessWidget {
-  const PinnedInfoWidget({super.key, this.onClose});
-  final VoidCallback? onClose;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.w),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(10),
-        height: 100.h,
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Icon(
-              IconlyBold.volume_up,
-              color: Theme.of(context).primaryColor,
-            ),
-            SizedBox(
-                width: 200.w,
-                child: Text(
-                  "Hello All your winnings have been paid to your account",
-                  style: GoogleFonts.lato(
-                      fontWeight: FontWeight.bold),
-                )),
-            GestureDetector(
-              onTap: onClose,
-              child: Icon(
-                IconlyBold.close_square,
-                color: Theme.of(context).dividerColor,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GetProfileProvider extends AsyncNotifier<ProfileData?> {
   Future<ProfileData?> getProfile() async {
+    state = const AsyncLoading();
     final token = TokenStorage();
     final response =
         await ref.read(networkProvider).getRequest(path: '/auth/profile');
@@ -15,21 +16,11 @@ class GetProfileProvider extends AsyncNotifier<ProfileData?> {
 
     token.saveUserId(profile!.id!);
 
+    state = AsyncData(profile);
+
     log("userId from profile: ${profile.id} ");
 
     return profile;
-  }
-
-  Future<void> displayProfile() async {
-    log('hello');
-    try {
-      state = const AsyncLoading();
-      final res = await getProfile();
-
-      state = AsyncData(res);
-    } catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
-    }
   }
 
   @override

@@ -3,7 +3,6 @@ import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconly/iconly.dart';
 
@@ -19,7 +18,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
       this.showSearch = false,
       this.showProfile = false,
       this.action,
-      this.showNofication = true});
+      this.showNofication = true,
+      this.bottom,
+      this.backgroundColor});
   final Widget? title;
   final bool centerTitle;
   final List<Widget>? actions;
@@ -30,6 +31,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
   final bool showProfile;
   final List<Widget>? action;
   final bool showNofication;
+  final PreferredSizeWidget? bottom;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +43,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
         return AppBar(
           automaticallyImplyLeading: true,
           elevation: elevation,
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.surface,
           centerTitle: centerTitle,
           leadingWidth: showLeading ? 100.w : null,
           leading: showLeading
-              ? SvgPicture.asset(
-                  'assets/images/10.svg',
+              ? Image.asset(
+                  'assets/images/dlog.png',
                 )
               : null,
           title: title,
+          bottom: bottom,
           actions: action ??
               [
                 if (showSearch)

@@ -20,7 +20,7 @@ class _LoginDialogState extends ConsumerState<LogoutDialog> {
     BuildContext context,
   ) {
     return SizedBox(
-      height: 257,
+      height: 250.h,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
         child: Column(
@@ -30,7 +30,7 @@ class _LoginDialogState extends ConsumerState<LogoutDialog> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Logout',
+                Text('Log out',
                     style: GoogleFonts.redHatDisplay(
                         fontWeight: FontWeight.bold, fontSize: 22.sp)),
                 Text('Seems you want to log out of your account',
@@ -45,18 +45,20 @@ class _LoginDialogState extends ConsumerState<LogoutDialog> {
             if (ref.watch(logoutProvider).isLoading)
               const CircularProgressIndicator(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AppPrimaryButton(
                   putIcon: false,
                   enabled: true,
+
                   width: 100.w,
                   title: 'Cancel',
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  color: Colors.red,
+                  color: Colors.grey,
                 ),
+                SizedBox(width: 50.w,),
                 AppPrimaryButton(
                   enabled: true,
                   putIcon: false,

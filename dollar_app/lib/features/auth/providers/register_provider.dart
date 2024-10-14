@@ -22,6 +22,8 @@ class RegisterProvider extends AsyncNotifier<Map<String, dynamic>> {
           refreshToken: res['data']['refreshToken'],
         );
         token.saveUserId(res['data']['id']);
+        token.saveUserRegistered(true);
+        token.saveUserEmail(res['data']['email'].toString());
         ref.read(router).go("${AppRoutes.verifyEmail}/${res['data']['email']}");
       }
 

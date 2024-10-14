@@ -4,13 +4,18 @@ import 'package:dollar_app/services/network/network_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LikeCountProvider extends AsyncNotifier<Map<String, dynamic>> {
-  Future<void> likeComment(String postId) async {
+  Future<void> likePost(String postId) async {
     await ref
         .read(networkProvider)
         .put('/posts/like', data: {"postId": postId});
   }
 
   Future<void> deleteComment(String postId) async {
+    await ref.read(networkProvider).delete('/posts/comments/$postId');
+  }
+
+  Future<void> deletePost(String postId) async {
+
     await ref.read(networkProvider).delete('/posts/comments/$postId');
   }
 

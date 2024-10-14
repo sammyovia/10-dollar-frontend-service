@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dollar_app/features/main/profile/providers/get_profile_provider.dart';
 import 'package:dollar_app/features/shared/widgets/toast.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
 import 'package:dollar_app/services/network/token_storage.dart';
@@ -22,6 +23,7 @@ class LoginProvider extends AsyncNotifier<Map<String, dynamic>> {
       );
 
       token.saveUserId(res['data']['id']);
+      ref.read(getProfileProvider.notifier).getProfile();
 
       ref.read(router).go(AppRoutes.home);
 

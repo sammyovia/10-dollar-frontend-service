@@ -142,7 +142,7 @@ class _FeedsDetailsViewState extends ConsumerState<FeedsDetailsView> {
                                     details.id!, details.likeCount!);
                                 ref
                                     .read(likeCountProvider.notifier)
-                                    .likeComment(details.id!);
+                                    .likePost(details.id!);
                                 setState(() {});
                               },
                               child: Icon(

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dollar_app/features/main/profile/model/profile_model.dart';
@@ -28,7 +27,6 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _phoneController;
-  bool _validated = false;
   String? selectedValue;
 
   @override
@@ -73,21 +71,6 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
     return menuItem;
   }
 
-  void _validateFields() {
-    final hasImage = _image != null;
-    final hasFirstName = _firstNameController.text.isNotEmpty;
-    final hasLastName = _lastNameController.text.isNotEmpty;
-    final hasGender = selectedValue != null;
-    final hasPhone = _phoneController.text.isNotEmpty;
-    final isValid =
-        hasImage && hasFirstName && hasLastName && hasGender && hasPhone;
-    _validated = isValid;
-
-    log(_validated.toString());
-
-    setState(() {});
-  }
-
   Future<void> _pickAttachments() async {
     try {
       FilePickerResult? result =
@@ -105,8 +88,6 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
         "An error occurred while picking files: $e";
       });
     }
-
-    _validateFields();
   }
 
   @override
@@ -141,9 +122,11 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
                           width: 100.w,
                           height: 100.h,
                           decoration: BoxDecoration(
-                              image: _imageFromServer != null ? DecorationImage(
-                                  image: NetworkImage(_imageFromServer!),
-                                  fit: BoxFit.cover): null,
+                              image: _imageFromServer != null
+                                  ? DecorationImage(
+                                      image: NetworkImage(_imageFromServer!),
+                                      fit: BoxFit.cover)
+                                  : null,
                               border: Border.all(
                                   color: Theme.of(context).dividerColor),
                               shape: BoxShape.circle),
@@ -179,9 +162,7 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
             AppTextField(
               controller: _firstNameController,
               keybordType: TextInputType.name,
-              onchaged: (value) {
-                _validateFields();
-              },
+              onchaged: (value) {},
               labelText: 'First Name',
               errorText: '',
               hintText: 'Enter your first name',
@@ -193,9 +174,7 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
             AppTextField(
               controller: _lastNameController,
               keybordType: TextInputType.name,
-              onchaged: (value) {
-                _validateFields();
-              },
+              onchaged: (value) {},
               labelText: 'Last Name',
               errorText: '',
               hintText: 'Enter your last name',
@@ -249,7 +228,7 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
                   ),
                 ),
                 style: GoogleFonts.lato(
-                    fontSize: 12.sp, color: Theme.of(context).dividerColor),
+                    fontSize: 12.sp, color: isDark? Colors.white:Colors.black87),
                 hint: Text(
                   "Select A Gender",
                   style: GoogleFonts.lato(fontSize: 12.sp),
@@ -257,8 +236,6 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
                 items: dropDownList,
                 onChanged: (String? value) {
                   selectedValue = value!;
-
-                  _validateFields();
                 },
                 value: selectedValue,
               ),
@@ -269,9 +246,6 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
             AppTextField(
               readOnly: true,
               keybordType: TextInputType.name,
-              onchaged: (value) {
-                _validateFields();
-              },
               labelText: 'Email ',
               errorText: '',
               hintText: widget.userData.email ?? '',
@@ -283,9 +257,6 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
             AppTextField(
               controller: _phoneController,
               keybordType: TextInputType.phone,
-              onchaged: (value) {
-                _validateFields();
-              },
               labelText: 'Phone ',
               errorText: '',
               hintText: 'Enter your phone number',
@@ -302,9 +273,10 @@ class _SetUpViewState extends ConsumerState<EditProfileView> {
               title: 'Submit',
               onPressed: () {
                 ref.read(setUpProvider.notifier).setup(context,
+                    fromProfile: true,
                     firstName: _firstNameController.text,
                     lastName: _lastNameController.text,
-                    attachment: _image!,
+                    attachment: _image,
                     email: widget.userData.email!,
                     gender: selectedValue!,
                     phoneNumber: _phoneController.text);

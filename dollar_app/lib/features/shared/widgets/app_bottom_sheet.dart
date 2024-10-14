@@ -12,8 +12,11 @@ class AppBottomSheet {
       isScrollControlled: true,
       context: context,
       builder: (context) {
-        return Wrap(
-          children: [child],
+        return PopScope(
+          canPop: false,
+          child: Wrap(
+            children: [child],
+          ),
         );
       },
     );

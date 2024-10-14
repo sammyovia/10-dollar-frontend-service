@@ -6,19 +6,24 @@ import 'package:dio/dio.dart';
 import 'package:dollar_app/features/main/profile/providers/get_profile_provider.dart';
 import 'package:dollar_app/features/shared/widgets/toast.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
+import 'package:dollar_app/services/network/token_storage.dart';
 import 'package:dollar_app/services/router/app_router.dart';
 import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mime/mime.dart';
 
 class SetUpProvider extends AsyncNotifier<Map<String, dynamic>> {
-  Future<void> setup(context,
-      {required String firstName,
-      required String lastName,
-      required File attachment,
-      required String email,
-      required String gender,
-      required String phoneNumber}) async {
+  Future<void> setup(
+    context, {
+    required String firstName,
+    required String lastName,
+    required File? attachment,
+    required String email,
+    required String gender,
+    required String phoneNumber,
+    bool fromProfile = false,
+  }) async {
+    final token = TokenStorage();
     try {
       state = const AsyncLoading();
 
@@ -30,20 +35,22 @@ class SetUpProvider extends AsyncNotifier<Map<String, dynamic>> {
         "phoneNumber": phoneNumber
       });
 
-      String fileName = attachment.path.split('/').last;
-      String? mimeType = lookupMimeType(attachment.path);
+      if (attachment != null) {
+        String fileName = attachment.path.split('/').last;
+        String? mimeType = lookupMimeType(attachment.path);
 
-      formData.files.add(
-        MapEntry(
-          'attachment',
-          await MultipartFile.fromFile(
-            attachment.path,
-            filename: fileName,
-            contentType:
-                DioMediaType.parse(mimeType ?? 'application/octect-stream'),
+        formData.files.add(
+          MapEntry(
+            'attachment',
+            await MultipartFile.fromFile(
+              attachment.path,
+              filename: fileName,
+              contentType:
+                  DioMediaType.parse(mimeType ?? 'application/octect-stream'),
+            ),
           ),
-        ),
-      );
+        );
+      }
 
       final response = await ref
           .read(networkProvider)
@@ -51,7 +58,13 @@ class SetUpProvider extends AsyncNotifier<Map<String, dynamic>> {
       log(response.toString());
       if (response['status'] == true) {
         ref.read(getProfileProvider.notifier).getProfile();
-        ref.read(router).go(AppRoutes.completeSetUp);
+        token.userProfileVerified(true);
+
+        if (fromProfile) {
+          Toast.showErrorToast(context, "profile edited successfully");
+        } else {
+          ref.read(router).go(AppRoutes.completeSetUp);
+        }
       }
       state = AsyncData(response);
       await future;

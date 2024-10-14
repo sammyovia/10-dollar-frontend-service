@@ -20,7 +20,9 @@ class VerifyEmailProvider extends AsyncNotifier<Map<String, dynamic>> {
           body: {"userId": userId, "otpCode": code, "type": "VERIFY_EMAIL"});
       log(res.toString());
       if (res['success'] == true) {
+        token.userEmailVerified(true);
         ref.read(router).go("${AppRoutes.setUp}/$email");
+
       }
 
       state = AsyncData(res);
@@ -41,6 +43,7 @@ class VerifyEmailProvider extends AsyncNotifier<Map<String, dynamic>> {
           body: {"email": email, "type": "VERIFY_EMAIL"});
       log(res.toString());
       state = AsyncData(res);
+      Toast.showErrorToast(context, "OTP has been sent to your mail");
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
       Toast.showErrorToast(context, e.toString());
