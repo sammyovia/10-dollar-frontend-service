@@ -9,41 +9,78 @@ class SenderMessageWidget extends StatefulWidget {
   final String? attachmentPath;
   final String message;
   final String time;
-  const SenderMessageWidget({
-    super.key,
-    required this.sender,
-    required this.avatar,
-    this.attachmentPath,
-    required this.message,
-    required this.time
-  });
+  final String userId;
+  final String senderId;
+  final String senderRole;
+  final String currentUserRole;
+
+  final Function()? onDelete;
+  const SenderMessageWidget(
+      {super.key,
+      required this.sender,
+      required this.avatar,
+      this.attachmentPath,
+      required this.message,
+      required this.time,
+      required this.userId,
+      required this.senderId,
+      required this.senderRole,
+        required this.currentUserRole,
+      this.onDelete});
 
   @override
   State<SenderMessageWidget> createState() => _SenderMessageWidgetState();
 }
 
 class _SenderMessageWidgetState extends State<SenderMessageWidget> {
+
+  bool get canDelete =>
+      widget.currentUserRole.toUpperCase() == "ADMIN" || widget.senderId == widget.userId;
+
+  void _handleDelete() {
+    // Show confirmation dialog before deleting
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Delete Message', style: GoogleFonts.lato()),
+        content: Text('Are you sure you want to delete this message?',
+            style: GoogleFonts.lato()),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: GoogleFonts.lato()),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              widget.onDelete?.call();
+            },
+            child: Text('Delete',
+                style: GoogleFonts.lato(color: Theme.of(context).colorScheme.error)),
+          ),
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     bool fromNetwork = widget.attachmentPath != null &&
         (widget.attachmentPath!.startsWith('http') ||
             widget.attachmentPath!.startsWith('https'));
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding:  EdgeInsets.symmetric(horizontal: 20.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
             backgroundColor: Colors.grey.shade300,
-            backgroundImage: widget.avatar != null
-                ? NetworkImage(widget.avatar!)
-                : null,
+            backgroundImage:
+                widget.avatar != null ? NetworkImage(widget.avatar!) : null,
           ),
           Expanded(
             child: Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -63,15 +100,27 @@ class _SenderMessageWidgetState extends State<SenderMessageWidget> {
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
                         widget.message,
-                        style:  GoogleFonts.lato(),
+                        style: GoogleFonts.lato(),
                       ),
                     ),
                   const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(widget.time, style: GoogleFonts.lato(fontSize: 10.sp),),
-
+                      Text(
+                        widget.time,
+                        style: GoogleFonts.lato(fontSize: 10.sp),
+                      ),
+                      SizedBox(width: 8.w,),
+                      if(canDelete)
+                        InkWell(
+                          onTap: _handleDelete,
+                          child: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).primaryColor,
+                            size: 17.r,
+                          ),
+                        ),
                     ],
                   ),
                 ],
@@ -82,5 +131,4 @@ class _SenderMessageWidgetState extends State<SenderMessageWidget> {
       ),
     );
   }
-
 }

@@ -7,6 +7,7 @@ import 'package:dollar_app/services/network/network_repository.dart';
 import 'package:dollar_app/services/file_picker_service.dart' as fps;
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
+
 class ChatNotifier extends StateNotifier<AsyncValue<List<dynamic>>> {
   ChatNotifier(this.ref) : super(const AsyncLoading()) {
     connectSocket();
@@ -26,8 +27,9 @@ class ChatNotifier extends StateNotifier<AsyncValue<List<dynamic>>> {
 
     // Listen for incoming messages from the server
     socket?.on("message", (data) {
-      log("$data");
+      log(" data $data");
       _handleIncomingMessage();
+      _handleMessageDeleted(data['senderId']);
     });
 
     socket?.onDisconnect((_) {
@@ -72,6 +74,46 @@ class ChatNotifier extends StateNotifier<AsyncValue<List<dynamic>>> {
     state = AsyncData(messages);
   }
 
+  void _handleMessageDeleted(String senderId) {
+    state.whenData((messages) {
+      final updatedMessages =
+          messages.where((msg) => msg['senderId'] != senderId).toList();
+      state = AsyncData(updatedMessages);
+    });
+  }
+
+  Future<void> deleteMessage(
+      {required String messageId, required String senderId}) async {
+    try {
+      final previousState = state;
+
+      state.whenData((messages) {
+
+        final updatedMessages =
+            messages.where((msg) => msg['id'] != messageId).toList();
+        state = AsyncData(updatedMessages);
+      });
+      final response = await ref.read(networkProvider).deleteRequest(
+            path: '/chats/$messageId',
+          );
+      log(response.toString());
+
+      if (response['status'] == true) {
+        // Emit socket event to notify other clients
+      //  socket?.emit("deleteMessage", {"messageId": messageId});
+
+        // No need to update state again as we've done it optimistically
+      } else {
+        // If deletion failed, rollback to previous state
+        state = previousState;
+
+      }
+    } catch (e) {
+      state = AsyncError(e, StackTrace.current);
+
+    }
+  }
+
   void sendChat({
     required String message,
     required String firstName,
@@ -86,7 +128,7 @@ class ChatNotifier extends StateNotifier<AsyncValue<List<dynamic>>> {
     // Create a new chat model for the new message
 
     final chat = {
-      "id": "12008500-95ee-498e-951b-c3a96030d764",
+      "id": "",
       "message": message,
       "attachment": attachmentPath,
       "pin": false,
@@ -102,7 +144,6 @@ class ChatNotifier extends StateNotifier<AsyncValue<List<dynamic>>> {
       },
       "createdAt": DateTime.now().toIso8601String()
     };
-    log("$chat");
 
     state = AsyncData([...state.value ?? [], chat]);
 

@@ -100,7 +100,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           },
                           labelText: 'email',
                           errorText: '',
-                          hintText: 'sammy@gmail.com',
+                          hintText: 'enter your email',
                           icon: IconlyBold.message,
                         ),
                         SizedBox(

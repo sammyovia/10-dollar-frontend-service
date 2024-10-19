@@ -1,15 +1,17 @@
 import 'package:dollar_app/features/main/feeds/widgets/feeds_attachment_widget.dart';
 import 'package:dollar_app/features/main/polls/provider/get_polls_provider.dart';
 import 'package:dollar_app/features/main/polls/provider/stake_videos_notifier.dart';
-import 'package:dollar_app/features/main/polls/provider/voted_videos_notifier.dart';
 import 'package:dollar_app/features/main/polls/widgets/stake_bootom_sheet.dart';
 import 'package:dollar_app/features/shared/widgets/dialog_method.dart';
 import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:dollar_app/features/main/polls/widgets/vote_pop_up_widget.dart';
+import 'package:dollar_app/services/network/token_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../provider/local_votes_provider.dart';
 
 class PollsViewWidgets extends ConsumerStatefulWidget {
   const PollsViewWidgets({super.key});
@@ -19,21 +21,30 @@ class PollsViewWidgets extends ConsumerStatefulWidget {
 }
 
 class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
-  Set<String> votedVideos = {};
+  String votedVideos = "";
+  bool isVoted = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(getPollsProvider.notifier).displayPolls(context);
+      getVotedVideos();
     });
+  }
+
+  getVotedVideos() async {
+    final token = TokenStorage();
+    final userId = await token.getUserId();
+    votedVideos = await ref
+        .watch(voteNotifierProvider.notifier)
+        .loadVotes(userId: userId!);
   }
 
   @override
   Widget build(BuildContext context) {
     final model = ref.watch(getPollsProvider);
     final stakedVideos = ref.watch(stakeVideoNotifierProvider);
-    final votedVideos = ref.watch(votedVideosProvider);
 
     return model.when(
       data: (data) {
@@ -53,7 +64,8 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
                   final artist = data[index].video;
                   final isStaked = stakedVideos.containsKey(artist!.id!);
                   final position = stakedVideos[artist.id!];
-                  final isVoted = votedVideos.contains(artist.id!);
+
+                  final isVoted = votedVideos == artist.id!;
                   return Container(
                     margin: EdgeInsets.only(bottom: 20.h),
                     child: Column(
@@ -108,7 +120,10 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
                                 onTap: () {
                                   diolagMethod(
                                     context,
-                                    child: VotePopupWidget(postId: artist.id!),
+                                    child: VotePopupWidget(
+                                      postId: artist.id!,
+                                      userId: artist.artist!.id!,
+                                    ),
                                   );
                                 },
                                 child: Container(
@@ -131,7 +146,6 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                 
                                   showStakeBottomSheet(context, artist.id!);
                                 },
                                 child: Container(

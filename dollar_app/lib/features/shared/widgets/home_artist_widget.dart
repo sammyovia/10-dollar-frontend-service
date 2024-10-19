@@ -7,7 +7,6 @@ import 'package:dollar_app/features/shared/widgets/dialog_method.dart';
 import 'package:dollar_app/features/shared/widgets/publish_pop_up_widget.dart';
 import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:dollar_app/features/shared/widgets/stake_widget/view/stake_widget.dart';
-import 'package:dollar_app/features/main/polls/widgets/vote_pop_up_widget.dart';
 import 'package:dollar_app/services/date_manipulation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -143,10 +142,7 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
                               if (widget.showVote)
                                 GestureDetector(
                                   onTap: () {
-                                    diolagMethod(
-                                      context,
-                                      child: VotePopupWidget(postId: artist.id),
-                                    );
+
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(8),

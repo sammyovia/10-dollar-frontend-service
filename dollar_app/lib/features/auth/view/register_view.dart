@@ -151,7 +151,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         },
                         labelText: 'email',
                         errorText: emailErrorText,
-                        hintText: 'sammy@gmail.com',
+                        hintText: 'enter your email',
                         icon: IconlyBold.message,
                       ),
                       SizedBox(

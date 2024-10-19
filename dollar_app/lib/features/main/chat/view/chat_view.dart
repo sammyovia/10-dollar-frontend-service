@@ -4,6 +4,7 @@ import 'package:dollar_app/features/main/chat/providers/attachment_service.dart'
 import 'package:dollar_app/features/main/chat/providers/chat_provider.dart';
 import 'package:dollar_app/features/main/chat/widget/sender_message_widget.dart';
 import 'package:dollar_app/features/main/profile/model/profile_model.dart';
+import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
 import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:dollar_app/services/network/token_storage.dart';
@@ -29,7 +30,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
   File? _selectedAttachment;
   String? userId;
   final scrollController = ScrollController();
-   ProfileData? profile;
+  ProfileData? profile;
 
   @override
   void initState() {
@@ -37,18 +38,14 @@ class _ChatViewState extends ConsumerState<ChatView> {
     _chatController = TextEditingController();
 
     getUserId();
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       getUserProfile();
-
     });
-
   }
 
   void getUserProfile() async {
-     profile = await ref.read(getProfileProvider.notifier).getProfile();
-setState(() {
-
-});
+    profile = await ref.read(getProfileProvider.notifier).getProfile();
+    setState(() {});
   }
 
   void getUserId() async {
@@ -93,10 +90,7 @@ setState(() {
       setState(() {
         _selectedAttachment = null;
       });
-
-
     }
-
   }
 
   Map<String, List<dynamic>> _groupChatsByDate(List<dynamic> chats) {
@@ -132,12 +126,10 @@ setState(() {
     return DateFormat('h:mm a').format(dateTime);
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     final chats = ref.watch(chatProvider);
+    log(userId.toString());
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: const CustomAppBar(
@@ -170,8 +162,7 @@ setState(() {
             Expanded(
                 child: chats.when(
                     data: (data) {
-                      final groupedChats =
-                          _groupChatsByDate(data);
+                      final groupedChats = _groupChatsByDate(data);
                       final sortedDates = groupedChats.keys.toList()
                         ..sort((a, b) {
                           if (a == 'Today') return 1;
@@ -181,11 +172,29 @@ setState(() {
                           return DateTime.parse(b).compareTo(DateTime.parse(a));
                         });
                       return data.isEmpty
-                          ? Center(
-                              child: Text(
-                                "No chats to display",
-                                style: GoogleFonts.lato(),
-                              ),
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    "No chats to display",
+                                    style: GoogleFonts.lato(),
+                                  ),
+                                ),
+                                AppPrimaryButton(
+                                  enabled: true,
+                                  putIcon: false,
+                                  width: 100.w,
+                                  height: 30.h,
+                                  title: "Retry",
+                                  onPressed: () {
+                                    ref
+                                        .read(chatProvider.notifier)
+                                        .getMessages();
+                                  },
+                                )
+                              ],
                             )
                           : GestureDetector(
                               onTap: () {
@@ -197,9 +206,11 @@ setState(() {
                                 controller: scrollController,
                                 itemCount: sortedDates.length,
                                 itemBuilder: (context, index) {
-                                  final date = sortedDates[sortedDates.length - 1 - index];
+                                  final date = sortedDates[
+                                      sortedDates.length - 1 - index];
                                   final messagesForDate =
                                       groupedChats[date] ?? [];
+
                                   return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -219,8 +230,7 @@ setState(() {
                                             Text(
                                               date,
                                               style: GoogleFonts.lato(
-                                                  fontWeight:
-                                                      FontWeight.bold),
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                             Expanded(
                                                 child: Divider(
@@ -234,11 +244,35 @@ setState(() {
                                       ),
                                       ...messagesForDate.map((message) {
                                         return SenderMessageWidget(
+                                          onDelete: () async {
+                                            try {
+                                              await ref
+                                                  .read(chatProvider.notifier)
+                                                  .deleteMessage(
+                                                      messageId: message['id'],
+                                                      senderId: message['user']
+                                                          ['id']);
+                                              // Show success toast if needed
+                                            } catch (e) {
+                                              // Show error toast if needed
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Failed to delete message: ${e.toString()}')),
+                                                );
+                                              }
+                                            }
+                                          },
+                                          currentUserRole: profile?.role ?? "",
+                                          senderRole: message['user']['role'],
+                                          senderId: message['user']['id'],
+                                          userId: profile!.id!,
                                           sender:
                                               "${message['user']['firstName'] ?? "John"} ${message['user']['lastName'] ?? "Doe"}",
                                           message: message['message'],
-                                          attachmentPath:
-                                              message['attachment'],
+                                          attachmentPath: message['attachment'],
                                           avatar: message['user']['avatar'],
                                           time: _formatTime(
                                               message['createdAt'] ??
@@ -316,6 +350,4 @@ setState(() {
       ),
     );
   }
-
-
 }

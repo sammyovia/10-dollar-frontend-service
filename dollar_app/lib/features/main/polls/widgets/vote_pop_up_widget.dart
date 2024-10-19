@@ -7,8 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class VotePopupWidget extends ConsumerStatefulWidget {
-  const VotePopupWidget({super.key, this.onPress, required this.postId});
+  const VotePopupWidget({super.key, this.onPress, required this.postId, required  this.userId});
   final String postId;
+  final String userId;
   final VoidCallback? onPress;
 
   @override
@@ -66,7 +67,7 @@ class _VotePopupWidgetState extends ConsumerState<VotePopupWidget> {
                       onPressed: () {
                         final future = ref
                             .read(voteProvider.notifier)
-                            .voteVideo(context, videoId: widget.postId);
+                            .voteVideo(context, videoId: widget.postId, userId: widget.userId);
 
                         setState(() {
                           _pendingAddTodo = future;
