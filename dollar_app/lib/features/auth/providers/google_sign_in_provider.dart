@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:dollar_app/features/main/admin/videos/provider/video_provider.dart';
+import 'package:dollar_app/features/main/profile/providers/ticket_provider.dart';
 import 'package:dollar_app/features/shared/widgets/toast.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
 import 'package:dollar_app/services/network/token_storage.dart';
@@ -8,6 +10,8 @@ import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../../main/profile/providers/get_profile_provider.dart';
 
 class GoogleSignInProvider extends AsyncNotifier<User?> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -58,10 +62,12 @@ class GoogleSignInProvider extends AsyncNotifier<User?> {
           .read(networkProvider)
           .postRequest(path: '/auth/google', body: body);
       if (res['status'] == true) {
-        token.saveTokens( accessToken: 
-            res['data']['accessToken'], 
-            refreshToken: 
-            res['data']['refreshToken']);
+        token.saveTokens(
+            accessToken: res['data']['accessToken'],
+            refreshToken: res['data']['refreshToken']);
+        ref.read(getProfileProvider.notifier).getProfile();
+        ref.read(ticketProvider.notifier).getTickets();
+        ref.read(videoProvider.notifier).getVideos();
         ref.read(router).go(AppRoutes.home);
       }
       state = const AsyncData(null);

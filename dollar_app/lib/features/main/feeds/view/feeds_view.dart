@@ -111,10 +111,7 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
               SizedBox(
                 height: 15.h,
               ),
-              Padding(
-                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: const FeedsWidget(),
-              )
+              const FeedsWidget()
             ],
           ),
         ),

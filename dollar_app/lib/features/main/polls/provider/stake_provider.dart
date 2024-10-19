@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:paystack_for_flutter/paystack_for_flutter.dart';
 
+import '../../profile/providers/ticket_provider.dart';
+
 class StakeProvider extends AsyncNotifier<Map<String, dynamic>> {
   Future<void> getReference(context, {required String refernce}) async {
     try {
@@ -20,6 +22,7 @@ class StakeProvider extends AsyncNotifier<Map<String, dynamic>> {
       Toast.showSuccessToast(context, "Payment Successful");
       ref.invalidate(getPollsProvider);
       ref.invalidate(stakeVideoNotifierProvider);
+      ref.read(ticketProvider.notifier).getTickets();
       ref.invalidateSelf();
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);

@@ -17,7 +17,6 @@ class VoteProvider extends AsyncNotifier<Map<String, dynamic>> {
       final response = await ref
           .read(networkProvider)
           .putRequest(path: '/videos/vote', body: {"videoId": videoId});
-      print(response);
 
       final votedVideos = await ref
           .read(voteNotifierProvider.notifier)

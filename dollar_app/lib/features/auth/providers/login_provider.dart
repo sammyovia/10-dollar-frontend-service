@@ -8,6 +8,9 @@ import 'package:dollar_app/services/router/app_router.dart';
 import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../main/admin/videos/provider/video_provider.dart';
+import '../../main/profile/providers/ticket_provider.dart';
+
 class LoginProvider extends AsyncNotifier<Map<String, dynamic>> {
   Future<void> login(context,
       {required String email, required String password}) async {
@@ -24,6 +27,8 @@ class LoginProvider extends AsyncNotifier<Map<String, dynamic>> {
 
       token.saveUserId(res['data']['id']);
       ref.read(getProfileProvider.notifier).getProfile();
+      ref.read(ticketProvider.notifier).getTickets();
+      ref.read(videoProvider.notifier).getVideos();
 
       ref.read(router).go(AppRoutes.home);
 

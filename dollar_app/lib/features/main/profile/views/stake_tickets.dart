@@ -63,69 +63,76 @@ class _FeedsViewState extends ConsumerState<StakeTicketsView> {
                       itemCount: data['data'].length,
                       itemBuilder: (context, index) {
                         final tick = data['data'][index];
-                        return GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () {
-                            context.go(
-                                '/profile/tickets/ticketDetails/${tick['id']}');
-                          },
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                radius: 25.r,
-                                backgroundImage: tick['user']['avatar'] != null
-                                    ? NetworkImage(tick['user']['avatar'])
-                                    : null,
-                              ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${tick['user']['firstName']} ${tick['user']['lastName']}",
-                                    style: GoogleFonts.lato(fontSize: 14.sp),
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Text(
-                                    _formatTime(tick['createdAt']),
-                                    style: GoogleFonts.lato(fontSize: 14.sp),
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              Text(
-                                tick['code'].toString(),
-                                style: GoogleFonts.lato(fontSize: 12.sp),
-                              ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  width: 50.w,
-                                  height: 20.h,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      tick['status'].toString(),
-                                      style: GoogleFonts.lato(
-                                          fontSize: 10.sp, color: Colors.white),
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 10.h),
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              context.go(
+                                  '/profile/tickets/ticketDetails/${tick['id']}');
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 25.r,
+                                  backgroundImage: tick['user']['avatar'] != null
+                                      ? NetworkImage(tick['user']['avatar'])
+                                      : null,
+                                ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${tick['user']['firstName']} ${tick['user']['lastName']}",
+                                      style: GoogleFonts.lato(fontSize: 14.sp),
+                                    ),
+                                    SizedBox(
+                                      height: 5.h,
+                                    ),
+                                    Text(
+                                      tick['code'].toString(),
+                                      style: GoogleFonts.lato(fontSize: 12.sp),
+                                    ),
+                                    SizedBox(
+                                      height: 5.h,
+                                    ),
+                                    Text(
+                                      _formatTime(tick['createdAt']),
+                                      style: GoogleFonts.lato(fontSize: 14.sp),
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                    width: 50.w,
+                                    height: 20.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        tick['status'].toString(),
+                                        style: GoogleFonts.lato(
+                                            fontSize: 10.sp, color: Colors.white),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
                         );
                       }),

@@ -59,11 +59,8 @@ class _FeedsVideoPreviewState extends State<FeedsVideoPreview> {
         children: [
           // Video Player
           if (_isVideoInitialized)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: CustomVideoPlayer(
-                customVideoPlayerController: _customVideoPlayerController,
-              ),
+            CustomVideoPlayer(
+              customVideoPlayerController: _customVideoPlayerController,
             ),
           // Loading Indicator
           if (!_isVideoInitialized)

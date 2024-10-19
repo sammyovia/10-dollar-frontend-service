@@ -110,7 +110,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                     ),
                   ],
                 ),
-              if (user?.role != "ADMIN")
+              if (user?.role == "ARTIST")
                 Column(
                   children: [
                     SizedBox(height: 10.h),

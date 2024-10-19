@@ -1,4 +1,3 @@
-import 'package:dollar_app/features/main/admin/posts/view/admin_post_view.dart';
 import 'package:dollar_app/features/main/admin/users/view/users_view.dart';
 import 'package:dollar_app/features/main/admin/videos/view/admin_video_view.dart';
 import 'package:dollar_app/features/main/profile/views/stake_tickets.dart';
@@ -23,7 +22,7 @@ class _AdminViewState extends ConsumerState<AdminView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -84,20 +83,7 @@ class _AdminViewState extends ConsumerState<AdminView>
               ),
             ),
           ),
-          Tab(
-            icon: Icon(
-              Icons.featured_play_list,
-              color: _tabController.index == 3
-                  ? Theme.of(context).primaryColor
-                  : null,
-            ),
-            child: Text(
-              'Posts',
-              style: GoogleFonts.lato(
-                fontSize: 12.sp,
-              ),
-            ),
-          ),
+
         ]),
       ),
       body: TabBarView(controller: _tabController, children: const [
@@ -106,7 +92,7 @@ class _AdminViewState extends ConsumerState<AdminView>
         StakeTicketsView(
           admin: 'yes',
         ),
-        AdminPostView()
+
       ]),
     );
   }

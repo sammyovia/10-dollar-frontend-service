@@ -12,6 +12,9 @@ import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mime/mime.dart';
 
+import '../../main/admin/videos/provider/video_provider.dart';
+import '../../main/profile/providers/ticket_provider.dart';
+
 class SetUpProvider extends AsyncNotifier<Map<String, dynamic>> {
   Future<void> setup(
     context, {
@@ -58,6 +61,9 @@ class SetUpProvider extends AsyncNotifier<Map<String, dynamic>> {
       log(response.toString());
       if (response['status'] == true) {
         ref.read(getProfileProvider.notifier).getProfile();
+        ref.read(ticketProvider.notifier).getTickets();
+        ref.read(videoProvider.notifier).getVideos();
+
         token.userProfileVerified(true);
 
         if (fromProfile) {

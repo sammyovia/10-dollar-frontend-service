@@ -71,7 +71,7 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                   return Container(
                     margin: EdgeInsets.only(bottom: 5.0.h),
                     padding:
-                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
+                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 0.w),
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(15),
@@ -80,35 +80,39 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.grey.shade300,
-                              backgroundImage: feed.user.avatar != null
-                                  ? NetworkImage(feed.user.avatar!)
-                                  : null,
-                            ),
-                            SizedBox(width: 8.w),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${feed.user.firstName ?? 'new'} ${feed.user.lastName ?? 'user'}',
-                                  style: GoogleFonts.lato(fontSize: 12.sp),
-                                ),
-                                Text(
-                                  feed.user.role,
-                                  style: GoogleFonts.lato(fontSize: 10.sp),
-                                )
-                              ],
-                            )
-                          ],
+                        Padding(
+                          padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.grey.shade300,
+                                backgroundImage: feed.user.avatar != null
+                                    ? NetworkImage(feed.user.avatar!)
+                                    : null,
+                              ),
+                              SizedBox(width: 8.w),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${feed.user.firstName ?? 'new'} ${feed.user.lastName ?? 'user'}',
+                                    style: GoogleFonts.lato(fontSize: 12.sp),
+                                  ),
+                                  Text(
+                                    feed.user.role,
+                                    style: GoogleFonts.lato(fontSize: 10.sp),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 10.h,
                         ),
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () {
                             context.go('/feeds/feedDetails/${feed.id}');
                           },
@@ -122,7 +126,8 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                       horizontal: 23.0),
                                   child: Text(
                                     feed.content,
-                                    style: GoogleFonts.lato(fontSize: 10.sp),
+                                    style: GoogleFonts.lato(fontSize: 14.sp,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
@@ -130,7 +135,8 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                 ),
                                 if (feed.attachment != null &&
                                     feed.attachment!.isNotEmpty)
-                                  FeedsAttachmentWidget(file: feed.attachment!),
+                                  FeedsAttachmentWidget(file: feed.attachment!,
+                                 ),
                                 SizedBox(
                                   height: 5.h,
                                 ),

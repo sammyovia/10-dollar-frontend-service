@@ -66,39 +66,45 @@ class _HomeArtistWidgetState extends ConsumerState<HomeVideoProviderWidget> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: Colors.grey.shade300,
-                                  backgroundImage: artist.artist?.avatar !=
-                                          null
-                                      ? NetworkImage(artist.artist?.avatar)
-                                      : null,
-                                ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${artist.artist?.firstName}  ${artist.artist?.lastName}",
-                                      style:
-                                          GoogleFonts.lato(fontSize: 12.sp),
-                                    ),
-                                  ],
-                                )
-                              ],
+                            Padding(
+                              padding:  EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  CircleAvatar(
+
+                                    backgroundImage: artist.artist?.avatar !=
+                                            null
+                                        ? NetworkImage(artist.artist?.avatar)
+                                        : null,
+                                  ),
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${artist.artist?.firstName}  ${artist.artist?.lastName}",
+                                        style:
+                                            GoogleFonts.lato(fontSize: 12.sp),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 10.h,
                             ),
-                            Text(
-                              artist.title ?? '',
-                              style: GoogleFonts.lato(fontSize: 10.sp),
+                            Padding(
+                              padding:  EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Text(
+                                artist.title ?? '',
+                                style: GoogleFonts.lato(fontSize: 14.sp),
+                              ),
                             ),
                           ],
                         ),
@@ -176,7 +182,7 @@ class _HomeArtistWidgetState extends ConsumerState<HomeVideoProviderWidget> {
                                     color: Theme.of(context).primaryColor,
                                   ),
                                   child: Text(
-                                    'stake',
+                                    'votes',
                                     style: GoogleFonts.lato(
                                         fontSize: 10.sp, color: Colors.white),
                                   ),

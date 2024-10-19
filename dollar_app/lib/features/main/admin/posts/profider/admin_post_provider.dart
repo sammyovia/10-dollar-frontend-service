@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:dollar_app/features/main/feeds/model/feeds_model.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
@@ -9,7 +10,9 @@ class AdminPostProvider extends AsyncNotifier<List<FeedModelData>> {
     state = const AsyncLoading();
     final response = await ref.read(networkProvider).getRequest(path: '/posts');
     final feeds = FeedsModel.fromJson(response).feedModelData;
-    final adminFeeds = feeds.where((feed)=> feed.pin == true).toList();
+    final adminFeeds =
+        feeds.where((feed) => feed.user.role == "ADMIN").toList();
+    log(adminFeeds.toString());
 
     return adminFeeds;
   }
@@ -31,5 +34,5 @@ class AdminPostProvider extends AsyncNotifier<List<FeedModelData>> {
 }
 
 final getAdminFeeds =
-AsyncNotifierProvider<AdminPostProvider, List<FeedModelData>>(
-    AdminPostProvider.new);
+    AsyncNotifierProvider<AdminPostProvider, List<FeedModelData>>(
+        AdminPostProvider.new);
