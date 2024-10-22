@@ -19,7 +19,7 @@ class _FeedsVideoPreviewState extends State<FeedsVideoPreview> {
 
   void _initializeVideoPlayer() {
     VideoPlayerController videoplayerController =
-        VideoPlayerController.contentUri(Uri.parse(widget.file))
+        VideoPlayerController.networkUrl(Uri.parse(widget.file))
           ..initialize().then((_) {
             setState(() {
               _isVideoInitialized = true;
