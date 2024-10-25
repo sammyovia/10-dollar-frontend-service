@@ -1,3 +1,4 @@
+
 import 'package:dollar_app/services/network/token_storage.dart';
 import 'package:dollar_app/services/router/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -26,50 +27,32 @@ class _StartupViewState extends State<StartupView> {
     final userEmail = await tokenStorage.getUserEmail();
     final userEmailVerified = await tokenStorage.getEmailVerified();
     final userProfileVerified = await tokenStorage.getUserProfileVerified();
-    final isLoggedIn = await tokenStorage.getAccessToken() != null; // Add this line to check login state
-
-    if (!context.mounted) return;
-
-    // Decision tree for navigation
-    if (!isLoggedIn) {
-      // If user is not logged in, check onboarding and registration flow
-      if (userOnboarded != true) {
-        context.go(AppRoutes.onboarding);
-        return;
-      }
-
-      if (userRegistered != true) {
-        context.go(AppRoutes.register);
-        return;
-      }
-
-      // If registered but not completed other steps
-      if (userEmail?.isNotEmpty == true) {
-        if (userEmailVerified != true) {
-          context.go("${AppRoutes.verifyEmail}/$userEmail");
-          return;
-        }
-
-        if (userProfileVerified != true) {
-          context.go("${AppRoutes.setUp}/$userEmail");
-          return;
-        }
-      } else {
-        context.go(AppRoutes.register);
-        return;
-      }
-    } else {
-      // User is logged in
-      if (userProfileVerified == true) {
-        // If logged in and profile is verified, go straight to home
+    final isLoggedIn = await tokenStorage.userLoggedIN();
+    if (context.mounted) {
+      if (isLoggedIn == true) {
         context.go(AppRoutes.home);
-      } else if (userEmail?.isNotEmpty == true) {
-        // If logged in but profile not verified, complete setup
-        context.go("${AppRoutes.setUp}/$userEmail");
       } else {
-        // Fallback - something's wrong with the state, logout and restart flow
-        await tokenStorage.clearTokens();
-        context.go(AppRoutes.register);
+        if (userOnboarded == true) {
+          if (userRegistered == true) {
+            if (userEmail != null && userEmail.isNotEmpty) {
+              if (userEmailVerified == true) {
+                if (userProfileVerified == true) {
+                  context.go(AppRoutes.home);
+                } else {
+                  context.go("${AppRoutes.setUp}/$userEmail");
+                }
+              } else {
+                context.go("${AppRoutes.verifyEmail}/$userEmail");
+              }
+            } else {
+              context.go(AppRoutes.register);
+            }
+          } else {
+            context.go(AppRoutes.register);
+          }
+        } else {
+          context.go(AppRoutes.onboarding);
+        }
       }
     }
   }

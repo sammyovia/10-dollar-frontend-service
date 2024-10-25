@@ -68,6 +68,7 @@ class GoogleSignInProvider extends AsyncNotifier<User?> {
         ref.read(getProfileProvider.notifier).getProfile();
         ref.read(ticketProvider.notifier).getTickets();
         ref.read(videoProvider.notifier).getVideos();
+        token.saveUserLoggedIN(true);
         ref.read(router).go(AppRoutes.home);
       }
       state = const AsyncData(null);

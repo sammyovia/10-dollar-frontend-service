@@ -29,6 +29,7 @@ class LoginProvider extends AsyncNotifier<Map<String, dynamic>> {
       ref.read(getProfileProvider.notifier).getProfile();
       ref.read(ticketProvider.notifier).getTickets();
       ref.read(videoProvider.notifier).getVideos();
+      token.saveUserLoggedIN(true);
 
       ref.read(router).go(AppRoutes.home);
 

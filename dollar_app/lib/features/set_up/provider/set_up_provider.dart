@@ -65,6 +65,7 @@ class SetUpProvider extends AsyncNotifier<Map<String, dynamic>> {
         ref.read(videoProvider.notifier).getVideos();
 
         token.userProfileVerified(true);
+        token.saveUserLoggedIN(true);
 
         if (fromProfile) {
           Toast.showErrorToast(context, "profile edited successfully");

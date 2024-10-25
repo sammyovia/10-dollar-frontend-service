@@ -9,6 +9,7 @@ class TokenStorage {
   static const _userEmail = "userEmail";
   static const _userEmailVerified = "emailVerified";
   static const _userProfileVerified = "userProfile";
+  static const _userLoggedIn = 'userLoggedIn';
 
   Future<void> saveTokens(
       {required String accessToken, required String refreshToken}) async {
@@ -20,6 +21,11 @@ class TokenStorage {
   Future<void> saveUserId(String userId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_userId, userId);
+  }
+
+  Future<void> saveUserLoggedIN(bool login) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_userLoggedIn, login);
   }
 
   Future<void> userProfileVerified(bool verified) async {
@@ -49,6 +55,11 @@ class TokenStorage {
   Future<bool?> getEmailVerified() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_userEmailVerified);
+  }
+
+  Future<bool?> userLoggedIN() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_userLoggedIn);
   }
   Future<bool?> getUserProfileVerified() async {
     final prefs = await SharedPreferences.getInstance();
