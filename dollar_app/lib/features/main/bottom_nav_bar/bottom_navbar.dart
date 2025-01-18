@@ -39,8 +39,8 @@ class _BottomNavbarState extends State<BottomNavbar> {
         items: [
           BottomNavigationBarItem(
             icon: _buildIconWithIndicator(
-              icon: Icons.home,
-              label: "Home",
+              icon: Icons.featured_play_list,
+              label: "Feeds",
               isActive: widget.child.currentIndex == 0,
             ),
             label: "",
@@ -55,8 +55,8 @@ class _BottomNavbarState extends State<BottomNavbar> {
           ),
           BottomNavigationBarItem(
             icon: _buildIconWithIndicator(
-              icon: Icons.featured_play_list,
-              label: "Feeds",
+              icon: Icons.panorama_horizontal_select_rounded,
+              label: "Past Polls",
               isActive: widget.child.currentIndex == 2,
             ),
             label: "",
@@ -91,8 +91,8 @@ class _BottomNavbarState extends State<BottomNavbar> {
               width: 5.w,
               height: 5.h,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.primary,
+                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
@@ -101,16 +101,18 @@ class _BottomNavbarState extends State<BottomNavbar> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: isActive ? 
-                isDark? Colors.white12:
-                 Colors.grey.shade300 :
-                  null,
+                color: isActive
+                    ? isDark
+                        ? Colors.white12
+                        : Colors.grey.shade300
+                    : null,
                 shape: BoxShape.circle,
               ),
               child: Center(
                 child: Icon(
                   icon,
-                  color: isActive ? Theme.of(context).colorScheme.primary : null,
+                  color:
+                      isActive ? Theme.of(context).colorScheme.primary : null,
                 ),
               ),
             ),
@@ -118,7 +120,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
               label,
               style: GoogleFonts.lato(
                 fontSize: 10.sp,
-                color: isActive ? Theme.of(context).colorScheme.primary: null,
+                color: isActive ? Theme.of(context).colorScheme.primary : null,
               ),
             )
           ],

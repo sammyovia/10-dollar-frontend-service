@@ -1,5 +1,6 @@
 import 'package:dollar_app/features/main/admin/posts/profider/admin_post_provider.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
+import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -315,6 +316,6 @@ class _PinnedInfoWidgetState extends ConsumerState<PinnedInfoWidget> {
             ),
           );
         },
-        loading: () => const CircularProgressIndicator());
+        loading: () => const ShimmerWidget(layoutType: LayoutType.howVideo,));
   }
 }

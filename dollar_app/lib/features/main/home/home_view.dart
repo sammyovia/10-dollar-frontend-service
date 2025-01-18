@@ -73,7 +73,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
               ),
               if (isBannerVisible)
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 20.w),
+                  padding:  EdgeInsets.symmetric(horizontal: 15.w),
                   child: PinnedInfoWidget(
                     onClose: () {
                       setState(() {
@@ -83,9 +83,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   ),
                 ),
               isBannerVisible? SizedBox(height: 10.h,): const SizedBox.shrink(),
-              const HomeVideoProviderWidget(
-                canStake: true,
-                showShare: false,
+              Padding(
+                padding:  EdgeInsets.symmetric(horizontal: 15.w),
+                child: const HomeVideoProviderWidget(
+                  canStake: true,
+                  showShare: false,
+                ),
               )
             ],
           ),

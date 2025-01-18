@@ -320,11 +320,13 @@ class _ChatViewState extends ConsumerState<ChatView> {
                     icon: const Icon(Icons.attach_file),
                     iconSize: 17.r,
                   ),
-                  suffixIcon: IconButton(
-                    onPressed: _sendMessage,
-                    icon: const Icon(Icons.send_sharp),
-                    iconSize: 17.r,
-                  ),
+                  suffixIcon: profile?.chatStatus == "active"
+                      ? IconButton(
+                          onPressed: _sendMessage,
+                          icon: const Icon(Icons.send_sharp),
+                          iconSize: 17.r,
+                        )
+                      : null,
                   hintText: 'Type a message...',
                   hintStyle: GoogleFonts.lato(fontSize: 12.sp),
                   enabledBorder: OutlineInputBorder(

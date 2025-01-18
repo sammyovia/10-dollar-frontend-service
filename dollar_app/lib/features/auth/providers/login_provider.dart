@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:dollar_app/features/main/chat/providers/chat_provider.dart';
+import 'package:dollar_app/features/main/feeds/providers/get_feeds_provider.dart';
+import 'package:dollar_app/features/main/polls/provider/get_polls_provider.dart';
 import 'package:dollar_app/features/main/profile/providers/get_profile_provider.dart';
 import 'package:dollar_app/features/shared/widgets/toast.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
@@ -29,9 +32,12 @@ class LoginProvider extends AsyncNotifier<Map<String, dynamic>> {
       ref.read(getProfileProvider.notifier).getProfile();
       ref.read(ticketProvider.notifier).getTickets();
       ref.read(videoProvider.notifier).getVideos();
+      ref.read(getFeedsProvider.notifier).getFeeds();
+      ref.read(getPollsProvider.notifier).getPolls();
+      ref.invalidate(chatProvider);
       token.saveUserLoggedIN(true);
 
-      ref.read(router).go(AppRoutes.home);
+      ref.read(router).go(AppRoutes.feeds);
 
       state = AsyncData(res);
     } catch (e) {

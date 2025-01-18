@@ -299,7 +299,7 @@ class CommentItem extends StatelessWidget {
                       Image.network(
                         contentImage!,
                         width: double.infinity,
-                        height: 100,
+                       
                       ),
                     if (comment.isNotEmpty)
                       Padding(
@@ -326,52 +326,7 @@ class CommentItem extends StatelessWidget {
           ],
         )
 
-        // ListTile(
-        //   titleAlignment: ListTileTitleAlignment.top,
-        //
-        //   dense: true,
-        //   leading: CircleAvatar(
-        //     backgroundColor: Colors.grey.shade300,
-        //     backgroundImage: image != null ? NetworkImage(image!) : null,
-        //   ),
-        //   title: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Text(comment),
-        //       SizedBox(
-        //         height: 5.h,
-        //       ),
-        //       Container(
-        //         decoration: BoxDecoration(
-        //           color: Theme.of(context).colorScheme.onSecondaryContainer,
-        //           borderRadius: BorderRadius.circular(8),
-        //         ),
-        //         padding: const EdgeInsets.all(10),
-        //         child: Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           mainAxisAlignment: MainAxisAlignment.start,
-        //           children: [
-        //             if (contentImage != null)
-        //               Image.network(
-        //                 contentImage!,
-        //                 width: double.infinity,
-        //                 height: 100,
-        //               ),
-        //           ],
-        //         ),
-        //       ),
-        //       Align(
-        //         alignment: Alignment.centerRight,
-        //         child: Text(
-        //           DataManipulation.timeAgo(date),
-        //           style: GoogleFonts.lato(fontSize: 12.sp),
-        //         ),
-        //       )
-        //     ],
-        //   ),
-        //   // trailing:
-        //   //     comment.attachments.isNotEmpty ? const Icon(Icons.attachment) : null,
-        // ),
+       
         );
   }
 }

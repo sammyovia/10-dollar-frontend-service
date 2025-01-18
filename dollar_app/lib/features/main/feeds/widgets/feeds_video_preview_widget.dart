@@ -59,18 +59,22 @@ class _FeedsVideoPreviewState extends State<FeedsVideoPreview> {
         children: [
           // Video Player
           if (_isVideoInitialized)
-            CustomVideoPlayer(
-              customVideoPlayerController: _customVideoPlayerController,
+            SizedBox(
+              width: double.infinity,
+              height: 200.h,
+              child: CustomVideoPlayer(
+                customVideoPlayerController: _customVideoPlayerController,
+              ),
             ),
           // Loading Indicator
           if (!_isVideoInitialized)
             Container(
 
               width:  double.infinity,
-              height: 150.h,
+              height: 200.h,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(15),
+
               ),
               child: Center(
                 child: SizedBox(
