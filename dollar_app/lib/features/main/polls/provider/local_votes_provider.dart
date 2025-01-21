@@ -1,47 +1,61 @@
-
-
 import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class VoteNotifier extends StateNotifier<Set<String>> {
   SharedPreferences? _prefs;
 
-  VoteNotifier() : super({}) ;
+  VoteNotifier() : super({});
 
-
-  Future<String> loadVotes({required String userId}) async {
-    log("loading votes >>>>>>>>>>>>");
-    _prefs = await SharedPreferences.getInstance();
-    final votes =  _prefs?.getString('votes_$userId') ?? [];
-    log("$votes  Loaded for $userId<<<<<<");
-
-    return votes.toString();
+  // Initialize SharedPreferences lazily
+  Future<void> _initPrefs() async {
+    _prefs ??= await SharedPreferences.getInstance();
   }
 
-  Future<void> saveVote({required String videoId,required String userId}) async {
-    final updatedVotes = {...state}..add(videoId);
+  // Load votes as a list of video IDs
+  Future<List<String>> loadVotes({required String userId}) async {
+    await _initPrefs();
+    log("Loading votes for $userId >>>>>>>>>>");
+   final votes = _prefs?.getStringList('votes_$userId') ?? [];
+    log("${votes.length} votes loaded for $userId <<<<<<");
+
+    // Update state with the loaded votes
+    state = votes.toSet();
+    return votes;
+  }
+
+  // Save a vote (video ID) for the user
+  Future<void> saveVote({required String videoId, required String userId}) async {
+    await _initPrefs();
+    final updatedVotes = {...state}..add(videoId); // Add the new vote
     state = updatedVotes;
 
-    await _prefs?.setString('votes_$userId', videoId);
-    log("voting $videoId for $userId");
-
+    // Persist updated votes as a list
+    await _prefs?.setStringList('votes_$userId', updatedVotes.toList());
+    log("Voted for $videoId by $userId");
   }
 
-  Future<void> removeVote({ required String videoId, required String userId}) async {
-    final updatedVotes = {...state}..remove(videoId);
+  // Remove a vote (video ID) for the user
+  Future<void> removeVote({required String videoId, required String userId}) async {
+    await _initPrefs();
+    final updatedVotes = {...state}..remove(videoId); // Remove the vote
     state = updatedVotes;
-    await _prefs?.setString('votes_$userId', "");
+
+    // Persist updated votes as a list
+    await _prefs?.setStringList('votes_$userId', updatedVotes.toList());
+    log("Removed vote for $videoId by $userId");
   }
 
+  // Clear all votes for the user
   Future<void> clearVotes(String userId) async {
-    state = {};
-    await _prefs?.remove('votes_$userId');
+    await _initPrefs();
+    state = {}; // Clear state
+    await _prefs?.remove('votes_$userId'); // Remove votes from storage
+    log("Cleared all votes for $userId");
   }
 }
 
+// Riverpod provider for the VoteNotifier
 final voteNotifierProvider = StateNotifierProvider<VoteNotifier, Set<String>>((ref) {
   return VoteNotifier();
 });

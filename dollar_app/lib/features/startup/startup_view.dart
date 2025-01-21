@@ -30,14 +30,14 @@ class _StartupViewState extends State<StartupView> {
     final isLoggedIn = await tokenStorage.userLoggedIN();
     if (context.mounted) {
       if (isLoggedIn == true) {
-        context.go(AppRoutes.home);
+        context.go(AppRoutes.feeds);
       } else {
         if (userOnboarded == true) {
           if (userRegistered == true) {
             if (userEmail != null && userEmail.isNotEmpty) {
               if (userEmailVerified == true) {
                 if (userProfileVerified == true) {
-                  context.go(AppRoutes.home);
+                  context.go(AppRoutes.feeds);
                 } else {
                   context.go("${AppRoutes.setUp}/$userEmail");
                 }

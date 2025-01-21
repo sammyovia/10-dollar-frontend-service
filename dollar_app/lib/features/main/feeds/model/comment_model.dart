@@ -81,17 +81,17 @@ class User {
   });
   late final String id;
   late final String email;
-  late final Null firstName;
-  late final Null lastName;
-  late final Null avatar;
+  late final String? firstName;
+  late final String? lastName;
+  late final String? avatar;
   late final String role;
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     email = json['email'];
-    firstName = null;
-    lastName = null;
-    avatar = null;
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    avatar = json['avatar'];
     role = json['role'];
   }
 

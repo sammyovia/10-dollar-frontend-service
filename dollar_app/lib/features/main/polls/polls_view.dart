@@ -17,7 +17,7 @@ class _PollsViewState extends ConsumerState<PollsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+
       appBar: const CustomAppBar(
         showLeading: true,
         showProfile: true,
@@ -47,7 +47,7 @@ class _PollsViewState extends ConsumerState<PollsView> {
                 color: Theme.of(context).dividerColor,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                padding:  EdgeInsets.symmetric(horizontal: 15.w),
                 child: const PollsViewWidgets(),
               )
             ],

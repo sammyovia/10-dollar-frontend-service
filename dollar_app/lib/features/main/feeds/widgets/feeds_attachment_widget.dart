@@ -1,6 +1,7 @@
 import 'package:dollar_app/features/main/feeds/widgets/feeds_video_preview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:dollar_app/services/file_picker_service.dart' as fps;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FeedsAttachmentWidget extends StatefulWidget {
   const FeedsAttachmentWidget(
@@ -20,19 +21,15 @@ class _FileAttachmentWidgetState extends State<FeedsAttachmentWidget> {
         fps.FilePickerService.getFileType(widget.file);
     switch (fileType) {
       case fps.AttachmentType.image:
-
-        return Image.network(widget.file);
-        //   Container(
-        //   width: widget.width ?? double.infinity,
-        //  height: widget.height ?? 150.h,
-        //   padding: const EdgeInsets.symmetric(horizontal: 23.0),
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(15),
-        //     color: Colors.grey.shade300,
-        //     image: DecorationImage(
-        //         image: NetworkImage(widget.file), fit: BoxFit.cover),
-        //   ),
-        // );
+        return GestureDetector(
+          onTap: ()=> _showFullImageView(context),
+          child: Image.network(
+            widget.file,
+            width: double.infinity,
+            height: 200.h,
+            fit: BoxFit.cover,
+          ),
+        );
 
       case fps.AttachmentType.video:
         return FeedsVideoPreview(file: widget.file);
@@ -40,5 +37,24 @@ class _FileAttachmentWidgetState extends State<FeedsAttachmentWidget> {
       case fps.AttachmentType.audio:
         return Container();
     }
+  }
+
+  void _showFullImageView(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: GestureDetector(
+          child: Center(
+            child: Image.network(
+              widget.file,
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

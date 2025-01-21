@@ -78,7 +78,7 @@ class _SetUPSuccessfulViewState extends ConsumerState<SetUPSuccessfulView> {
                         putIcon: false,
                         title: "Go To Home",
                         onPressed: () {
-                          ref.read(router).go(AppRoutes.home);
+                          ref.read(router).go(AppRoutes.feeds);
                         },
                         enabled: true,
                       )

@@ -119,6 +119,43 @@ final router = Provider<GoRouter>((ref) {
         StatefulShellRoute.indexedStack(
           parentNavigatorKey: _rootNavigationKey,
           branches: [
+            StatefulShellBranch(navigatorKey: _feedsNavigationKey, routes: [
+              GoRoute(
+                  path: AppRoutes.feeds,
+                  pageBuilder: (context, state) {
+                    return getPage(child: const FeedsView(), state: state);
+                  },
+                  routes: [
+                    GoRoute(
+                        parentNavigatorKey: _feedsNavigationKey,
+                        path: 'new',
+                        pageBuilder: (context, state) {
+                          return CustomTransitionPage(
+                              child: const NewFeedsView(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return ScaleTransition(
+                                  scale: animation,
+                                  child: const NewFeedsView(),
+                                );
+                              });
+                        }),
+                    GoRoute(
+                        path: 'feedDetails/:postId',
+                        builder: (BuildContext context, GoRouterState state) {
+                          final postId = state.pathParameters['postId']!;
+                          return FeedsDetailsView(postId: postId);
+                        })
+                  ])
+            ]),
+
+            StatefulShellBranch(navigatorKey: _poolsNavigationKey, routes: [
+              GoRoute(
+                  path: AppRoutes.polls,
+                  pageBuilder: (context, state) {
+                    return getPage(child: const PollsView(), state: state);
+                  })
+            ]),
             StatefulShellBranch(navigatorKey: _homeNavigationKey, routes: [
               GoRoute(
                   path: AppRoutes.home,
@@ -195,42 +232,6 @@ final router = Provider<GoRouter>((ref) {
                               }),
                         ]),
                   ]),
-            ]),
-            StatefulShellBranch(navigatorKey: _poolsNavigationKey, routes: [
-              GoRoute(
-                  path: AppRoutes.polls,
-                  pageBuilder: (context, state) {
-                    return getPage(child: const PollsView(), state: state);
-                  })
-            ]),
-            StatefulShellBranch(navigatorKey: _feedsNavigationKey, routes: [
-              GoRoute(
-                  path: AppRoutes.feeds,
-                  pageBuilder: (context, state) {
-                    return getPage(child: const FeedsView(), state: state);
-                  },
-                  routes: [
-                    GoRoute(
-                        parentNavigatorKey: _feedsNavigationKey,
-                        path: 'new',
-                        pageBuilder: (context, state) {
-                          return CustomTransitionPage(
-                              child: const NewFeedsView(),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                return ScaleTransition(
-                                  scale: animation,
-                                  child: const NewFeedsView(),
-                                );
-                              });
-                        }),
-                    GoRoute(
-                        path: 'feedDetails/:postId',
-                        builder: (BuildContext context, GoRouterState state) {
-                          final postId = state.pathParameters['postId']!;
-                          return FeedsDetailsView(postId: postId);
-                        })
-                  ])
             ]),
             StatefulShellBranch(navigatorKey: _chatNavigationKey, routes: [
               GoRoute(

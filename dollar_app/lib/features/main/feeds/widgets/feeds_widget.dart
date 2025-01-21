@@ -53,6 +53,7 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
     final model = ref.watch(getFeedsProvider);
     final userRole = ref.watch(getProfileProvider).value?.role ?? "";
     final userId = ref.watch(getProfileProvider).value?.id ?? "";
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return model.when(
       data: (data) {
         return data.isEmpty
@@ -71,10 +72,10 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                   return Container(
                     margin: EdgeInsets.only(bottom: 5.0.h),
                     padding:
-                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 0.w),
+                        EdgeInsets.only(top: 20.h),
                     decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
                       color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -97,7 +98,8 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                 children: [
                                   Text(
                                     '${feed.user.firstName ?? 'new'} ${feed.user.lastName ?? 'user'}',
-                                    style: GoogleFonts.lato(fontSize: 12.sp),
+                                    style: GoogleFonts.lato(fontSize: 12.sp,
+                                    ),
                                   ),
                                   Text(
                                     feed.user.role,
@@ -137,15 +139,13 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                     feed.attachment!.isNotEmpty)
                                   FeedsAttachmentWidget(file: feed.attachment!,
                                  ),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
+
                               ],
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 23.0),
+                          padding:  EdgeInsets.symmetric(horizontal: 23.0,vertical: 10.h),
                           child: Row(
                             children: [
                               GestureDetector(
