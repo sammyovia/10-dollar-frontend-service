@@ -53,7 +53,6 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
     final model = ref.watch(getFeedsProvider);
     final userRole = ref.watch(getProfileProvider).value?.role ?? "";
     final userId = ref.watch(getProfileProvider).value?.id ?? "";
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return model.when(
       data: (data) {
         return data.isEmpty

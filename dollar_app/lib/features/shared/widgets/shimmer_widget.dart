@@ -107,13 +107,7 @@ class ShimmerWidget extends StatelessWidget {
             ),
           ],
         );
-      default:
-        return Container(
-          width: width,
-          height: height,
-          color: baseColor,
-        );
-    }
+      }
   }
 }
 
