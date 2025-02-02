@@ -124,81 +124,90 @@ class _CommentBoxState extends ConsumerState<CommentBox> {
                   ),
                   Text(
                     "Comments",
-                    style: GoogleFonts.notoSans(
-                        fontWeight: FontWeight.bold, fontSize: 16.sp),
+                    style: GoogleFonts.notoSans(fontSize: 16.sp),
                   ),
-                  const Divider(
-                    color: Colors.grey,
+                  Divider(
+                    color: Theme.of(context).dividerColor,
                   ),
                 ],
               ),
 
-            comments.when(
-                data: (data) {
-                  return data.isEmpty
-                      ? const Expanded(
-                          child: Center(
+            Expanded(
+              child: comments.when(
+                  data: (data) {
+                    return data.isEmpty
+                        ? const Center(
                             child: Text('No comments to display'),
-                          ),
-                        )
-                      : Expanded(
-                          child: ListView.builder(
-                              physics: widget.showBottomSheet
-                                  ? null
-                                  : const NeverScrollableScrollPhysics(),
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                final comment = data[index];
-                                return CommentItem(
-                                  comment: comment.content,
-                                  image: comment.user.avatar,
-                                  contentImage: comment.attachment,
-                                  date: comment.createdAt,
-                                );
-                              }),
-                        );
-                },
-                error: (e, s) {
-                  return Text(e.toString());
-                },
-                loading: () => const ShimmerWidget(
-                      layoutType: LayoutType.howVideo,
-                    )),
+                          )
+                        : ListView.builder(
+                            physics: widget.showBottomSheet
+                                ? null
+                                : const NeverScrollableScrollPhysics(),
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              final comment = data[index];
+                              return CommentItem(
+                                sender:
+                                    "${comment.user.firstName}  ${comment.user.lastName}",
+                                comment: comment.content,
+                                image: comment.user.avatar,
+                                contentImage: comment.attachment,
+                                date: comment.createdAt,
+                              );
+                            });
+                  },
+                  error: (e, s) {
+                    return Text(e.toString());
+                  },
+                  loading: () => const ShimmerWidget(
+                        layoutType: LayoutType.howVideo,
+                      )),
+            ),
             // const Spacer(),
             // Input area
             if (widget.showBottomSheet)
               Container(
                 padding: const EdgeInsets.all(8.0),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Colors.grey),
-                  ),
-                ),
                 height: _focus.hasFocus ? 100 : 50.h,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _commentController,
-                        focusNode: _focus,
-                        expands: true,
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                        minLines: null,
-                        decoration: const InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white24,
-                          hintText: 'your comment...',
-                        ),
+                child: TextFormField(
+                  controller: _commentController,
+                  focusNode: _focus,
+                  expands: true,
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  minLines: null,
+                  decoration: InputDecoration(
+                    prefixIcon: IconButton(
+                      icon: Icon(
+                        Icons.attach_file,
+                        size: 17.r,
                       ),
+                      onPressed: _pickAttachments,
                     ),
-                  ],
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        Icons.send,
+                        size: 17.r,
+                      ),
+                      onPressed: postComment,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide:
+                      BorderSide(color: Theme.of(context).dividerColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide:
+                      BorderSide(color: Theme.of(context).dividerColor),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide:
+                      BorderSide(color: Theme.of(context).dividerColor),
+                    ),
+                    hintText: 'your comment...',
+                  ),
                 ),
               ),
             SizedBox(
@@ -239,20 +248,7 @@ class _CommentBoxState extends ConsumerState<CommentBox> {
               ),
             if (ref.watch(postCommentProvider).isLoading) const Text('posting'),
 
-            if (_focus.hasFocus)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.attach_file),
-                    onPressed: _pickAttachments,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.send),
-                    onPressed: postComment,
-                  ),
-                ],
-              ),
+
             SizedBox(
               height: 10.h,
             )
@@ -264,6 +260,7 @@ class _CommentBoxState extends ConsumerState<CommentBox> {
 }
 
 class CommentItem extends StatelessWidget {
+  final String sender;
   final String comment;
   final String? image;
   final String? contentImage;
@@ -271,6 +268,7 @@ class CommentItem extends StatelessWidget {
 
   const CommentItem(
       {super.key,
+      required this.sender,
       required this.comment,
       required this.image,
       required this.contentImage,
@@ -278,51 +276,57 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      titleAlignment: ListTileTitleAlignment.top,
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              backgroundImage: image != null ? NetworkImage(image!) : null,
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      sender,
+                      style: GoogleFonts.lato(),
+                    ),
+                    if (contentImage != null)
+                      Image.network(
+                        contentImage!,
+                        width: double.infinity,
+                       
+                      ),
+                    if (comment.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          comment,
+                          style: GoogleFonts.lato(),
+                        ),
+                      ),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          DataManipulation.timeAgo(date),
+                          style: GoogleFonts.lato(fontSize: 10.sp),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        )
 
-      dense: true,
-      leading: CircleAvatar(
-        backgroundColor: Colors.grey.shade300,
-        backgroundImage: image != null ? NetworkImage(image!) : null,
-      ),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(comment),
-          SizedBox(
-            height: 5.h,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                if (contentImage != null)
-                  Image.network(
-                    contentImage!,
-                    width: double.infinity,
-                    height: 100,
-                  ),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              DataManipulation.timeAgo(date),
-              style: GoogleFonts.lato(fontSize: 12.sp),
-            ),
-          )
-        ],
-      ),
-      // trailing:
-      //     comment.attachments.isNotEmpty ? const Icon(Icons.attachment) : null,
-    );
+       
+        );
   }
 }

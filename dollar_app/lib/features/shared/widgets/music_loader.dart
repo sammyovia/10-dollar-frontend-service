@@ -16,9 +16,13 @@ class MusicLoader extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        CircularProgressIndicator(
-          color: color,
-          strokeWidth: strokeWidth,
+        SizedBox(
+          height: 25.h,
+          width: 25.h,
+          child: CircularProgressIndicator(
+            color: color,
+            strokeWidth: strokeWidth,
+          ),
         ),
         MiniMusicVisualizer(
           height: 15.h,

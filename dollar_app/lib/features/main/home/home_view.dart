@@ -1,3 +1,4 @@
+import 'package:dollar_app/features/main/admin/posts/profider/admin_post_provider.dart';
 import 'package:dollar_app/features/main/home/provider/home_video_provider.dart';
 import 'package:dollar_app/features/main/home/provider/top_artist_provider.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
@@ -8,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../admin/posts/view/pinne_post.dart';
+
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
@@ -16,10 +19,11 @@ class HomeView extends ConsumerStatefulWidget {
 }
 
 class _HomeViewState extends ConsumerState<HomeView> {
+  bool isBannerVisible = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+
       appBar: const CustomAppBar(
         showProfile: true,
         showSearch: true,
@@ -32,8 +36,10 @@ class _HomeViewState extends ConsumerState<HomeView> {
         onRefresh: () async {
           ref.refresh(topArtistProvider.notifier).displayFeeds();
           ref.refresh(getHomeVideosProvider.notifier).displayFeeds(context);
+          ref.read(getAdminFeeds.notifier).displayFeeds();
         },
         child: SingleChildScrollView(
+          
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
@@ -48,26 +54,41 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       style: GoogleFonts.lato(fontSize: 16.sp),
                     ),
                   ),
-                  Divider(
-                    thickness: 2,
-                    color: Theme.of(context).dividerColor,
-                  ),
                   SizedBox(
                     height: 10.h,
+                  ),
+                  Divider(
+                    thickness: 1,
+                    color: Theme.of(context).dividerColor,
                   ),
                   const TopArtistWidget()
                 ],
               ),
+              Divider(
+                thickness: 1,
+                color: Theme.of(context).dividerColor,
+              ),
               SizedBox(
                 height: 10.h,
               ),
-              Divider(
-                thickness: 2,
-                color: Theme.of(context).dividerColor,
-              ),
-              const HomeVideoProviderWidget(
-                canStake: true,
-                showShare: false,
+              if (isBannerVisible)
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: 15.w),
+                  child: PinnedInfoWidget(
+                    onClose: () {
+                      setState(() {
+                        isBannerVisible = false;
+                      });
+                    },
+                  ),
+                ),
+              isBannerVisible? SizedBox(height: 10.h,): const SizedBox.shrink(),
+              Padding(
+                padding:  EdgeInsets.symmetric(horizontal: 15.w),
+                child: const HomeVideoProviderWidget(
+                  canStake: true,
+                  showShare: false,
+                ),
               )
             ],
           ),

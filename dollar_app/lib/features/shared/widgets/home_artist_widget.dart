@@ -7,7 +7,6 @@ import 'package:dollar_app/features/shared/widgets/dialog_method.dart';
 import 'package:dollar_app/features/shared/widgets/publish_pop_up_widget.dart';
 import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:dollar_app/features/shared/widgets/stake_widget/view/stake_widget.dart';
-import 'package:dollar_app/features/shared/widgets/vote_pop_up_widget.dart';
 import 'package:dollar_app/services/date_manipulation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -128,7 +127,7 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
                                   child: Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
+                                        borderRadius: BorderRadius.circular(8),
                                         color: Colors.green),
                                     child: Text(
                                       'Publish',
@@ -143,10 +142,7 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
                               if (widget.showVote)
                                 GestureDetector(
                                   onTap: () {
-                                    diolagMethod(
-                                      context,
-                                      child: VotePopupWidget(postId: artist.id),
-                                    );
+
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(8),
@@ -258,8 +254,11 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
                                           onPress: () {},
                                         ));
                                   },
-                                  child: Icon(Icons.delete,
-                                      size: 17.r, color: Colors.grey),
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Theme.of(context).primaryColor,
+                                    size: 17.r,
+                                  ),
                                 ),
                             ],
                           )
@@ -272,7 +271,7 @@ class _HomeArtistWidgetState extends ConsumerState<HomeArtistWidget> {
         error: (e, s) {
           return Text(e.toString());
         },
-        loading: () => const ShimmerWidget( 
+        loading: () => const ShimmerWidget(
               layoutType: LayoutType.howVideo,
             ));
   }

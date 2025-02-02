@@ -20,7 +20,9 @@ class AuthBottomText extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.redHatDisplay(),
+          style: GoogleFonts.lato(
+            fontSize: 12.sp
+          ),
         ),
         SizedBox(
           width: 8.w,
@@ -29,8 +31,9 @@ class AuthBottomText extends StatelessWidget {
           onTap: onClick,
           child: Text(
             actionText,
-            style: GoogleFonts.redHatDisplay(
+            style: GoogleFonts.lato(
                 fontWeight: FontWeight.w800,
+                fontSize: 12.sp,
                 color: Theme.of(context).primaryColor),
           ),
         )

@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dollar_app/features/main/feeds/providers/get_comments_provider.dart';
+import 'package:dollar_app/features/main/feeds/providers/get_feeds_provider.dart';
+import 'package:dollar_app/features/shared/widgets/toast.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mime/mime.dart';
@@ -42,11 +44,13 @@ class PostCommentsProvider extends AsyncNotifier<Map<String, dynamic>> {
         state = AsyncData(response);
         ref.read(getCommentProvider.notifier).displayComent(postId);
         ref.read(getCommentProvider.notifier).getComments(postId);
+        ref.invalidate(getFeedsProvider);
         attachments.clear();
       }
       await future;
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
+      Toast.showErrorToast(context, e.toString());
     }
   }
 

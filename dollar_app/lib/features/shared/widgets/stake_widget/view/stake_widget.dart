@@ -5,7 +5,6 @@ import 'package:dollar_app/features/main/polls/provider/get_polls_provider.dart'
 import 'package:dollar_app/features/main/videos/provider/like_delete_video_provider.dart';
 import 'package:dollar_app/features/onboarding/provider/indicator_provider.dart';
 import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
-import 'package:dollar_app/features/shared/widgets/app_text_field.dart';
 import 'package:dollar_app/features/shared/widgets/stake_widget/helper/stake_helper.dart';
 import 'package:dollar_app/features/shared/widgets/stake_widget/widgets/build_position_tile.dart';
 import 'package:flutter/material.dart';
@@ -42,12 +41,12 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
   Widget build(BuildContext context) {
     final model = ref.watch(getPollsProvider);
     final stakeHelper = ref.watch(stakeHelperProvider);
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          SizedBox(height: 8.h),
-          Align(
+    return Column(
+      children: [
+        SizedBox(height: 8.h),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Align(
             alignment: Alignment.topLeft,
             child: InkWell(
               onTap: () {
@@ -69,88 +68,105 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
               ),
             ),
           ),
-          SizedBox(height: 8.h),
-          Text(
-            'Stake',
-            style: GoogleFonts.notoSans(
-                fontSize: 16.sp, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 10.h),
-          model.when(
-              data: (data) {
-                return CarouselSlider.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index, innerIndex) {
-                    final stake = data[index];
-                    return Column(
-                      children: [
-                        Text(
-                          "${stake.video!.title} Video",
-                          style: GoogleFonts.notoSans(fontSize: 14.sp),
-                        ),
-                        SizedBox(height: 10.h),
-                        FeedsAttachmentWidget(file: stake.video!.videoUrl!),
-                        SizedBox(height: 10.h),
-                        buildPositionTile(ref, context,
-                            videoIndex: index,
-                            position: StakePosition.first,
-                            title: "FIRST",
-                            id: stake.video!.id!),
-                        buildPositionTile(ref, context,
-                            videoIndex: index,
-                            position: StakePosition.second,
-                            title: "SECOND",
-                            id: stake.video!.id!),
-                        buildPositionTile(ref, context,
-                            videoIndex: index,
-                            position: StakePosition.third,
-                            title: "THIRD",
-                            id: stake.video!.id!),
-                        SizedBox(height: 8.h),
-                        const StakeIndicatorWidget(),
-                      ],
-                    );
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          'Stake',
+          style: GoogleFonts.notoSans(
+              fontSize: 16.sp, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 10.h),
+        model.when(
+            data: (data) {
+              return CarouselSlider.builder(
+                itemCount: 3,
+                itemBuilder: (context, index, innerIndex) {
+                  final stake = data[index];
+                  return Column(
+                    children: [
+                      Text(
+                        "${stake.video!.title} Video",
+                        style: GoogleFonts.lato(fontSize: 14.sp),
+                      ),
+                      SizedBox(height: 10.h),
+                      FeedsAttachmentWidget(file: stake.video!.videoUrl!),
+                      SizedBox(height: 10.h),
+                      buildPositionTile(ref, context,
+                          videoIndex: index,
+                          position: StakePosition.first,
+                          title: "FIRST",
+                          id: stake.video!.id!),
+                      buildPositionTile(ref, context,
+                          videoIndex: index,
+                          position: StakePosition.second,
+                          title: "SECOND",
+                          id: stake.video!.id!),
+                      buildPositionTile(ref, context,
+                          videoIndex: index,
+                          position: StakePosition.third,
+                          title: "THIRD",
+                          id: stake.video!.id!),
+                      SizedBox(height: 8.h),
+                      const StakeIndicatorWidget(),
+                    ],
+                  );
+                },
+                options: CarouselOptions(
+                  enableInfiniteScroll: false,
+                  height: 370.h,
+                  viewportFraction: 1,
+                  onPageChanged: (index, reason) {
+                    ref.watch(inidcatorProvider.notifier).state = index;
+                    _updateTextFieldValue(index);
+                    setState(() {
+                      _isLastItem = index == 2;
+                    });
                   },
-                  options: CarouselOptions(
-                    enableInfiniteScroll: false,
-                    height: 370.h,
-                    viewportFraction: 1,
-                    onPageChanged: (index, reason) {
-                      ref.watch(inidcatorProvider.notifier).state = index;
-                      _updateTextFieldValue(index);
-                      setState(() {
-                        _isLastItem = index == 2;
-                      });
-                    },
-                  ),
-                );
-              },
-              error: (error, stackTrace) {
-                return Text(
-                  error.toString(),
-                  style: GoogleFonts.lato(),
-                );
-              },
-              loading: () => Container()),
-          if (_isLastItem)
-            Column(
+                ),
+              );
+            },
+            error: (error, stackTrace) {
+              return Text(
+                error.toString(),
+                style: GoogleFonts.lato(),
+              );
+            },
+            loading: () => Container()),
+        if (_isLastItem)
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 23.w),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 8.h),
-                const Text(' Stake Amount'),
-                AppTextField(
-                  controller: _stakeAmountController,
-                  readOnly: true,
-                  // onchaged: (value) => _updateStakeAmount(index, value!),
-                  labelText: '',
-                  errorText: '',
-                  hintText: '200 naira',
+                Text(
+                  'Stake Amount',
+                  style: GoogleFonts.lato(),
                 ),
                 SizedBox(height: 8.h),
-                const Text('Balance: 2000'),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  width: double.infinity,
+                  height: 30.h,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey.shade300),
+                  child: Center(
+                    child: Text(
+                      "200 Naira",
+                      style: GoogleFonts.lato(),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  'Balance: 2000',
+                  style: GoogleFonts.lato(),
+                ),
                 SizedBox(height: 8.h),
                 AppPrimaryButton(
+                  height: 40.h,
                   isLoading: ref.watch(likeDeleteVideoProvider).isLoading,
                   onPressed: () {
                     final videosList =
@@ -169,12 +185,12 @@ class _StakeWidgetState extends ConsumerState<StakeWidget> {
                 ),
               ],
             ),
-          Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
           ),
-        ],
-      ),
+        Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        ),
+      ],
     );
   }
 }

@@ -65,6 +65,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
   @override
   Widget build(BuildContext context) {
     final curent = ref.watch(inidcatorProvider);
+    final token = TokenStorage();
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: ListView(
@@ -98,6 +99,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                           child: AppPrimaryButton(
                               onPressed: () {
                                 context.go(AppRoutes.register);
+                                token.saveUserOnboarded(true);
                               },
                               putIcon: false,
                               height: 30.h,
@@ -170,6 +172,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                         curve: Curves.linear,
                       );
                     } else {
+                      token.saveUserOnboarded(true);
                       context.go(AppRoutes.register);
                     }
                   },
@@ -181,6 +184,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                   title: curent == 2 ? 'Proceed' : 'next'),
             ],
           ),
+          SizedBox(height: 10.h,),
         ],
       ),
     );

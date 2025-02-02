@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FeedsVideoPreview extends StatefulWidget {
   final String file;
+  final double? width;
+  final double? height;
 
-  const FeedsVideoPreview({super.key, required this.file});
+  const FeedsVideoPreview({super.key, required this.file, this.width, this.height});
 
   @override
   State<FeedsVideoPreview> createState() => _FeedsVideoPreviewState();
@@ -17,7 +19,7 @@ class _FeedsVideoPreviewState extends State<FeedsVideoPreview> {
 
   void _initializeVideoPlayer() {
     VideoPlayerController videoplayerController =
-        VideoPlayerController.contentUri(Uri.parse(widget.file))
+        VideoPlayerController.networkUrl(Uri.parse(widget.file))
           ..initialize().then((_) {
             setState(() {
               _isVideoInitialized = true;
@@ -47,24 +49,33 @@ class _FeedsVideoPreviewState extends State<FeedsVideoPreview> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(25),
+        // color: Colors.grey.shade100,
       ),
-      width: double.infinity,
+      width: widget.width ?? double.infinity,
+      height: widget.height,
       child: Stack(
         alignment: Alignment.center,
         children: [
           // Video Player
           if (_isVideoInitialized)
-            CustomVideoPlayer(
-              customVideoPlayerController: _customVideoPlayerController,
+            SizedBox(
+              width: double.infinity,
+              height: 200.h,
+              child: CustomVideoPlayer(
+                customVideoPlayerController: _customVideoPlayerController,
+              ),
             ),
           // Loading Indicator
           if (!_isVideoInitialized)
             Container(
-              color: Colors.grey.shade200,
-              width: double.infinity,
-              height: 150.h,
+
+              width:  double.infinity,
+              height: 200.h,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+
+              ),
               child: Center(
                 child: SizedBox(
                   height: 30.h,

@@ -76,7 +76,7 @@ class NetworkService {
         case DioExceptionType.cancel:
           return RequestCancelledException('Request was cancelled');
         default:
-          return NetworkException('Network error occurred');
+          return error;
       }
     }
     return UnknownException('An unknown error occurred');
@@ -208,9 +208,17 @@ class RequestCancelledException implements Exception {
 class NetworkException implements Exception {
   final String message;
   NetworkException(this.message);
+@override
+  String toString() {
+    return message;
+  }
 }
 
 class UnknownException implements Exception {
   final String message;
   UnknownException(this.message);
+  @override
+  String toString() {
+    return message;
+  }
 }

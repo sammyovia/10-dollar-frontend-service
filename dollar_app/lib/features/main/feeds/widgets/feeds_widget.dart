@@ -1,7 +1,9 @@
 import 'package:dollar_app/features/main/feeds/providers/get_feeds_provider.dart';
 import 'package:dollar_app/features/main/feeds/providers/like_count_provider.dart';
+import 'package:dollar_app/features/main/feeds/view/delete_post.dart';
 import 'package:dollar_app/features/main/feeds/widgets/comment_box.dart';
 import 'package:dollar_app/features/main/feeds/widgets/feeds_attachment_widget.dart';
+import 'package:dollar_app/features/main/profile/providers/get_profile_provider.dart';
 import 'package:dollar_app/features/shared/widgets/app_bottom_sheet.dart';
 import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +11,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconly/iconly.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedsWidget extends ConsumerStatefulWidget {
-  const FeedsWidget({
-    super.key,
-  });
+  const FeedsWidget({super.key, this.physics});
+  final ScrollPhysics? physics;
 
   @override
   ConsumerState<FeedsWidget> createState() => _FeedsWidgetState();
@@ -51,6 +51,8 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
   @override
   Widget build(BuildContext context) {
     final model = ref.watch(getFeedsProvider);
+    final userRole = ref.watch(getProfileProvider).value?.role ?? "";
+    final userId = ref.watch(getProfileProvider).value?.id ?? "";
     return model.when(
       data: (data) {
         return data.isEmpty
@@ -58,7 +60,7 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                 child: Text('No Feeds to display'),
               )
             : ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
+                physics: widget.physics ?? const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 itemCount: data.length,
                 shrinkWrap: true,
@@ -67,13 +69,19 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                   final isLiked = likedFeeds[feed.id] ?? false;
 
                   return Container(
-                    margin: EdgeInsets.only(bottom: 20.0.h),
+                    margin: EdgeInsets.only(bottom: 5.0.h),
+                    padding:
+                        EdgeInsets.only(top: 20.h),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                      color: Theme.of(context).cardColor,
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 23.0),
+                          padding:  EdgeInsets.symmetric(horizontal: 10.w),
                           child: Row(
                             children: [
                               CircleAvatar(
@@ -89,7 +97,8 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                 children: [
                                   Text(
                                     '${feed.user.firstName ?? 'new'} ${feed.user.lastName ?? 'user'}',
-                                    style: GoogleFonts.lato(fontSize: 12.sp),
+                                    style: GoogleFonts.lato(fontSize: 12.sp,
+                                    ),
                                   ),
                                   Text(
                                     feed.user.role,
@@ -104,6 +113,7 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                           height: 10.h,
                         ),
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () {
                             context.go('/feeds/feedDetails/${feed.id}');
                           },
@@ -117,7 +127,8 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                       horizontal: 23.0),
                                   child: Text(
                                     feed.content,
-                                    style: GoogleFonts.lato(fontSize: 10.sp),
+                                    style: GoogleFonts.lato(fontSize: 14.sp,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
@@ -125,16 +136,15 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                 ),
                                 if (feed.attachment != null &&
                                     feed.attachment!.isNotEmpty)
-                                  FeedsAttachmentWidget(file: feed.attachment!),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
+                                  FeedsAttachmentWidget(file: feed.attachment!,
+                                 ),
+
                               ],
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 23.0),
+                          padding:  EdgeInsets.symmetric(horizontal: 23.0,vertical: 10.h),
                           child: Row(
                             children: [
                               GestureDetector(
@@ -147,8 +157,9 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                       ));
                                 },
                                 child: Icon(
-                                  IconlyBold.chat,
+                                  Icons.comment_rounded,
                                   color: Theme.of(context).colorScheme.primary,
+                                  size: 17.r,
                                 ),
                               ),
                               SizedBox(
@@ -168,14 +179,14 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                   _toggleLike(feed.id, feed.likeCount);
                                   ref
                                       .read(likeCountProvider.notifier)
-                                      .likeComment(feed.id);
+                                      .likePost(feed.id);
                                 },
                                 child: Icon(
                                   Icons.favorite,
                                   color: isLiked
                                       ? Colors.red
                                       : Colors.grey.shade200,
-                                  size: 20.r,
+                                  size: 17.r,
                                 ),
                               ),
                               SizedBox(
@@ -190,11 +201,17 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                 ),
                               ),
                               const Spacer(),
-                              Icon(
-                                Icons.share,
-                                size: 20.r,
-                                color: Theme.of(context).primaryColor,
-                              )
+                              if (userRole == "ADMIN" || userId == feed.user.id)
+                                IconButton(
+                                    onPressed: () {
+                                      AppBottomSheet.showBottomSheet(context,
+                                          child: DeletePostWidget(post: feed));
+                                    },
+                                    icon: Icon(
+                                      Icons.delete,
+                                      size: 17.r,
+                                      color: Theme.of(context).primaryColor,
+                                    ))
                             ],
                           ),
                         )

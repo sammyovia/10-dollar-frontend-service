@@ -42,6 +42,8 @@ class _FeedsViewState extends ConsumerState<VideosView> {
                     HomeArtistWidget(
                       showDelete: true,
                       showShare: false,
+                      showStake: false,
+                      showLike: false,
                     ),
                   ],
                 ),

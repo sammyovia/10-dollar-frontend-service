@@ -25,6 +25,8 @@ class FeedModelData {
     required this.likeCount,
     required this.commentCount,
     required this.user,
+    required this.pin,
+    required this.createdAt
   });
   late final String id;
   late final String title;
@@ -33,6 +35,8 @@ class FeedModelData {
   late final int likeCount;
   late final int commentCount;
   late final User user;
+  late final bool pin;
+  late final String? createdAt;
 
   FeedModelData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -42,6 +46,8 @@ class FeedModelData {
     likeCount = json['likeCount'];
     commentCount = json['commentCount'];
     user = User.fromJson(json['user']);
+    pin = json['pin'];
+    createdAt = json['createdAt'];
   }
 }
 

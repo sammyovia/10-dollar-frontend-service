@@ -13,19 +13,19 @@ class _CustomRadioButtonState extends State<CustomRadioButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 20.w,
-      height: 20.h,
+      width: 14.w,
+      height: 14.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: Colors.black,
+          color: Colors.grey,
           width: 2,
         ),
       ),
       child: Center(
         child: Container(
-          width: 13.w,
-          height: 13.h,
+          width: 7.w,
+          height: 7.h,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: widget.activeColor,

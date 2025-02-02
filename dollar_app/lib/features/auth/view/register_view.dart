@@ -99,15 +99,14 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                 fit: BoxFit.fill,
                 opacity: 0.1)),
         child: ListView(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.start,
+  
           children: [
             SizedBox(
               height: 30.h,
             ),
             Text(
               "Sign up",
-              style: GoogleFonts.notoSans(
+              style: GoogleFonts.aBeeZee(
                   //color: Colors.white,
                   fontSize: 35.sp,
                   fontWeight: FontWeight.w700),
@@ -138,7 +137,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         width: 300.w,
                         child: Text(
                           "It seems you dont't have an account, lets create one.",
-                          style: GoogleFonts.redHatDisplay(
+                          style: GoogleFonts.lato(
                               fontSize: 14.sp, fontWeight: FontWeight.w400),
                         ),
                       ),
@@ -152,11 +151,11 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         },
                         labelText: 'email',
                         errorText: emailErrorText,
-                        hintText: 'sammy@gmail.com',
+                        hintText: 'enter your email',
                         icon: IconlyBold.message,
                       ),
                       SizedBox(
-                        height: 16.h,
+                        height: 8.h,
                       ),
                       AppTextField(
                         onchaged: (v) {
@@ -179,11 +178,13 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             showPassword
                                 ? Icons.visibility
                                 : Icons.visibility_off,
+                            size: 17.r,
+                            color: Theme.of(context).dividerColor,
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 16.h,
+                        height: 8.h,
                       ),
                       AppTextField(
                         onchaged: (v) {
@@ -205,6 +206,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             showConfirmPassword
                                 ? Icons.visibility
                                 : Icons.visibility_off,
+                                color: Theme.of(context).dividerColor,
                           ),
                         ),
                       ),
@@ -212,6 +214,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         height: 20.h,
                       ),
                       AppPrimaryButton(
+                        putIcon: false,
+                        height: 35.h,
                         enabled: validated,
                         isLoading: ref.watch(registerProvider).isLoading,
                         onPressed: () {
@@ -229,6 +233,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         color: Theme.of(context).dividerColor,
                       ),
                       AppPrimaryButton(
+                        height: 35.h,
                         enabled: true,
                         isLoading: ref.watch(googleSinginProvider).isLoading,
                         onPressed: () => ref
