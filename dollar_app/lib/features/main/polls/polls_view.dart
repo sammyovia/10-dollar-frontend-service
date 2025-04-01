@@ -1,4 +1,6 @@
 import 'package:dollar_app/features/main/polls/provider/get_polls_provider.dart';
+import 'package:dollar_app/features/main/polls/provider/weekly_winnings_provider.dart';
+import 'package:dollar_app/features/main/polls/widgets/weekly_winnings_widget.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
 import 'package:dollar_app/features/main/polls/widgets/polls_view_widgets.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,7 @@ class _PollsViewState extends ConsumerState<PollsView> {
           child: RefreshIndicator(
         onRefresh: () async {
           ref.refresh(getPollsProvider.notifier).displayPolls(context);
+          ref.refresh(weeklyWinningsProder.notifier).displayWinngs(context);
         },
         child: SingleChildScrollView(
           child: Column(
@@ -46,6 +49,7 @@ class _PollsViewState extends ConsumerState<PollsView> {
               Divider(
                 color: Theme.of(context).dividerColor,
               ),
+              const WeeklyWinngsWidget(),
               Padding(
                 padding:  EdgeInsets.symmetric(horizontal: 15.w),
                 child: const PollsViewWidgets(),
@@ -57,3 +61,5 @@ class _PollsViewState extends ConsumerState<PollsView> {
     );
   }
 }
+
+
