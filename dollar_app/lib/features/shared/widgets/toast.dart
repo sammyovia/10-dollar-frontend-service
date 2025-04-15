@@ -44,7 +44,7 @@ class Toast {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0XFF2DCB30).withOpacity(0.3),
+                    color: const Color(0XFF2DCB30).withValues(alpha:  0.3),
                     spreadRadius: 2,
                     blurRadius: 8,
                     offset: const Offset(0, 3), // changes position of shadow
@@ -115,7 +115,7 @@ class Toast {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0XFFDC2B2B).withOpacity(0.3),
+                    color: const Color(0XFFDC2B2B).withValues(alpha:  0.3),
                     spreadRadius: 2,
                     blurRadius: 8,
                     offset: const Offset(0, 3), // changes position of shadow

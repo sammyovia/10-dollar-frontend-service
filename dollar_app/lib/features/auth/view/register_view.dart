@@ -121,7 +121,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
                   width: 450.w,
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.all(
                       Radius.circular(25.r),
                     ),

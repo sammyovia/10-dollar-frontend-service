@@ -71,7 +71,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     width: 450.w,
                     //height: 450.h,
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.grey.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.all(
                         Radius.circular(25.r),
                       ),

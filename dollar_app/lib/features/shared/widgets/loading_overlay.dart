@@ -21,7 +21,7 @@ class LoadingOverlay extends StatelessWidget {
         child,
         if (isLoading)
           Container(
-            color: color.withOpacity(opacity),
+            color: color.withValues(alpha: opacity),
             child: const Center(
               child: CircularProgressIndicator(),
             ),
