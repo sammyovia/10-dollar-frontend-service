@@ -23,7 +23,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: const CustomAppBar(
         showProfile: true,
         showSearch: true,
@@ -39,7 +38,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
           ref.read(getAdminFeeds.notifier).displayFeeds();
         },
         child: SingleChildScrollView(
-          
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
@@ -73,7 +71,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
               ),
               if (isBannerVisible)
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 15.w),
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
                   child: PinnedInfoWidget(
                     onClose: () {
                       setState(() {
@@ -82,9 +80,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     },
                   ),
                 ),
-              isBannerVisible? SizedBox(height: 10.h,): const SizedBox.shrink(),
+              isBannerVisible
+                  ? SizedBox(
+                      height: 10.h,
+                    )
+                  : const SizedBox.shrink(),
               Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 15.w),
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
                 child: const HomeVideoProviderWidget(
                   canStake: true,
                   showShare: false,

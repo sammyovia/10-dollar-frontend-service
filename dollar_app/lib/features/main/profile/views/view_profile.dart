@@ -46,7 +46,7 @@ class _ViewProfileState extends ConsumerState<ViewProfile> {
                   height: 100.h,
                   decoration: BoxDecoration(
                       image: widget.userData.avatar != null ? DecorationImage(
-                          image: NetworkImage(widget.userData.avatar),
+                          image: NetworkImage(widget.userData.avatar!),
                           fit: BoxFit.cover): null,
                       border: Border.all(
                           color: Theme.of(context).dividerColor),

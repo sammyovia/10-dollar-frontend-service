@@ -54,7 +54,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                           radius: 29.r,
                           backgroundColor: Colors.grey,
                           backgroundImage: user?.avatar != null
-                              ? NetworkImage(user?.avatar)
+                              ? NetworkImage(user!.avatar!)
                               : null,
                         ),
                         SizedBox(

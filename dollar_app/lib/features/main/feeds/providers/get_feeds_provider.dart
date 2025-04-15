@@ -6,11 +6,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GetFeedsProvider extends AsyncNotifier<List<FeedModelData>> {
   Future<List<FeedModelData>> getFeeds() async {
-    state = const AsyncLoading();
-    final response = await ref.read(networkProvider).getRequest(path: '/posts');
-    final feeds = FeedsModel.fromJson(response).feedModelData;
+    try {
+      state = const AsyncLoading();
+      final response =
+          await ref.read(networkProvider).getRequest(path: '/posts');
+      final feeds = FeedsModel.fromJson(response).feedModelData;
 
-    return feeds;
+      return feeds;
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+      return [];
+    }
   }
 
   Future<void> displayFeeds() async {

@@ -32,7 +32,7 @@ class ProfileData {
   bool? phoneVerified;
   String? status;
   String? chatStatus;
-  dynamic avatar;
+  String? avatar;
   dynamic gender;
   dynamic googleId;
   dynamic phoneNumber;

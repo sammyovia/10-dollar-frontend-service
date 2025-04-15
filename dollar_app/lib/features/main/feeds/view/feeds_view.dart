@@ -1,7 +1,9 @@
 import 'package:dollar_app/features/main/admin/posts/profider/admin_post_provider.dart';
 import 'package:dollar_app/features/main/feeds/providers/get_feeds_provider.dart';
 import 'package:dollar_app/features/main/feeds/widgets/feeds_widget.dart';
+import 'package:dollar_app/features/shared/widgets/app_primary_button.dart';
 import 'package:dollar_app/features/shared/widgets/custom_app_bar.dart';
+import 'package:dollar_app/features/shared/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,117 +25,151 @@ class _FeedsViewState extends ConsumerState<FeedsView> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final image = ref.watch(getProfileProvider).value?.avatar;
-    return Scaffold(
-      appBar: CustomAppBar(
-        showProfile: true,
-        showSearch: true,
-        showLeading: true,
-        height: 70.h,
-        centerTitle: false,
-      ),
-      body: SafeArea(
-          child: RefreshIndicator(
-        onRefresh: () async {
-          await ref.refresh(getFeedsProvider.notifier).getFeeds();
-          await ref.refresh(getProfileProvider.notifier).getProfile();
-          await ref.refresh(getAdminFeeds.notifier).getFeeds();
-        },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 10.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Text(
-                  "Feed",
-                  style: GoogleFonts.lato(fontSize: 16.sp),
-                ),
-              ),
-              Divider(
-                color: Theme.of(context).dividerColor,
-                //thickness: 2,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: Column(
-                  children: [
-                    Row(
+    final profileProvider = ref.watch(getProfileProvider);
+
+    return profileProvider.when(
+      data: (data) {
+        final image = data?.avatar;
+        return Scaffold(
+          appBar: CustomAppBar(
+            showProfile: true,
+            showSearch: true,
+            showLeading: true,
+            height: 70.h,
+            centerTitle: false,
+          ),
+          body: SafeArea(
+              child: RefreshIndicator(
+            onRefresh: () async {
+              await ref.refresh(getFeedsProvider.notifier).getFeeds();
+              await ref.refresh(getProfileProvider.notifier).getProfile();
+              await ref.refresh(getAdminFeeds.notifier).getFeeds();
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
+                    child: Text(
+                      "Feed",
+                      style: GoogleFonts.lato(fontSize: 16.sp),
+                    ),
+                  ),
+                  Divider(
+                    color: Theme.of(context).dividerColor,
+                    //thickness: 2,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.w),
+                    child: Column(
                       children: [
-                        CircleAvatar(
-                            backgroundColor: Colors.grey.shade300,
-                            backgroundImage:
-                                image != null ? NetworkImage(image) : null),
+                        Row(
+                          children: [
+                            CircleAvatar(
+                                backgroundColor: Colors.grey.shade300,
+                                backgroundImage:
+                                    image != null ? NetworkImage(image) : null),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                context.go('/feeds/new');
+                              },
+                              child: SizedBox(
+                                  width: 260.w,
+                                  child: TextField(
+                                    enabled: false,
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                        isDense: true,
+                                        fillColor: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                        filled: true,
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: isDark
+                                                    ? const Color(0xFFB2DFDF)
+                                                    : const Color(0xFF5AA3A3)),
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: isDark
+                                                    ? const Color(0xFFB2DFDF)
+                                                    : const Color(0xFF5AA3A3)),
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: isDark
+                                                    ? const Color(0xFFB2DFDF)
+                                                    : const Color(0xFF5AA3A3)),
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        hintText: "What's Popping?"),
+                                  )),
+                            ),
+                          ],
+                        ),
                         SizedBox(
-                          width: 10.w,
+                          height: 15.h,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            context.go('/feeds/new');
-                          },
-                          child: SizedBox(
-                              width: 260.w,
-                              child: TextField(
-                                enabled: false,
-                                readOnly: true,
-                                decoration: InputDecoration(
-                                    isDense: true,
-                                    fillColor: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                    filled: true,
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: isDark
-                                                ? const Color(0xFFB2DFDF)
-                                                : const Color(0xFF5AA3A3)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: isDark
-                                                ? const Color(0xFFB2DFDF)
-                                                : const Color(0xFF5AA3A3)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: isDark
-                                                ? const Color(0xFFB2DFDF)
-                                                : const Color(0xFF5AA3A3)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    hintText: "What's Popping?"),
-                              )),
+                        if (isBannerVisible)
+                          PinnedInfoWidget(
+                            onClose: () {
+                              setState(() {
+                                isBannerVisible = false;
+                              });
+                            },
+                          ),
+                        SizedBox(
+                          height: 5.h,
                         ),
+                        const FeedsWidget()
                       ],
                     ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    if (isBannerVisible)
-                      PinnedInfoWidget(
-                        onClose: () {
-                          setState(() {
-                            isBannerVisible = false;
-                          });
-                        },
-                      ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    const FeedsWidget()
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      )),
+            ),
+          )),
+        );
+      },
+      error: (error, stackTrace) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text("There was a problem loading feeds"),
+            SizedBox(
+              height: 10.h,
+            ),
+            AppPrimaryButton(
+              fontSize: 16.sp,
+              width: 150.w,
+              height: 30.h,
+              putIcon: false,
+              enabled: true,
+              title: "Retry",
+              onPressed: () {
+                ref.read(getFeedsProvider.notifier).getFeeds();
+                ref.read(getProfileProvider.notifier).getProfile();
+                ref.read(getAdminFeeds.notifier).getFeeds();
+              },
+            )
+          ],
+        );
+      },
+      loading: () => const ShimmerWidget(
+        layoutType: LayoutType.howVideo,
+      ),
     );
   }
 }

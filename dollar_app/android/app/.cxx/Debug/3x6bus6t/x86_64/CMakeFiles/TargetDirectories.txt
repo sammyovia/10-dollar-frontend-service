@@ -1,0 +1,2 @@
+C:/Users/frank/Documents/GitHub/10-dollar-frontend-service/dollar_app/android/app/.cxx/Debug/3x6bus6t/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/frank/Documents/GitHub/10-dollar-frontend-service/dollar_app/android/app/.cxx/Debug/3x6bus6t/x86_64/CMakeFiles/rebuild_cache.dir

@@ -15,7 +15,8 @@ class AppPrimaryButton extends StatelessWidget {
       this.height,
       this.isLoading = false,
       this.enabled = false,
-      this.radius = 15});
+      this.radius = 15,
+      this.fontSize});
   final String title;
   final bool putIcon;
   final Color? color;
@@ -25,6 +26,7 @@ class AppPrimaryButton extends StatelessWidget {
   final bool isLoading;
   final bool enabled;
   final double radius;
+  final double? fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class AppPrimaryButton extends StatelessWidget {
             children: [
               Text(
                 isLoading ? "" : title,
-                style: GoogleFonts.lato(color: Colors.white),
+                style: GoogleFonts.lato(color: Colors.white, fontSize: fontSize),
               ),
               SizedBox(
                 width: 8.w,

@@ -46,159 +46,170 @@ class _HomeArtistWidgetState extends ConsumerState<PollsViewWidgets> {
       data: (data) {
         return data.isEmpty
             ? Center(
-          child: Text(
-            "No data to display",
-            style: GoogleFonts.lato(fontSize: 14.sp),
-          ),
-        )
+                child: Text(
+                  "No data to display",
+                  style: GoogleFonts.lato(fontSize: 14.sp),
+                ),
+              )
             : ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          itemCount: data.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final artist = data[index].video;
-            final isStaked = stakedVideos.containsKey(artist!.id!);
-            final position = stakedVideos[artist.id!];
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                itemCount: data.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final artist = data[index].video;
+                  final isStaked = stakedVideos.containsKey(artist!.id!);
+                  final position = stakedVideos[artist.id!];
 
-            // Observe if the video is voted
-            final isVoted = votedVideos.contains(artist.id!);
+                  // Observe if the video is voted
+                  final isVoted = votedVideos.contains(artist.id!);
 
-            return Container(
-              margin: EdgeInsets.only(bottom: 5.h),
-                padding:
-            EdgeInsets.only(top: 20.h),
-            decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Theme.of(context).cardColor,
-            ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: 20.w),
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 5.h),
+                    padding: EdgeInsets.only(top: 20.h),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Theme.of(context).cardColor,
+                    ),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.grey.shade300,
-                              backgroundImage: artist.artist?.avatar != null
-                                  ? NetworkImage(artist.artist?.avatar)
-                                  : null,
-                            ),
-                            SizedBox(width: 8.w),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${artist.artist?.firstName} ${artist.artist?.lastName}",
-                                  style: GoogleFonts.lato(fontSize: 12.sp),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.grey.shade300,
+                                    backgroundImage: artist.artist?.avatar !=
+                                            null
+                                        ? NetworkImage(artist.artist?.avatar)
+                                        : null,
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${artist.artist?.firstName} ${artist.artist?.lastName}",
+                                        style:
+                                            GoogleFonts.lato(fontSize: 12.sp),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Text(
+                                artist.title ?? '',
+                                style: GoogleFonts.lato(fontSize: 10.sp),
+                              ),
+                              SizedBox(
+                                height: 8.h,
+                              ),
+                            ],
+                          ),
+                        ),
+                        FeedsAttachmentWidget(file: artist.videoUrl!),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 23.w, vertical: 10.h),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  diolagMethod(
+                                    context,
+                                    child: VotePopupWidget(
+                                      postId: artist.id!,
+                                      userId: artist.artist!.id!,
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20.w, vertical: 5.h),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: isVoted
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.grey),
+                                  child: Text(
+                                    isVoted ? 'Unvote' : 'Vote',
+                                    style: GoogleFonts.lato(
+                                        fontSize: 10.sp, color: Colors.white),
+                                  ),
                                 ),
-                              ],
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          artist.title ?? '',
-                          style: GoogleFonts.lato(fontSize: 10.sp),
-                        ),
-                        SizedBox(
-                          height: 8.h,
-                        ),
+                              ),
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  showStakeBottomSheet(context, artist.id!);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20.w, vertical: 5.h),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: isStaked
+                                        ? Colors.green
+                                        : Colors.green.shade300,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      isStaked ? 'Staked ($position)' : 'Stake',
+                                      style: GoogleFonts.lato(
+                                          fontSize: 10.sp, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 3.w,
+                              ),
+                              if (artist.stakeCount! > 0)
+                                Text(
+                                  artist.stakeCount.toString(),
+                                  style: GoogleFonts.lato(
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  ),
-                  FeedsAttachmentWidget(file: artist.videoUrl!),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 23.w, vertical: 10.h),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            diolagMethod(
-                              context,
-                              child: VotePopupWidget(
-                                postId: artist.id!,
-                                userId: artist.artist!.id!,
-                              ),
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20.w, vertical: 5.h),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: isVoted
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.grey),
-                            child: Text(
-                              isVoted ? 'Unvote' : 'Vote',
-                              style: GoogleFonts.lato(
-                                  fontSize: 10.sp, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            showStakeBottomSheet(context, artist.id!);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20.w, vertical: 5.h),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: isStaked
-                                  ? Colors.green
-                                  : Colors.green.shade300,
-                            ),
-                            child: Center(
-                              child: Text(
-                                isStaked ? 'Staked ($position)' : 'Stake',
-                                style: GoogleFonts.lato(
-                                    fontSize: 10.sp, color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 3.w,
-                        ),
-                        if (artist.stakeCount! > 0)
-                          Text(
-                            artist.stakeCount.toString(),
-                            style: GoogleFonts.lato(
-                              fontSize: 12.sp,
-                            ),
-                          ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            );
-          },
-        );
+                  );
+                },
+              );
       },
       error: (e, s) {
         return Center(
-            child: Text(
-              e.toString(),
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "There was an issue getting polls, please check your internet",
               style: GoogleFonts.lato(),
-            ));
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+          ],
+        ));
       },
       loading: () => const ShimmerWidget(
         layoutType: LayoutType.howVideo,

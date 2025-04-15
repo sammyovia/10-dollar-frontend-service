@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:dollar_app/features/main/profile/model/profile_model.dart';
 import 'package:dollar_app/services/network/network_repository.dart';
@@ -8,19 +7,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GetProfileProvider extends AsyncNotifier<ProfileData?> {
   Future<ProfileData?> getProfile() async {
-    state = const AsyncLoading();
-    final token = TokenStorage();
-    final response =
-        await ref.read(networkProvider).getRequest(path: '/auth/profile');
-    final profile = ProfileModel.fromJson(response).data;
+    try {
+      state = const AsyncLoading();
+      final token = TokenStorage();
+      final response =
+          await ref.read(networkProvider).getRequest(path: '/auth/profile');
+      final profile = ProfileModel.fromJson(response).data;
 
-    token.saveUserId(profile!.id!);
+      token.saveUserId(profile!.id!);
 
-    state = AsyncData(profile);
+      state = AsyncData(profile);
 
-    log("userId from profile: ${profile.id} ");
-
-    return profile;
+      return profile;
+    } catch (e) {
+      state = AsyncValue.error(e.toString(), StackTrace.current);
+      return null;
+    }
   }
 
   @override

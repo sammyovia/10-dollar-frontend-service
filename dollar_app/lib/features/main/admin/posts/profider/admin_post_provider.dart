@@ -7,14 +7,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AdminPostProvider extends AsyncNotifier<List<FeedModelData>> {
   Future<List<FeedModelData>> getFeeds() async {
-    state = const AsyncLoading();
-    final response = await ref.read(networkProvider).getRequest(path: '/posts');
-    final feeds = FeedsModel.fromJson(response).feedModelData;
-    final adminFeeds =
-        feeds.where((feed) => feed.user.role == "ADMIN").toList();
-    log(adminFeeds.toString());
+    try {
+      state = const AsyncLoading();
+      final response =
+          await ref.read(networkProvider).getRequest(path: '/posts');
+      final feeds = FeedsModel.fromJson(response).feedModelData;
+      final adminFeeds =
+          feeds.where((feed) => feed.user.role == "ADMIN").toList();
+      log(adminFeeds.toString());
 
-    return adminFeeds;
+      return adminFeeds;
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+      return [];
+    }
   }
 
   Future<void> displayFeeds() async {

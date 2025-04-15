@@ -70,10 +70,9 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
 
                   return Container(
                     margin: EdgeInsets.only(bottom: 5.0.h),
-                    padding:
-                        EdgeInsets.only(top: 20.h),
+                    padding: EdgeInsets.only(top: 20.h),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(15),
                       color: Theme.of(context).cardColor,
                     ),
                     child: Column(
@@ -81,7 +80,7 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 10.w),
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
                           child: Row(
                             children: [
                               CircleAvatar(
@@ -97,7 +96,8 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                 children: [
                                   Text(
                                     '${feed.user.firstName ?? 'new'} ${feed.user.lastName ?? 'user'}',
-                                    style: GoogleFonts.lato(fontSize: 12.sp,
+                                    style: GoogleFonts.lato(
+                                      fontSize: 12.sp,
                                     ),
                                   ),
                                   Text(
@@ -127,7 +127,8 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                       horizontal: 23.0),
                                   child: Text(
                                     feed.content,
-                                    style: GoogleFonts.lato(fontSize: 14.sp,
+                                    style: GoogleFonts.lato(
+                                      fontSize: 14.sp,
                                     ),
                                   ),
                                 ),
@@ -136,15 +137,16 @@ class _FeedsWidgetState extends ConsumerState<FeedsWidget> {
                                 ),
                                 if (feed.attachment != null &&
                                     feed.attachment!.isNotEmpty)
-                                  FeedsAttachmentWidget(file: feed.attachment!,
-                                 ),
-
+                                  FeedsAttachmentWidget(
+                                    file: feed.attachment!,
+                                  ),
                               ],
                             ),
                           ),
                         ),
                         Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 23.0,vertical: 10.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 23.0, vertical: 10.h),
                           child: Row(
                             children: [
                               GestureDetector(
