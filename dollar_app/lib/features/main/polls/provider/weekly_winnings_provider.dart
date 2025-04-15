@@ -43,9 +43,13 @@ class SetWinningsProvider extends AsyncNotifier<Map<String, dynamic>> {
           path: '/tickets/winning-percentage',
           body: {"percentage": percentage});
       if (context.mounted) {
-        Toast.showSuccessToast(context, "Successful");
+        if (response['status'] == true) {
+          Toast.showSuccessToast(context, "Successful");
+          ref.read(weeklyWinningsProder.notifier).displayWinngs(context);
+        }
       }
       log(response.toString());
+
       state = AsyncData(response);
     } catch (e) {
       if (context.mounted) {
@@ -64,6 +68,6 @@ class SetWinningsProvider extends AsyncNotifier<Map<String, dynamic>> {
 final weeklyWinningsProder =
     AsyncNotifierProvider<WeeklyWinningsProder, Map<String, dynamic>>(
         WeeklyWinningsProder.new);
-        final setWinningsProvider =
+final setWinningsProvider =
     AsyncNotifierProvider<SetWinningsProvider, Map<String, dynamic>>(
         SetWinningsProvider.new);

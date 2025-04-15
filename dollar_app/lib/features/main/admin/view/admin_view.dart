@@ -161,9 +161,9 @@ class _SetWinningsViewState extends ConsumerState<SetWinningsView> {
                 },
                 keybordType:
                     const TextInputType.numberWithOptions(decimal: true),
-                labelText: "Enter Amount",
+                labelText: "Enter Percentage (between 0 and 1)",
                 errorText: "",
-                hintText: "NGN 10,0000"),
+                hintText: "0.7"),
             SizedBox(
               height: 20.h,
             ),
@@ -173,8 +173,9 @@ class _SetWinningsViewState extends ConsumerState<SetWinningsView> {
               putIcon: false,
               enabled: isValid,
               height: 40.h,
-              title: "Post Winnings",
+              title: "Post Percentage",
               onPressed: () {
+
                 if (isValid) {
                   ref.read(setWinningsProvider.notifier).setWinning(
                       context: context,
