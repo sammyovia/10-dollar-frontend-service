@@ -12,6 +12,12 @@ subprojects {
 subprojects {
     project.evaluationDependsOn(":app")
 }
+subprojects {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs.removeAll { it == '-Werror' }
+    }
+}
+
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
