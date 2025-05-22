@@ -1,1 +1,0 @@
-C:\Users\frank\Documents\GitHub\10-dollar-frontend-service\dollar_app\build\app\intermediates\cxx\RelWithDebInfo\542ft67q\obj\x86_64

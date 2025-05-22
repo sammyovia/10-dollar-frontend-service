@@ -1,1 +1,0 @@
-C:\Users\frank\Documents\GitHub\10-dollar-frontend-service\dollar_app\build\app\intermediates\cxx\Debug\3x6bus6t\obj\arm64-v8a

@@ -1,2 +1,0 @@
-C:/Users/frank/Documents/GitHub/10-dollar-frontend-service/dollar_app/android/app/.cxx/RelWithDebInfo/542ft67q/armeabi-v7a/CMakeFiles/edit_cache.dir
-C:/Users/frank/Documents/GitHub/10-dollar-frontend-service/dollar_app/android/app/.cxx/RelWithDebInfo/542ft67q/armeabi-v7a/CMakeFiles/rebuild_cache.dir
