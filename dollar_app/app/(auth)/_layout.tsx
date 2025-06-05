@@ -1,45 +1,107 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+// import { SafeAreaView } from "@/components";
+// import { useAuthContext } from "@/context/context";
+// import { Redirect, router, Stack } from "expo-router";
+// import { View, ActivityIndicator } from "react-native";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+// const AuthLayout = () => {
+//   const { isLoggedIn, isLoading } = useAuthContext();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+//   if (isLoading)
+//     return (
+//       <View
+//         style={{
+//           flex: 1,
+//           justifyContent: "center",
+//           alignItems: "center",
+//         }}
+//       >
+//         <ActivityIndicator size={"small"} />
+//       </View>
+//     );
 
+//   if (!isLoading && isLoggedIn) return <Redirect href="/(tabs)/home" />;
+
+//   return (
+//     <SafeAreaView>
+//       <Stack>
+//         <Stack.Screen
+//           name="login"
+//           options={{
+//             headerShown: false,
+//           }}
+//         />
+//         <Stack.Screen
+//           name="otp"
+//           options={{
+//             headerShown: false,
+//           }}
+//         />
+//         <Stack.Screen
+//           name="register"
+//           options={{
+//             headerShown: false,
+//           }}
+//         />
+//         <Stack.Screen
+//           name="forgotPassword"
+//           options={{
+//             headerShown: false,
+//           }}
+//         />
+//       </Stack>
+//     </SafeAreaView>
+//   );
+// };
+
+// export default AuthLayout;
+
+import { Stack } from "expo-router";
+import { Text, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
+
+const AuthLayout = () => {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
+    <Stack>
+      {/* Admin Screen */}
+      <Stack.Screen
+        name="forgotPassword"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Forgot Password",
+          headerShown: true,
         }}
       />
-      <Tabs.Screen
-        name="explore"
+
+      {/* Percent Screen */}
+      <Stack.Screen
+        name="login"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Login",
+          headerShown: true,
         }}
       />
-    </Tabs>
+
+      {/* Post Screen */}
+      <Stack.Screen
+        name="otp"
+        options={{
+          title: "Otp",
+          headerShown: true,
+        }}
+      />
+
+      {/* Profile Screen */}
+      <Stack.Screen
+        name="register"
+        options={{
+          title: "Register",
+          headerShown: true,
+        }}
+      />
+
+      
+       </Stack>
   );
-}
+};
+
+export default AuthLayout;
+

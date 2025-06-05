@@ -1,45 +1,92 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { Stack } from "expo-router";
+import { Text, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+const ViewLayout = () => {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
+    <Stack>
+      {/* Admin Screen */}
+      <Stack.Screen
+        name="admin"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Admin",
+          headerShown: true,
         }}
       />
-      <Tabs.Screen
-        name="explore"
+
+      {/* Percent Screen */}
+      <Stack.Screen
+        name="percent"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Percent",
+          headerShown: true,
         }}
       />
-    </Tabs>
+
+      {/* Post Screen */}
+      <Stack.Screen
+        name="post"
+        options={{
+          title: "Post",
+          headerShown: true,
+        }}
+      />
+
+      {/* Profile Screen */}
+      <Stack.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          headerShown: true,
+        }}
+      />
+
+      {/* Request Payout Screen */}
+      <Stack.Screen
+        name="requestPayout"
+        options={{
+          title: "Request Payout",
+          headerShown: true,
+        }}
+      />
+
+      {/* Stakes Screen */}
+      <Stack.Screen
+        name="stakes"
+        options={{
+          title: "Stakes",
+          headerShown: true,
+        }}
+      />
+      {/* User Screen */}
+      <Stack.Screen
+        name="users"
+        options={{
+          title: "Users",
+          headerShown: true,
+        }}
+      />
+
+      {/* Upload Videos Screen */}
+      <Stack.Screen
+        name="uploadVideos"
+        options={{
+          title: "Upload Videos",
+          headerShown: true,
+        }}
+      />
+
+        {/* Videos Screen */}
+      <Stack.Screen
+        name="videos"
+        options={{
+          title: "Videos",
+          headerShown: true,
+        }}
+      />
+      
+       </Stack>
   );
-}
+};
+
+export default ViewLayout;
